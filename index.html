@@ -40,12 +40,18 @@ const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
 
 const estado = document.getElementById("estado");
 
-try {
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  estado.innerText = "Supabase cargó correctamente ✅";
-} catch(e) {
-  estado.innerText = "Error: " + e.message;
-}
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+(async () => {
+  try {
+    estado.innerText = "Probando conexión...";
+    const { data, error } = await supabase.auth.getSession();
+    if (error) throw error;
+    estado.innerText = "✅ Conectado a Supabase correctamente";
+  } catch (e) {
+    estado.innerText = "❌ Error Supabase: " + (e?.message || e);
+  }
+})();
 </script>
 
 </body>
