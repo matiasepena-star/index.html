@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test Martu Art</title>
+<title>Martu Art</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
@@ -21,16 +23,6 @@ body{
   background:#1e1e1e;
   padding:40px;
   border-radius:20px;
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
-}
-button{
-  margin-top:20px;
-  padding:12px 20px;
-  border:none;
-  border-radius:12px;
-  font-size:16px;
-  background:#7c5cff;
-  color:white;
 }
 </style>
 </head>
@@ -38,10 +30,23 @@ button{
 <body>
 
 <div class="card">
-  <h1>Funciona 🎉</h1>
-  <p>Si ves esto, GitHub Pages está bien.</p>
-  <button onclick="alert('JavaScript funciona')">Probar botón</button>
+  <h1>Probando conexión</h1>
+  <div id="estado">Esperando...</div>
 </div>
+
+<script>
+const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+
+const estado = document.getElementById("estado");
+
+try {
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  estado.innerText = "Supabase cargó correctamente ✅";
+} catch(e) {
+  estado.innerText = "Error: " + e.message;
+}
+</script>
 
 </body>
 </html>
