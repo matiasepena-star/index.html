@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Martu Art</title>
 
 <style>
 :root{
   --bg:#0f1115;
-  --card:#1b2233;
+  --panel:rgba(255,255,255,.05);
   --stroke:rgba(255,255,255,.12);
   --text:#e8ecf6;
   --muted:rgba(232,236,246,.65);
@@ -16,250 +16,1089 @@
   --danger:#ff5b6b;
   --ok:#44d07b;
   --r:20px;
+  --tap: translateY(1px) scale(.99);
+  --shadow:0 18px 55px rgba(0,0,0,.55);
 }
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  background:linear-gradient(135deg,#0f1115,#1b2233);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background:
+    radial-gradient(900px 600px at 18% -10%, rgba(122,162,255,.18), transparent 55%),
+    radial-gradient(900px 600px at 120% 0%, rgba(68,208,123,.12), transparent 55%),
+    var(--bg);
   color:var(--text);
 }
-.wrap{max-width:1000px;margin:auto;padding:16px 14px 100px}
-h1{margin:0;font-size:22px}
-p{margin:6px 0 14px;color:var(--muted)}
 
-.actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:16px;
+.wrap{max-width:1100px;margin:0 auto;padding:16px 14px 120px}
+.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+h1{margin:0;font-size:22px}
+p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
+.badge{
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.04);
+  padding:8px 10px;border-radius:999px;
+  color:var(--muted);font-size:12px;white-space:nowrap;
 }
-button{
-  border:none;
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 14px}
+.btn{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:14px 16px;
   border-radius:16px;
-  padding:16px 18px;
-  font-size:16px;
-  font-weight:900;
   cursor:pointer;
+  font-weight:950;
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  font-size:16px;
 }
-.primary{
-  background:var(--brand);
-  color:#000;
+.btn.primary{
+  background:linear-gradient(135deg, rgba(122,162,255,.98), rgba(122,162,255,.72));
+  color:#0b0d12;
+  border-color:rgba(0,0,0,.18);
 }
-.danger{
-  background:var(--danger);
-  color:#fff;
+.btn.danger{
+  background:rgba(255,91,107,.14);
+  border-color:rgba(255,91,107,.35);
+  color:#ffd7dc;
 }
-.secondary{
-  background:#2a3245;
-  color:#fff;
+.btn.ok{
+  background:linear-gradient(135deg, rgba(68,208,123,.95), rgba(68,208,123,.65));
+  color:#07110b;
+  border-color:rgba(0,0,0,.18);
 }
-button:active{transform:scale(.97)}
+.btn:active{transform:var(--tap)}
+
+.tip{
+  background:rgba(0,0,0,.22);
+  border:1px dashed rgba(255,255,255,.18);
+  border-radius:16px;
+  padding:12px 12px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.35;
+  margin-bottom:14px;
+}
+.tip b{color:var(--text)}
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns: repeat(2, minmax(0,1fr));
   gap:12px;
 }
-@media(min-width:700px){
-  .grid{grid-template-columns:repeat(4,1fr)}
+@media (min-width:720px){
+  .grid{ grid-template-columns: repeat(4, minmax(0,1fr)); gap:14px; }
 }
 .card{
-  background:var(--card);
+  background:rgba(255,255,255,.04);
   border:1px solid var(--stroke);
   border-radius:var(--r);
   overflow:hidden;
+  box-shadow:0 10px 28px rgba(0,0,0,.25);
 }
-.card img{
+.thumb{
   width:100%;
   aspect-ratio:1/1;
   object-fit:cover;
   display:block;
-}
-.meta{
-  padding:10px;
-  font-size:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.small{
-  background:none;
-  border:none;
-  color:var(--danger);
-  font-size:14px;
+  background:#0b0d12;
   cursor:pointer;
 }
-.editor{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.9);
+.meta{
+  padding:10px 10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.title{
+  font-size:13px;
+  margin:0;
+  color:var(--muted);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:62%;
+}
+.rowBtns{display:flex;gap:8px;align-items:center}
+.smallbtn{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:950;
+}
+.smallbtn.del{
+  border-color:rgba(255,91,107,.35);
+  background:rgba(255,91,107,.12);
+  color:#ffd7dc;
+}
+.smallbtn:active{transform:var(--tap)}
+
+.empty{
+  padding:16px 14px;
+  border:1px dashed rgba(255,255,255,.18);
+  border-radius:16px;
+  color:var(--muted);
+  background:rgba(0,0,0,.18);
+  line-height:1.35;
+  font-size:14px;
+}
+
+/* Modal base */
+.modal{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.72);
   display:none;
   align-items:center;
   justify-content:center;
-  padding:20px;
-}
-.editor.open{display:flex}
-.editorBox{
-  width:100%;
-  max-width:600px;
-  background:#111;
-  border-radius:20px;
   padding:16px;
+  z-index:999;
 }
-.editor img{
-  width:100%;
+.modal.open{display:flex}
+.modalCard{
+  width:min(980px, 100%);
+  background:rgba(20,24,34,.95);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.modalTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+.modalTop .t{font-weight:1000;font-size:14px;color:var(--text)}
+.closeBtn{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
   border-radius:14px;
+  padding:10px 12px;
+  cursor:pointer;
+  font-weight:1000;
 }
-.editorActions{
+.closeBtn:active{transform:var(--tap)}
+.big{
+  width:100%;
+  height:auto;
+  display:block;
+  max-height: 78vh;
+  object-fit: contain;
+  background:#0b0d12;
+}
+
+/* Editor */
+.editorBody{padding:14px}
+.editorRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:12px}
+.editorBtns{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn2{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:14px 16px;
+  border-radius:16px;
+  cursor:pointer;
+  font-weight:1000;
+  font-size:16px;
+}
+.btn2.primary{
+  background:linear-gradient(135deg, rgba(68,208,123,.95), rgba(68,208,123,.65));
+  color:#07110b;
+  border-color:rgba(0,0,0,.18);
+}
+.btn2:active{transform:var(--tap)}
+.hint{color:var(--muted);font-size:13px;line-height:1.35;margin:10px 2px 0}
+
+/* Área recorte */
+.cropWrap{
+  width:100%;
+  background:#0b0d12;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+  touch-action:none;
+  user-select:none;
+}
+.cropImg{
+  width:100%;
+  height:auto;
+  display:block;
+  max-height:62vh;
+  object-fit:contain;
+}
+.cropBox{
+  position:absolute;
+  border:2px solid rgba(122,162,255,.98);
+  border-radius:14px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.45);
+}
+.handle{
+  position:absolute;
+  width:18px;height:18px;
+  border-radius:999px;
+  background:rgba(122,162,255,.98);
+  border:2px solid rgba(0,0,0,.35);
+}
+.handle.nw{left:-9px;top:-9px;cursor:nwse-resize}
+.handle.ne{right:-9px;top:-9px;cursor:nesw-resize}
+.handle.sw{left:-9px;bottom:-9px;cursor:nesw-resize}
+.handle.se{right:-9px;bottom:-9px;cursor:nwse-resize}
+
+/* Controles filtro */
+.controls{
   display:flex;
   gap:10px;
-  margin-top:12px;
   flex-wrap:wrap;
+  align-items:center;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;
+  padding:10px 12px;
+  margin-top:12px;
 }
-canvas{display:none}
+.controls label{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:900;
+}
+.controls input[type="range"]{width:170px}
+.pill{
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  padding:10px 12px;
+  border-radius:999px;
+  font-weight:950;
+  color:var(--text);
+  cursor:pointer;
+}
+.pill:active{transform:var(--tap)}
+.pill.on{
+  border-color:rgba(68,208,123,.55);
+  background:rgba(68,208,123,.14);
+  color:#d9ffe8;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  left:50%; bottom:18px;
+  transform:translateX(-50%);
+  background:rgba(20,24,34,.96);
+  border:1px solid rgba(255,255,255,.14);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.6);
+  display:none;
+  z-index:2000;
+  font-weight:950;
+  font-size:13px;
+}
+.toast.show{display:block}
 </style>
 </head>
 
 <body>
-<div class="wrap">
-  <h1>🎨 Martu Art</h1>
-  <p>Escaneá tu dibujo, recortalo y guardalo.</p>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>🎨 Martu Art</h1>
+        <p>Escaneá tu dibujo, recortalo, mejoralo y guardalo en tu biblioteca.</p>
+      </div>
+      <div class="badge" id="count">0 dibujos</div>
+    </div>
 
-  <div class="actions">
-    <button class="primary" onclick="agregar()">📷 Escanear dibujo</button>
-    <button class="secondary" onclick="backup()">📦 Backup</button>
-    <button class="danger" onclick="borrarTodo()">🗑 Borrar todo</button>
+    <div class="tip">
+      Consejo pro: mesa + luz + que el dibujo se vea “derecho”. Después acá lo recortás y le ponés filtro tipo escáner.
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="scanBtn">📷 Escanear dibujo</button>
+      <button class="btn" id="backupBtn">📦 Backup</button>
+      <button class="btn" id="importBtn">📥 Importar</button>
+      <button class="btn danger" id="clearBtn">🗑 Borrar todo</button>
+    </div>
+
+    <div id="empty" class="empty" style="display:none">
+      Todavía no hay dibujos.<br><br>
+      Tocá <b>“Escanear dibujo”</b> y sacá una foto del dibujo.
+    </div>
+
+    <div class="grid" id="grid"></div>
   </div>
 
-  <div class="grid" id="grid"></div>
-</div>
+  <input id="file" type="file" accept="image/*" capture="environment" hidden>
+  <input id="importFile" type="file" accept="application/json" hidden>
 
-<input type="file" id="fileInput" accept="image/*" capture="environment" hidden>
-
-<div class="editor" id="editor">
-  <div class="editorBox">
-    <img id="preview">
-    <div class="editorActions">
-      <button class="secondary" onclick="rotar()">↻ Girar</button>
-      <button class="primary" onclick="guardar()">✅ Guardar</button>
-      <button class="danger" onclick="cerrarEditor()">✖ Cancelar</button>
+  <!-- Ver grande -->
+  <div class="modal" id="viewModal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalTop">
+        <div class="t" id="viewTitle">Dibujo</div>
+        <button class="closeBtn" id="viewClose">Cerrar ✖</button>
+      </div>
+      <img class="big" id="viewImg" alt="Dibujo ampliado">
+      <div class="editorBody">
+        <div class="editorBtns" style="justify-content:flex-end">
+          <button class="btn2" id="exportOneBtn">⬇️ Exportar</button>
+          <button class="btn2" id="editOneBtn">✂️ Editar</button>
+        </div>
+        <p class="hint">Exportar descarga la imagen para compartirla. Editar abre el editor para recortar/mejorar.</p>
+      </div>
     </div>
   </div>
-</div>
 
-<canvas id="canvas"></canvas>
+  <!-- Editor -->
+  <div class="modal" id="editModal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalTop">
+        <div class="t">✂️ Editor (recorte + escáner)</div>
+        <button class="closeBtn" id="editClose">Cancelar ✖</button>
+      </div>
+
+      <div class="editorBody">
+        <div class="cropWrap" id="cropWrap">
+          <img class="cropImg" id="cropImg" alt="Editor de recorte">
+          <div class="cropBox" id="cropBox">
+            <div class="handle nw" data-h="nw"></div>
+            <div class="handle ne" data-h="ne"></div>
+            <div class="handle sw" data-h="sw"></div>
+            <div class="handle se" data-h="se"></div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="pill" id="bwPill">🖨️ Blanco y negro</div>
+          <label>Contraste
+            <input type="range" id="contrastRange" min="0" max="100" value="35">
+          </label>
+          <label style="opacity:.95">Vista previa
+            <input type="checkbox" id="previewToggle" checked>
+          </label>
+        </div>
+
+        <div class="editorRow">
+          <div class="editorBtns">
+            <button class="btn2" id="rotateBtn">↻ Girar</button>
+            <button class="btn2" id="resetBtn">↺ Reset</button>
+          </div>
+
+          <div class="editorBtns">
+            <button class="btn2 primary" id="saveBtn">✅ Guardar</button>
+          </div>
+        </div>
+
+        <p class="hint">
+          Mové el rectángulo para encuadrar. Ajustá las esquinas para recortar.
+          Activá <b>Blanco y negro</b> y subí el contraste si querés efecto escáner.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Listo</div>
 
 <script>
-const LS_KEY="martu_app_v1";
-const grid=document.getElementById("grid");
-const input=document.getElementById("fileInput");
-const editor=document.getElementById("editor");
-const preview=document.getElementById("preview");
-const canvas=document.getElementById("canvas");
+/* ==========================
+   Config
+========================== */
+const LS_KEY = "martu_dibujos_v3";
+const MAX_ITEMS = 250;
+const MAX_DIM = 1400;  // tamaño máximo (lado mayor) para guardar
+const JPEG_Q = 0.82;
 
-let dibujos=JSON.parse(localStorage.getItem(LS_KEY)||"[]");
-let currentImg=null;
-let rotation=0;
+/* ==========================
+   DOM
+========================== */
+const grid = document.getElementById("grid");
+const empty = document.getElementById("empty");
+const count = document.getElementById("count");
 
+const scanBtn = document.getElementById("scanBtn");
+const backupBtn = document.getElementById("backupBtn");
+const importBtn = document.getElementById("importBtn");
+const clearBtn = document.getElementById("clearBtn");
+
+const file = document.getElementById("file");
+const importFile = document.getElementById("importFile");
+
+const viewModal = document.getElementById("viewModal");
+const viewImg = document.getElementById("viewImg");
+const viewTitle = document.getElementById("viewTitle");
+const viewClose = document.getElementById("viewClose");
+const exportOneBtn = document.getElementById("exportOneBtn");
+const editOneBtn = document.getElementById("editOneBtn");
+
+const editModal = document.getElementById("editModal");
+const editClose = document.getElementById("editClose");
+
+const cropWrap = document.getElementById("cropWrap");
+const cropImg = document.getElementById("cropImg");
+const cropBox = document.getElementById("cropBox");
+
+const rotateBtn = document.getElementById("rotateBtn");
+const resetBtn = document.getElementById("resetBtn");
+const saveBtn = document.getElementById("saveBtn");
+
+const bwPill = document.getElementById("bwPill");
+const contrastRange = document.getElementById("contrastRange");
+const previewToggle = document.getElementById("previewToggle");
+
+const toast = document.getElementById("toast");
+
+/* ==========================
+   State
+========================== */
+let dibujos = load();
+let viewIndex = -1;
+
+let baseDataURL = "";          // imagen actual en editor (dataURL)
+let originalImg = null;        // Image() cargada de baseDataURL
+let rotation = 0;              // 0/90/180/270
+
+let bwOn = false;
+let contrast = 35;
+let livePreview = true;
+
+// crop en coordenadas del cropWrap (px)
+let crop = { x: 40, y: 40, w: 220, h: 220 };
+
+// drag
+let drag = { active:false, mode:"move", handle:null, startX:0, startY:0, startCrop:null };
+
+/* ==========================
+   Helpers
+========================== */
+function load(){
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }
+  catch { return []; }
+}
+function persist(){
+  localStorage.setItem(LS_KEY, JSON.stringify(dibujos));
+}
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 1600);
+}
+function updateCount(){
+  count.textContent = `${dibujos.length} dibujo${dibujos.length===1?"":"s"}`;
+}
+function showEmpty(){
+  empty.style.display = dibujos.length ? "none" : "block";
+}
+function safeName(name, fallback){
+  const s = (name || "").trim();
+  return s ? s : fallback;
+}
+function uid(){
+  return Math.random().toString(16).slice(2) + Date.now().toString(16);
+}
+function downloadDataURL(dataURL, filename){
+  const a = document.createElement("a");
+  a.href = dataURL;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+/* ==========================
+   Render
+========================== */
 function render(){
-  grid.innerHTML="";
-  dibujos.forEach((img,i)=>{
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerHTML=`
-      <img src="${img}">
+  grid.innerHTML = "";
+  updateCount();
+  showEmpty();
+
+  dibujos.forEach((d, idx) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const title = safeName(d.title, `Dibujo ${dibujos.length - idx}`);
+
+    card.innerHTML = `
+      <img class="thumb" src="${d.data}" alt="${title}">
       <div class="meta">
-        <span>Dibujo ${i+1}</span>
-        <button class="small" onclick="eliminar(${i})">✖</button>
+        <p class="title">${title}</p>
+        <div class="rowBtns">
+          <button class="smallbtn" data-act="rename" data-idx="${idx}">✏️</button>
+          <button class="smallbtn" data-act="export" data-idx="${idx}">⬇️</button>
+          <button class="smallbtn del" data-act="del" data-idx="${idx}">🗑</button>
+        </div>
       </div>
     `;
+
+    card.querySelector(".thumb").addEventListener("click", () => openView(idx));
+
+    card.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click", () => {
+        const act = b.getAttribute("data-act");
+        const i = Number(b.getAttribute("data-idx"));
+        if(act === "del") delOne(i);
+        if(act === "rename") renameOne(i);
+        if(act === "export") exportOne(i);
+      });
+    });
+
     grid.appendChild(card);
   });
 }
-render();
 
-function agregar(){input.click()}
+function delOne(i){
+  if(!confirm("¿Eliminar este dibujo?")) return;
+  dibujos.splice(i, 1);
+  persist();
+  render();
+}
 
-input.addEventListener("change",e=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    currentImg=ev.target.result;
-    preview.src=currentImg;
-    rotation=0;
-    editor.classList.add("open");
-  };
-  reader.readAsDataURL(file);
-  input.value="";
+function renameOne(i){
+  const cur = dibujos[i]?.title || "";
+  const next = prompt("Nombre del dibujo:", cur);
+  if(next === null) return;
+  dibujos[i].title = next.trim() || null;
+  persist();
+  render();
+}
+
+function exportOne(i){
+  const d = dibujos[i];
+  if(!d) return;
+  const name = safeName(d.title, `dibujo-${i+1}`);
+  downloadDataURL(d.data, `${name}.jpg`);
+}
+
+/* ==========================
+   View modal
+========================== */
+function openView(i){
+  const d = dibujos[i];
+  if(!d) return;
+  viewIndex = i;
+  viewTitle.textContent = safeName(d.title, `Dibujo ${i+1}`);
+  viewImg.src = d.data;
+  viewModal.classList.add("open");
+  viewModal.setAttribute("aria-hidden","false");
+}
+function closeView(){
+  viewModal.classList.remove("open");
+  viewModal.setAttribute("aria-hidden","true");
+  viewImg.src = "";
+  viewIndex = -1;
+}
+viewClose.addEventListener("click", closeView);
+viewModal.addEventListener("click", (e)=>{ if(e.target === viewModal) closeView(); });
+
+exportOneBtn.addEventListener("click", ()=>{
+  if(viewIndex < 0) return;
+  exportOne(viewIndex);
 });
 
-function cerrarEditor(){
-  editor.classList.remove("open");
-}
+editOneBtn.addEventListener("click", async ()=>{
+  if(viewIndex < 0) return;
+  const d = dibujos[viewIndex];
+  if(!d) return;
+  closeView();
+  await setupEditorFromDataURL(d.data, d.title || "");
+  openEditor({ mode:"update", index:viewIndex });
+});
 
-function rotar(){
-  rotation=(rotation+90)%360;
-  preview.style.transform=`rotate(${rotation}deg)`;
-}
-
-function guardar(){
-  const img=new Image();
-  img.onload=function(){
-    const ctx=canvas.getContext("2d");
-
-    let w=img.width;
-    let h=img.height;
-
-    const max=1400;
-    if(w>h && w>max){h=h*(max/w);w=max}
-    if(h>w && h>max){w=w*(max/h);h=max}
-
-    canvas.width=w;
-    canvas.height=h;
-
-    ctx.clearRect(0,0,w,h);
-
-    ctx.save();
-    ctx.translate(w/2,h/2);
-    ctx.rotate(rotation*Math.PI/180);
-    ctx.drawImage(img,-w/2,-h/2,w,h);
-    ctx.restore();
-
-    const data=canvas.toDataURL("image/jpeg",0.8);
-    dibujos.unshift(data);
-    localStorage.setItem(LS_KEY,JSON.stringify(dibujos));
-    cerrarEditor();
-    render();
-  };
-  img.src=currentImg;
-}
-
-function eliminar(i){
-  if(confirm("¿Eliminar dibujo?")){
-    dibujos.splice(i,1);
-    localStorage.setItem(LS_KEY,JSON.stringify(dibujos));
-    render();
-  }
-}
-
-function borrarTodo(){
-  if(confirm("¿Borrar toda la biblioteca?")){
-    dibujos=[];
-    localStorage.setItem(LS_KEY,JSON.stringify(dibujos));
-    render();
-  }
-}
-
-function backup(){
-  const blob=new Blob([JSON.stringify(dibujos)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="backup_martu.json";
+/* ==========================
+   Backup / Import
+========================== */
+backupBtn.addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(dibujos, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "martu-art-backup.json";
+  document.body.appendChild(a);
   a.click();
-}
-</script>
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  showToast("Backup descargado");
+});
 
+importBtn.addEventListener("click", ()=> importFile.click());
+
+importFile.addEventListener("change", async (e)=>{
+  const f = e.target.files?.[0];
+  if(!f) return;
+  try{
+    const text = await f.text();
+    const arr = JSON.parse(text);
+    if(!Array.isArray(arr)) throw new Error("Formato inválido");
+
+    // merge simple
+    const cleaned = arr
+      .filter(x => x && typeof x === "object" && typeof x.data === "string")
+      .map(x => ({ id: x.id || uid(), title: x.title || null, date: x.date || null, data: x.data }));
+
+    if(!cleaned.length) throw new Error("No hay dibujos");
+
+    if(!confirm(`Importar ${cleaned.length} dibujo(s)? Se van a sumar a los que ya hay.`)){
+      importFile.value = "";
+      return;
+    }
+
+    dibujos = [...cleaned, ...dibujos].slice(0, MAX_ITEMS);
+    try{
+      persist();
+    }catch{
+      alert("No entró todo por límite de almacenamiento. Se importó una parte.");
+      // intentamos guardar recortando
+      while(dibujos.length){
+        try { persist(); break; }
+        catch { dibujos.pop(); }
+      }
+    }
+
+    render();
+    showToast("Importado ✅");
+  }catch(err){
+    alert("No se pudo importar ese archivo.");
+  }
+  importFile.value = "";
+});
+
+/* ==========================
+   Clear
+========================== */
+clearBtn.addEventListener("click", ()=>{
+  if(!confirm("¿Borrar toda la biblioteca?")) return;
+  dibujos = [];
+  persist();
+  render();
+});
+
+/* ==========================
+   Editor
+========================== */
+let editorContext = { mode:"new", index:-1, titlePreset:"" };
+
+function openEditor(ctx){
+  editorContext = ctx || { mode:"new", index:-1, titlePreset:"" };
+  editModal.classList.add("open");
+  editModal.setAttribute("aria-hidden","false");
+}
+function closeEditor(){
+  editModal.classList.remove("open");
+  editModal.setAttribute("aria-hidden","true");
+  baseDataURL = "";
+  originalImg = null;
+  rotation = 0;
+  bwOn = false;
+  contrast = 35;
+  livePreview = true;
+  bwPill.classList.remove("on");
+  contrastRange.value = String(contrast);
+  previewToggle.checked = true;
+  cropImg.style.filter = "";
+}
+editClose.addEventListener("click", closeEditor);
+editModal.addEventListener("click", (e)=>{ if(e.target === editModal) closeEditor(); });
+
+scanBtn.addEventListener("click", ()=> file.click());
+
+file.addEventListener("change", async (e)=>{
+  const f = e.target.files?.[0];
+  if(!f) return;
+
+  const dataURL = await fileToDataURL(f);
+  await setupEditorFromDataURL(dataURL, "");
+  openEditor({ mode:"new", index:-1, titlePreset:"" });
+
+  file.value = "";
+});
+
+function fileToDataURL(file){
+  return new Promise((res, rej)=>{
+    const r = new FileReader();
+    r.onload = ()=> res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+function imgLoaded(img){
+  return new Promise((res)=>{ if(img.complete) res(); else img.onload = ()=>res(); });
+}
+
+async function setupEditorFromDataURL(dataURL, titlePreset){
+  baseDataURL = dataURL;
+  rotation = 0;
+
+  bwOn = false;
+  contrast = 35;
+  livePreview = true;
+  bwPill.classList.remove("on");
+  contrastRange.value = String(contrast);
+  previewToggle.checked = true;
+
+  cropImg.src = dataURL;
+  await imgLoaded(cropImg);
+
+  originalImg = new Image();
+  originalImg.src = dataURL;
+  await imgLoaded(originalImg);
+
+  // crop box centrado
+  requestAnimationFrame(()=>{
+    const rect = cropWrap.getBoundingClientRect();
+    const W = rect.width;
+    const H = rect.height;
+    const side = Math.min(W, H) * 0.78;
+
+    crop.w = side;
+    crop.h = side;
+    crop.x = (W - side) / 2;
+    crop.y = (H - side) / 2;
+
+    applyCropBox();
+    applyPreviewFilter();
+  });
+
+  editorContext = { mode:"new", index:-1, titlePreset: titlePreset || "" };
+}
+
+function applyCropBox(){
+  cropBox.style.left = crop.x + "px";
+  cropBox.style.top  = crop.y + "px";
+  cropBox.style.width  = crop.w + "px";
+  cropBox.style.height = crop.h + "px";
+}
+
+function clampCrop(){
+  const rect = cropWrap.getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+  const minSize = 90;
+
+  crop.w = Math.max(minSize, crop.w);
+  crop.h = Math.max(minSize, crop.h);
+
+  crop.x = Math.max(0, Math.min(crop.x, W - crop.w));
+  crop.y = Math.max(0, Math.min(crop.y, H - crop.h));
+}
+
+function pointerXY(ev){
+  const p = ev.touches?.[0] || ev;
+  return { x: p.clientX, y: p.clientY };
+}
+
+cropWrap.addEventListener("mousedown", startDrag);
+cropWrap.addEventListener("touchstart", startDrag, {passive:false});
+
+function startDrag(ev){
+  ev.preventDefault();
+  const {x,y} = pointerXY(ev);
+  const wrapRect = cropWrap.getBoundingClientRect();
+  const px = x - wrapRect.left;
+  const py = y - wrapRect.top;
+
+  const target = ev.target;
+  const isHandle = target.classList?.contains("handle");
+
+  drag.active = true;
+  drag.startX = px;
+  drag.startY = py;
+  drag.startCrop = {...crop};
+
+  if(isHandle){
+    drag.mode = "resize";
+    drag.handle = target.getAttribute("data-h");
+  }else{
+    const inside =
+      px >= crop.x && px <= crop.x + crop.w &&
+      py >= crop.y && py <= crop.y + crop.h;
+
+    drag.mode = "move";
+    drag.handle = null;
+
+    if(!inside){
+      // recentrar a donde tocó
+      crop.x = px - crop.w/2;
+      crop.y = py - crop.h/2;
+      clampCrop();
+      applyCropBox();
+      drag.startCrop = {...crop};
+    }
+  }
+
+  window.addEventListener("mousemove", onDrag);
+  window.addEventListener("mouseup", endDrag);
+  window.addEventListener("touchmove", onDrag, {passive:false});
+  window.addEventListener("touchend", endDrag);
+}
+
+function onDrag(ev){
+  if(!drag.active) return;
+  ev.preventDefault();
+
+  const {x,y} = pointerXY(ev);
+  const wrapRect = cropWrap.getBoundingClientRect();
+  const px = x - wrapRect.left;
+  const py = y - wrapRect.top;
+
+  const dx = px - drag.startX;
+  const dy = py - drag.startY;
+
+  if(drag.mode === "move"){
+    crop.x = drag.startCrop.x + dx;
+    crop.y = drag.startCrop.y + dy;
+    clampCrop();
+    applyCropBox();
+    return;
+  }
+
+  const h = drag.handle;
+  const c0 = drag.startCrop;
+
+  let nx = c0.x, ny = c0.y, nw = c0.w, nh = c0.h;
+
+  if(h === "se"){ nw = c0.w + dx; nh = c0.h + dy; }
+  else if(h === "sw"){ nx = c0.x + dx; nw = c0.w - dx; nh = c0.h + dy; }
+  else if(h === "ne"){ ny = c0.y + dy; nh = c0.h - dy; nw = c0.w + dx; }
+  else if(h === "nw"){ nx = c0.x + dx; ny = c0.y + dy; nw = c0.w - dx; nh = c0.h - dy; }
+
+  crop.x = nx; crop.y = ny; crop.w = nw; crop.h = nh;
+  clampCrop();
+  applyCropBox();
+}
+
+function endDrag(){
+  drag.active = false;
+  window.removeEventListener("mousemove", onDrag);
+  window.removeEventListener("mouseup", endDrag);
+  window.removeEventListener("touchmove", onDrag);
+  window.removeEventListener("touchend", endDrag);
+}
+
+/* Preview filter (solo visual en editor) */
+bwPill.addEventListener("click", ()=>{
+  bwOn = !bwOn;
+  bwPill.classList.toggle("on", bwOn);
+  applyPreviewFilter();
+});
+contrastRange.addEventListener("input", ()=>{
+  contrast = Number(contrastRange.value);
+  applyPreviewFilter();
+});
+previewToggle.addEventListener("change", ()=>{
+  livePreview = previewToggle.checked;
+  applyPreviewFilter();
+});
+
+function applyPreviewFilter(){
+  if(!livePreview){
+    cropImg.style.filter = "";
+    return;
+  }
+  const c = 1 + (contrast / 100) * 1.6; // 1..2.6 aprox
+  const bw = bwOn ? "grayscale(1) saturate(0)" : "grayscale(0)";
+  cropImg.style.filter = `${bw} contrast(${c})`;
+}
+
+rotateBtn.addEventListener("click", async ()=>{
+  if(!baseDataURL) return;
+  rotation = (rotation + 90) % 360;
+
+  const rotated = await rotateDataURL(baseDataURL, 90);
+  baseDataURL = rotated;
+
+  // recargamos editor desde la imagen rotada (mantiene rotación acumulada en dataURL)
+  await setupEditorFromDataURL(baseDataURL, editorContext.titlePreset || "");
+  showToast("Girada ↻");
+});
+
+resetBtn.addEventListener("click", async ()=>{
+  if(!baseDataURL) return;
+  // reset del filtro y crop centrado
+  bwOn = false; bwPill.classList.remove("on");
+  contrast = 35; contrastRange.value = String(contrast);
+  livePreview = true; previewToggle.checked = true;
+  applyPreviewFilter();
+
+  requestAnimationFrame(()=>{
+    const rect = cropWrap.getBoundingClientRect();
+    const W = rect.width, H = rect.height;
+    const side = Math.min(W, H) * 0.78;
+    crop.w = side; crop.h = side;
+    crop.x = (W - side) / 2;
+    crop.y = (H - side) / 2;
+    applyCropBox();
+  });
+
+  showToast("Reset ↺");
+});
+
+function rotateDataURL(dataURL, deg){
+  return new Promise(async (res)=>{
+    const img = new Image();
+    img.src = dataURL;
+    await imgLoaded(img);
+
+    const rad = deg * Math.PI / 180;
+    const cw = (deg % 180 === 0) ? img.width : img.height;
+    const ch = (deg % 180 === 0) ? img.height : img.width;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = cw; canvas.height = ch;
+    const ctx = canvas.getContext("2d");
+
+    ctx.translate(cw/2, ch/2);
+    ctx.rotate(rad);
+    ctx.drawImage(img, -img.width/2, -img.height/2);
+
+    res(canvas.toDataURL("image/jpeg", 0.92));
+  });
+}
+
+/* Guardar (crop real + filtro real + compresión) */
+saveBtn.addEventListener("click", async ()=>{
+  if(!originalImg) return;
+
+  const titleDefault = (editorContext.mode === "update" && dibujos[editorContext.index]?.title) ? dibujos[editorContext.index].title : "";
+  const title = prompt("Nombre del dibujo (opcional):", titleDefault || "") || "";
+
+  try{
+    const out = await cropAndProcess(originalImg, cropWrap, crop, { bwOn, contrast });
+    const item = {
+      id: (editorContext.mode === "update" && dibujos[editorContext.index]?.id) ? dibujos[editorContext.index].id : uid(),
+      title: title.trim() || null,
+      date: new Date().toISOString(),
+      data: out
+    };
+
+    if(editorContext.mode === "update" && editorContext.index >= 0){
+      dibujos[editorContext.index] = item;
+    }else{
+      dibujos.unshift(item);
+      if(dibujos.length > MAX_ITEMS) dibujos = dibujos.slice(0, MAX_ITEMS);
+    }
+
+    // Guardado con fallback por límites de iPhone
+    try{
+      persist();
+    }catch(e){
+      // recortamos hasta que entre
+      let removed = 0;
+      while(dibujos.length){
+        try{ persist(); break; }
+        catch{ dibujos.pop(); removed++; }
+      }
+      alert("Se estaba quedando sin espacio. Se guardó, pero se borraron algunos viejos para que entre.");
+    }
+
+    closeEditor();
+    render();
+    showToast("Guardado ✅");
+  }catch(e){
+    alert("No se pudo guardar. Probá con una foto más liviana o borrá algunos dibujos viejos.");
+  }
+});
+
+/* crop + process + compress */
+async function cropAndProcess(img, wrapEl, cropRect, fx){
+  // 1) determinar cómo está dibujada la imagen en el wrap (object-fit: contain)
+  const wrap = wrapEl.getBoundingClientRect();
+  const W = wrap.width;
+  const H = wrap.height;
+
+  // el elemento img que se ve (cropImg) tiene tamaño responsivo; calculamos el tamaño "contain"
+  const iw = img.width;
+  const ih = img.height;
+
+  const scale = Math.min(W / iw, H / ih);
+  const drawnW = iw * scale;
+  const drawnH = ih * scale;
+  const offsetX = (W - drawnW) / 2;
+  const offsetY = (H - drawnH) / 2;
+
+  // 2) convertir cropRect (px en wrap) a coords en imagen original
+  const cx = (cropRect.x - offsetX) / scale;
+  const cy = (cropRect.y - offsetY) / scale;
+  const cw = cropRect.w / scale;
+  const ch = cropRect.h / scale;
+
+  // clamp
+  const sx = Math.max(0, Math.min(cx, iw - 1));
+  const sy = Math.max(0, Math.min(cy, ih - 1));
+  const sw = Math.max(1, Math.min(cw, iw - sx));
+  const sh = Math.max(1, Math.min(ch, ih - sy));
+
+  // 3) salida con compresión (MAX_DIM)
+  const outScale = Math.min(1, MAX_DIM / Math.max(sw, sh));
+  const outW = Math.max(1, Math.round(sw * outScale));
+  const outH = Math.max(1, Math.round(sh * outScale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = outW;
+  canvas.height = outH;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+  // draw crop
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+
+  // apply filters on pixels
+  if(fx && (fx.bwOn || fx.contrast > 0)){
+    const im = ctx.getImageData(0,0,outW,outH);
+    const data = im.data;
+
+    // contrast factor
+    // contrast 0..100 => factor ~ 1..2.8
+    const factor = 1 + (Number(fx.contrast || 0) / 100) * 1.8;
+
+    for(let i=0;i<data.length;i+=4){
+      let r = data[i], g = data[i+1], b = data[i+2];
+
+      // contrast around mid (128)
+      r = (r - 128) * factor + 128;
+      g = (g - 128) * factor + 128;
+      b = (b - 128) * factor + 128;
+
+      // clamp
+      r = r < 0 ? 0 : (r > 255 ? 255 : r);
+      g = g < 0 ? 0 : (g > 255 ? 255 : g);
+      b = b < 0 ? 0 : (b > 255 ? 255 : b);
+
+      if(fx.bwOn){
+        // luminancia + umbral suave
+        const y = 0.2126*r + 0.7152*g + 0.0722*b;
+        // umbral adaptado por contraste
+        const t = 145;
+        const v = y > t ? 255 : 0;
+        r = g = b = v;
+      }
+
+      data[i] = r; data[i+1] = g; data[i+2] = b;
+    }
+
+    ctx.putImageData(im,0,0);
+  }
+
+  return canvas.toDataURL("image/jpeg", JPEG_Q);
+}
+
+/* ==========================
+   Init
+========================== */
+render();
+</script>
 </body>
 </html>
