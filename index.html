@@ -5,20 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Martu-art</title>
 
+  <!-- Supabase JS (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root{
-      --bg:#0f1115;
-      --panel:rgba(20,24,32,.72);
+      --bg:#0b0f14;
+      --panel:rgba(255,255,255,.06);
       --stroke:rgba(255,255,255,.10);
       --text:#e8ecf6;
       --muted:rgba(232,236,246,.62);
-      --brand:#7aa2ff;
-      --ok:#44d07b;
+      --good:#44d07b;
       --bad:#ff5b6b;
-      --r:18px;
-      --shadow:0 14px 40px rgba(0,0,0,.55);
+      --brand:#7aa2ff;
+      --brand2:#9b7aff;
+      --shadow: 0 16px 44px rgba(0,0,0,.55);
+      --r:22px;
       --press: translateY(1px) scale(.99);
     }
     *{box-sizing:border-box}
@@ -27,539 +29,739 @@
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
-        radial-gradient(900px 600px at 15% -10%, rgba(122,162,255,.22), transparent 55%),
-        radial-gradient(900px 600px at 90% 0%, rgba(68,208,123,.18), transparent 55%),
+        radial-gradient(1100px 680px at 15% -10%, rgba(122,162,255,.20), transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(155,122,255,.14), transparent 55%),
+        radial-gradient(800px 600px at 40% 120%, rgba(68,208,123,.10), transparent 55%),
         var(--bg);
       color:var(--text);
     }
-    .wrap{max-width:980px;margin:0 auto;padding:14px 12px 74px}
-    .hero{
-      display:flex;align-items:center;gap:12px;
-      padding:14px;border:1px solid var(--stroke);border-radius:22px;
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+
+    .wrap{max-width:980px;margin:0 auto;padding:14px 12px 90px}
+    .top{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+      padding:14px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border-radius:var(--r);
       box-shadow:var(--shadow);
-      position:sticky;top:10px;backdrop-filter: blur(10px);z-index:5;
     }
-    .avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg, rgba(122,162,255,.85), rgba(255,255,255,.08));border:1px solid var(--stroke)}
-    .hero h1{font-size:22px;margin:0;line-height:1.1}
-    .hero .sub{color:var(--muted);font-size:13px;margin-top:3px}
+    .brand{
+      display:flex;gap:12px;align-items:center;
+      min-width:0;
+    }
     .pill{
-      margin-left:auto;
-      display:flex;align-items:center;gap:10px;
-      padding:10px 12px;border-radius:999px;border:1px solid var(--stroke);
-      background:rgba(0,0,0,.20);
-      font-weight:650;
+      width:44px;height:44px;border-radius:14px;
+      background:linear-gradient(180deg, rgba(122,162,255,.55), rgba(155,122,255,.35));
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      flex:0 0 auto;
     }
-    .dot{width:10px;height:10px;border-radius:99px;background:var(--bad);box-shadow:0 0 0 3px rgba(255,91,107,.15)}
-    .pill.ok .dot{background:var(--ok);box-shadow:0 0 0 3px rgba(68,208,123,.16)}
+    .titles{min-width:0}
+    .titles h1{margin:0;font-size:22px;letter-spacing:.2px}
+    .titles p{margin:2px 0 0;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .status{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.22);
+      flex:0 0 auto;
+    }
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--bad);box-shadow:0 0 0 6px rgba(255,91,107,.12)}
+    .status b{font-weight:700}
+    .status small{color:var(--muted)}
+    .btn-mini{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:999px;
+      padding:8px 10px;
+      font-weight:700;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn-mini:active{transform:var(--press)}
+
     .tabs{
-      margin-top:14px;
+      margin-top:12px;
       display:flex;gap:10px;
-      padding:10px;border-radius:22px;border:1px solid var(--stroke);
-      background:rgba(0,0,0,.18);
+      padding:12px;
+      border-radius:var(--r);
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
       box-shadow:var(--shadow);
     }
     .tab{
       flex:1;
-      cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      gap:10px;
+      padding:14px 12px;
+      border-radius:18px;
       border:1px solid var(--stroke);
-      background:rgba(255,255,255,.03);
-      color:var(--text);
-      border-radius:16px;
-      padding:12px 10px;
-      font-weight:750;
-      display:flex;gap:10px;align-items:center;justify-content:center;
+      background:rgba(255,255,255,.05);
+      font-weight:800;
+      cursor:pointer;
       user-select:none;
-      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+      min-height:54px;
+    }
+    .tab.active{
+      background:rgba(122,162,255,.12);
+      border-color: rgba(122,162,255,.35);
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
     }
     .tab:active{transform:var(--press)}
-    .tab.active{background:rgba(122,162,255,.14);border-color:rgba(122,162,255,.35)}
-    .panel{
+
+    .card{
       margin-top:12px;
-      border:1px solid var(--stroke);
-      border-radius:22px;
-      background:var(--panel);
-      box-shadow:var(--shadow);
-      padding:14px;
-      backdrop-filter: blur(10px);
-    }
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .field{flex:1;min-width:220px}
-    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
-    input,select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--stroke);
-      background:rgba(0,0,0,.22);
-      color:var(--text);
-      outline:none;
-    }
-    input::placeholder{color:rgba(232,236,246,.35)}
-    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{
-      cursor:pointer;
       border:1px solid var(--stroke);
       background:rgba(255,255,255,.04);
-      color:var(--text);
-      padding:12px 14px;
-      border-radius:16px;
-      font-weight:800;
-      transition:transform .06s ease, background .15s ease, border-color .15s ease;
-      user-select:none;
-    }
-    .btn.primary{background:rgba(122,162,255,.18);border-color:rgba(122,162,255,.35)}
-    .btn:active{transform:var(--press)}
-    .muted{color:var(--muted);font-size:13px;line-height:1.35}
-    .hr{height:1px;background:var(--stroke);margin:14px 0}
-    .toast{
-      position:fixed;left:50%;bottom:16px;transform:translateX(-50%);
-      padding:12px 14px;border-radius:999px;border:1px solid var(--stroke);
-      background:rgba(0,0,0,.55);backdrop-filter:blur(10px);
-      color:var(--text);font-weight:800;
-      opacity:0;pointer-events:none;transition:opacity .2s ease;
-      max-width:min(92vw, 880px);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    }
-    .toast.show{opacity:1}
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:10px;
-      margin-top:12px;
-    }
-    @media (min-width:860px){
-      .grid{grid-template-columns: repeat(3, minmax(0,1fr));}
-    }
-    .card{
-      border:1px solid var(--stroke);
-      border-radius:18px;
-      background:rgba(255,255,255,.03);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .thumb{
+    .card .inner{padding:14px}
+    .hint{color:var(--muted);font-size:13px;line-height:1.35}
+
+    label{display:block;margin:12px 0 6px;color:var(--muted);font-size:13px}
+    input,select,textarea{
       width:100%;
-      aspect-ratio: 4/3;
-      object-fit:cover;
-      display:block;
-      background:rgba(0,0,0,.25);
+      padding:12px 12px;
+      background:rgba(0,0,0,.22);
+      border:1px solid var(--stroke);
+      color:var(--text);
+      border-radius:14px;
+      outline:none;
+      font-size:15px;
     }
-    .card .meta{padding:10px 10px 12px}
-    .title{font-weight:850}
-    .small{font-size:12px;color:var(--muted);margin-top:4px}
-    .note{
-      margin-top:10px;
-      padding:10px 12px;
+    input::placeholder,textarea::placeholder{color:rgba(232,236,246,.38)}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row > *{flex:1;min-width:220px}
+
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
       border-radius:16px;
-      border:1px solid var(--stroke);
-      background:rgba(0,0,0,.20);
-      color:var(--muted);
-      font-size:12.5px;
-      line-height:1.35;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      min-width:160px;
+      text-align:center;
     }
-    .kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .kpi .box{
-      flex:1;min-width:190px;
+    .btn.primary{
+      background:rgba(122,162,255,.18);
+      border-color: rgba(122,162,255,.40);
+    }
+    .btn:active{transform:var(--press)}
+    .btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+
+    .divider{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .toast{
+      position:fixed;left:12px;right:12px;bottom:14px;
+      max-width:980px;margin:0 auto;
       border:1px solid var(--stroke);
+      background:rgba(0,0,0,.78);
+      color:var(--text);
+      border-radius:16px;
+      padding:12px 14px;
+      box-shadow:var(--shadow);
+      transform:translateY(18px);
+      opacity:0;
+      transition:.18s ease;
+      pointer-events:none;
+      z-index:99;
+    }
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast b{font-weight:900}
+    .toast .sub{color:var(--muted);font-size:13px;margin-top:2px}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:10px;
+    }
+    @media (max-width:720px){ .grid{grid-template-columns:1fr} }
+
+    .imgcard{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
       border-radius:18px;
-      background:rgba(255,255,255,.03);
-      padding:12px;
+      overflow:hidden;
     }
-    .kpi .n{font-weight:950;font-size:22px}
-    .kpi .l{color:var(--muted);font-size:12px;margin-top:4px}
-    .ghost{opacity:.55}
+    .imgcard img{width:100%;display:block;aspect-ratio: 4/3;object-fit:cover;background:rgba(255,255,255,.03)}
+    .imgcard .meta{padding:10px 12px}
+    .imgcard .meta b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .imgcard .meta small{color:var(--muted)}
+
+    .modal{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.72);
+      display:none;
+      align-items:center;justify-content:center;
+      padding:18px;
+      z-index:100;
+    }
+    .modal.open{display:flex}
+    .modal .box{
+      width:min(980px, 100%);
+      border:1px solid var(--stroke);
+      background:rgba(12,14,18,.92);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modal .bar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.10)
+    }
+    .modal .bar b{font-weight:900}
+    .modal .bar button{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .modal .bar button:active{transform:var(--press)}
+    .modal .content{padding:12px}
+    .bigimg{width:100%;max-height:75vh;object-fit:contain;background:rgba(255,255,255,.03);border-radius:14px}
+
+    .foot{
+      position:fixed;left:0;right:0;bottom:0;
+      background:rgba(7,10,14,.72);
+      backdrop-filter: blur(10px);
+      border-top:1px solid rgba(255,255,255,.10);
+      padding:10px 12px;
+      z-index:50;
+    }
+    .foot .inner{
+      max-width:980px;margin:0 auto;
+      display:flex;gap:10px;justify-content:space-between;align-items:center;
+      color:var(--muted);font-size:12px;
+    }
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="hero">
-      <div class="avatar"></div>
-      <div>
-        <h1>Martu-art</h1>
-        <div class="sub">Expos + Dibujos (GitHub Pages + Supabase)</div>
+    <div class="top">
+      <div class="brand">
+        <div class="pill"></div>
+        <div class="titles">
+          <h1>Martu-art</h1>
+          <p>Expos + Dibujos (GitHub Pages + Supabase)</p>
+        </div>
       </div>
-      <div id="pill" class="pill">
-        <span id="dot" class="dot"></span>
-        <span id="pillText">Conectando…</span>
+
+      <div class="status" id="statusWrap">
+        <span class="dot" id="dot"></span>
+        <div>
+          <b id="statusText">Conectando…</b><br/>
+          <small id="statusSub">probando Supabase</small>
+        </div>
+        <button class="btn-mini" id="btnRetry" title="Reintentar">↻</button>
       </div>
     </div>
 
     <div class="tabs">
       <div class="tab active" data-tab="expos">📁 Expos</div>
-      <div class="tab" data-tab="upload">⬆️ Subir dibujo</div>
-      <div class="tab" data-tab="gallery">🖼️ Galería</div>
+      <div class="tab" data-tab="subir">⬆️ Subir dibujo</div>
+      <div class="tab" data-tab="galeria">🖼️ Galería</div>
     </div>
 
-    <div class="panel" id="tab-expos">
-      <div class="muted">Creá una expo (se autogenera el slug). Después podés compartir el link.</div>
+    <!-- EXPO -->
+    <div class="card" id="panel-expos">
+      <div class="inner">
+        <div class="hint">
+          Creá una expo (se autogenera el slug). Después podés compartir el link.
+        </div>
 
-      <label>Nombre de la expo</label>
-      <input id="expoName" placeholder="Ej: Primavera 2026, Dinosaurios, etc."/>
+        <label>Nombre de la expo</label>
+        <input id="expoTitle" placeholder="Ej: Primavera 2026, Dinosaurios, etc."/>
 
-      <label>Slug (se autogenera)</label>
-      <input id="expoSlug" class="ghost" placeholder="ej: primavera-2026" disabled/>
+        <label>Slug (se autogenera)</label>
+        <input id="expoSlug" placeholder="ej: primavera-2026" disabled/>
 
-      <div class="btns">
-        <button class="btn primary" id="btnCreateExpo">Crear expo</button>
-        <button class="btn" id="btnRefreshExpos">Actualizar lista</button>
-      </div>
+        <div class="btns">
+          <div class="btn primary" id="btnCreateExpo">Crear expo</div>
+          <div class="btn" id="btnRefreshExpos">Actualizar lista</div>
+        </div>
 
-      <div class="hr"></div>
+        <div class="divider"></div>
 
-      <label>Expo seleccionada</label>
-      <select id="expoSelect">
-        <option value="">— Elegí una expo —</option>
-      </select>
+        <label>Expo seleccionada</label>
+        <select id="expoSelect">
+          <option value="">— Elegí una expo —</option>
+        </select>
 
-      <label>Link de la expo (para compartir)</label>
-      <input id="expoLink" readonly />
+        <label>Link de la expo (para compartir)</label>
+        <input id="expoLink" placeholder="Se completa al elegir una expo" readonly/>
 
-      <div class="btns">
-        <button class="btn" id="btnCopyLink">Copiar link</button>
-      </div>
+        <div class="btns">
+          <div class="btn" id="btnCopyLink">Copiar link</div>
+        </div>
 
-      <div class="kpi">
-        <div class="box"><div class="n" id="kpiExpos">0</div><div class="l">Expos creadas</div></div>
-        <div class="box"><div class="n" id="kpiDrawings">0</div><div class="l">Dibujos en esta expo</div></div>
-      </div>
-    </div>
+        <div class="divider"></div>
 
-    <div class="panel" id="tab-upload" style="display:none">
-      <div class="muted">Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda linkeada a la expo seleccionada.</div>
-
-      <label>Archivo (foto del dibujo)</label>
-      <input id="file" type="file" accept="image/*"/>
-
-      <label>Título (opcional)</label>
-      <input id="drawingTitle" placeholder="Ej: Gatito, Arcoiris, etc."/>
-
-      <div class="btns">
-        <button class="btn primary" id="btnUpload">Subir</button>
-        <button class="btn" id="btnGoGallery">Ver galería</button>
-      </div>
-
-      <div class="note">
-        Si sube a Storage pero falla en DB, es porque la tabla/policies no coinciden. Con este código usamos <b>drawings.image_url</b> (que vos sí tenés).
+        <div class="grid">
+          <div class="imgcard" style="padding:12px">
+            <b id="statExpos">0</b>
+            <small class="hint">Expos creadas</small>
+          </div>
+          <div class="imgcard" style="padding:12px">
+            <b id="statItems">0</b>
+            <small class="hint">Dibujos en esta expo</small>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="panel" id="tab-gallery" style="display:none">
-      <div class="muted">Muestra los dibujos de la expo seleccionada.</div>
-      <div class="btns">
-        <button class="btn primary" id="btnLoadGallery">Cargar galería</button>
+    <!-- SUBIR -->
+    <div class="card" id="panel-subir" style="display:none">
+      <div class="inner">
+        <div class="hint">
+          Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda en la expo seleccionada.
+        </div>
+
+        <label>Archivo (foto del dibujo)</label>
+        <input id="file" type="file" accept="image/*"/>
+
+        <label>Título (opcional)</label>
+        <input id="drawTitle" placeholder="Ej: Gatito, Arcoiris, etc."/>
+
+        <div class="btns">
+          <div class="btn primary" id="btnUpload">Subir</div>
+          <div class="btn" id="btnGoGallery">Ver galería</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="hint">
+          Tip: si te deja subir a Storage pero no aparece en galería, suele ser porque faltan permisos de DB (RLS) o porque no existe la relación en expo_items.
+        </div>
       </div>
-      <div id="gallery" class="grid"></div>
+    </div>
+
+    <!-- GALERIA -->
+    <div class="card" id="panel-galeria" style="display:none">
+      <div class="inner">
+        <div class="hint">
+          Mostramos la galería de la expo elegida.
+        </div>
+
+        <div class="btns">
+          <div class="btn primary" id="btnLoadGallery">Cargar / Actualizar</div>
+        </div>
+
+        <div class="divider"></div>
+        <div id="galleryGrid" class="grid"></div>
+      </div>
     </div>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <!-- MODAL IMG -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <div class="bar">
+        <b id="modalTitle">Dibujo</b>
+        <button id="modalClose">Cerrar</button>
+      </div>
+      <div class="content">
+        <img id="modalImg" class="bigimg" src="" alt=""/>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="inner">
+      <div>Estado: <span class="mono" id="footState">—</span></div>
+      <div class="mono" id="footBucket">bucket: —</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <b id="toastTitle">Listo</b>
+    <div class="sub" id="toastSub"></div>
+  </div>
 
 <script>
-/* =========================
-   CONFIG (PEGÁ TUS DATOS)
-========================= */
+/* ==========================
+   CONFIG (NO TOCAR 100 VECES)
+   ========================== */
 const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS"; // sb_publishable_...
-const BUCKET = "drawings"; // nombre del bucket en Storage
+const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+const BUCKET = "drawings";
 
-/* =========================
+/* ==========================
    APP
-========================= */
+   ========================== */
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const $ = (id)=>document.getElementById(id);
-const toast = (msg, bad=false)=>{
-  const t = $("toast");
-  t.textContent = msg;
-  t.style.borderColor = bad ? "rgba(255,91,107,.40)" : "rgba(68,208,123,.35)";
-  t.classList.add("show");
-  clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
-};
+const toastEl = $("toast");
 
-const setConn = (ok, msg)=>{
-  const pill = $("pill");
-  const dot = $("dot");
-  $("pillText").textContent = msg;
-  pill.classList.toggle("ok", !!ok);
-};
+function toast(title, sub=""){
+  $("toastTitle").textContent = title;
+  $("toastSub").textContent = sub;
+  toastEl.classList.add("show");
+  setTimeout(()=>toastEl.classList.remove("show"), 2200);
+}
 
 function slugify(s){
   return (s||"")
-    .trim().toLowerCase()
+    .toString()
+    .trim()
+    .toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
     .replace(/[^a-z0-9]+/g,"-")
-    .replace(/^-+|-+$/g,"")
-    .slice(0,60) || "expo";
+    .replace(/(^-|-$)/g,"")
+    .slice(0,60);
 }
 
-function baseUrl(){
-  // GitHub Pages user site: https://matiasepena-star.github.io/
-  // Si estás con /index.html también sirve, pero NO uses /index.html/ (con barra al final)
-  const u = new URL(window.location.href);
-  u.search = "";
-  u.hash = "";
-  return u.toString();
+function setStatus(ok, text, sub){
+  $("dot").style.background = ok ? "var(--good)" : "var(--bad)";
+  $("dot").style.boxShadow = ok ? "0 0 0 6px rgba(68,208,123,.12)" : "0 0 0 6px rgba(255,91,107,.12)";
+  $("statusText").textContent = text;
+  $("statusSub").textContent = sub || "";
+  $("footState").textContent = ok ? "conectado ✅" : "sin conexión / permisos ❌";
+  $("footBucket").textContent = "bucket: " + BUCKET;
 }
 
-async function testConn(){
+async function withTimeout(promise, ms=6000){
+  let t;
+  const timeout = new Promise((_,rej)=> t=setTimeout(()=>rej(new Error("Timeout")), ms));
+  try { return await Promise.race([promise, timeout]); }
+  finally { clearTimeout(t); }
+}
+
+async function checkConnection(){
+  setStatus(false, "Conectando…", "probando Supabase");
   try{
-    // prueba simple: pedir 1 fila de expos
-    const { error } = await supabase.from("expos").select("id").limit(1);
-    if (error) throw error;
-    setConn(true, "Conectado ✅");
+    // prueba DB (expos) con timeout
+    const { data, error } = await withTimeout(
+      supabase.from("expos").select("id").limit(1),
+      6500
+    );
+    if(error) throw error;
+    setStatus(true, "Conectado ✅", "DB OK");
     return true;
   }catch(e){
-    setConn(false, "No conectado ❌");
-    toast("Error Supabase: " + (e.message||e), true);
+    // si DB falla, igual puede existir Storage OK, pero te lo marco rojo
+    setStatus(false, "Conectando…", (e && e.message) ? e.message : "error");
     return false;
   }
 }
 
-async function refreshExpos(selectSlugToPick=null){
+/* ---------- Tabs ---------- */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    const name = t.dataset.tab;
+    $("panel-expos").style.display = (name==="expos") ? "" : "none";
+    $("panel-subir").style.display = (name==="subir") ? "" : "none";
+    $("panel-galeria").style.display = (name==="galeria") ? "" : "none";
+  });
+});
+
+/* ---------- Expos ---------- */
+$("expoTitle").addEventListener("input", ()=>{
+  $("expoSlug").value = slugify($("expoTitle").value);
+});
+
+async function refreshExpos(selectKeep=true){
+  const keep = $("expoSelect").value;
   const { data, error } = await supabase
     .from("expos")
     .select("id,title,slug,created_at")
     .order("created_at", { ascending:false });
 
-  if (error){ toast("Error cargando expos ❌", true); return; }
-
-  $("kpiExpos").textContent = data.length;
-
-  const sel = $("expoSelect");
-  const prev = sel.value;
-  sel.innerHTML = `<option value="">— Elegí una expo —</option>` + data.map(x=>{
-    return `<option value="${x.id}" data-slug="${x.slug}">${x.title} (${x.slug})</option>`;
-  }).join("");
-
-  // seleccionar
-  if (selectSlugToPick){
-    const opt = [...sel.options].find(o=>o.getAttribute("data-slug")===selectSlugToPick);
-    if (opt) sel.value = opt.value;
-  } else if (prev) {
-    sel.value = prev;
+  if(error){
+    toast("Error cargando expos ❌", error.message);
+    return;
   }
 
+  $("statExpos").textContent = data.length;
+
+  const sel = $("expoSelect");
+  sel.innerHTML = `<option value="">— Elegí una expo —</option>` +
+    data.map(r=>`<option value="${r.id}" data-slug="${r.slug}">${escapeHtml(r.title)} (${escapeHtml(r.slug)})</option>`).join("");
+
+  if(selectKeep && keep){
+    sel.value = keep;
+  }
+  // si hay una sola, auto
+  if(!sel.value && data.length===1){
+    sel.value = data[0].id;
+  }
   updateExpoLink();
-  await refreshKpis();
-}
-
-async function refreshKpis(){
-  const expoId = $("expoSelect").value;
-  if (!expoId){ $("kpiDrawings").textContent = "0"; return; }
-
-  const { count, error } = await supabase
-    .from("expo_items")
-    .select("id", { count:"exact", head:true })
-    .eq("expo_id", expoId);
-
-  if (error){ $("kpiDrawings").textContent = "0"; return; }
-  $("kpiDrawings").textContent = String(count ?? 0);
+  await refreshExpoStats();
 }
 
 function updateExpoLink(){
   const sel = $("expoSelect");
   const opt = sel.options[sel.selectedIndex];
-  const slug = opt?.getAttribute("data-slug") || "";
-  if (!slug){ $("expoLink").value = ""; return; }
-
-  const u = new URL(baseUrl());
-  u.searchParams.set("expo", slug);
-  $("expoLink").value = u.toString();
-}
-
-async function ensureExpoSelected(){
-  const expoId = $("expoSelect").value;
-  if (!expoId){
-    toast("Elegí una expo primero 🙏", true);
-    return null;
-  }
-  const opt = $("expoSelect").options[$("expoSelect").selectedIndex];
-  return { expoId, expoSlug: opt.getAttribute("data-slug") };
-}
-
-async function createExpo(){
-  const name = $("expoName").value.trim();
-  if (!name){ toast("Poné un nombre de expo", true); return; }
-  const slug = slugify(name);
-  $("expoSlug").value = slug;
-
-  const { data:existing, error:err1 } = await supabase.from("expos").select("id").eq("slug", slug).limit(1);
-  if (err1){ toast("Error verificando slug ❌", true); return; }
-  if (existing && existing.length){
-    toast("Ese slug ya existe. Cambiá el nombre o agregá algo.", true);
+  const slug = opt ? opt.getAttribute("data-slug") : "";
+  if(!sel.value || !slug){
+    $("expoLink").value = "";
     return;
   }
-
-  const { error } = await supabase.from("expos").insert({ title:name, slug });
-  if (error){ toast("No pudo crear expo ❌ " + error.message, true); return; }
-
-  toast("Expo creada ✅");
-  $("expoName").value = "";
-  $("expoSlug").value = "";
-  await refreshExpos(slug);
+  const url = new URL(window.location.href);
+  url.searchParams.set("expo", slug);
+  $("expoLink").value = url.toString();
 }
 
-async function uploadDrawing(){
-  const ok = await testConn();
-  if (!ok) return;
+$("expoSelect").addEventListener("change", async ()=>{
+  updateExpoLink();
+  await refreshExpoStats();
+});
 
-  const expo = await ensureExpoSelected();
-  if (!expo) return;
-
-  const file = $("file").files?.[0];
-  if (!file){ toast("Elegí una imagen", true); return; }
-
-  const title = $("drawingTitle").value.trim() || null;
-
-  // nombre único
-  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-  const safeExt = ext.match(/^(jpg|jpeg|png|webp|gif)$/) ? ext : "jpg";
-  const path = `${expo.expoSlug}/${Date.now()}-${Math.random().toString(16).slice(2)}.${safeExt}`;
-
-  // 1) sube a storage
-  const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
-    cacheControl: "3600",
-    upsert: false,
-    contentType: file.type || "image/jpeg"
-  });
-  if (upErr){
-    toast("No subió a Storage ❌ " + upErr.message, true);
-    return;
+$("btnCopyLink").addEventListener("click", async ()=>{
+  const v = $("expoLink").value;
+  if(!v){ toast("Elegí una expo primero"); return; }
+  try{
+    await navigator.clipboard.writeText(v);
+    toast("Copiado ✅", "Pegalo en WhatsApp y listo");
+  }catch{
+    toast("No pude copiar ❌", "Mantené apretado y copiá manual");
   }
+});
 
-  // 2) arma URL pública (bucket PUBLIC)
-  const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  const image_url = pub?.publicUrl;
-  if (!image_url){
-    toast("Subió pero no pude generar URL pública ❌", true);
-    return;
-  }
+$("btnCreateExpo").addEventListener("click", async ()=>{
+  const title = $("expoTitle").value.trim();
+  const slug = slugify(title);
+  if(!title){ toast("Poné un nombre"); return; }
+  if(!slug){ toast("Ese nombre no sirve", "Probá con letras/números"); return; }
 
-  // 3) inserta en DB (SOLO columnas que existen)
-  const { data: drow, error: dbErr } = await supabase
-    .from("drawings")
-    .insert({ title, image_url })
-    .select("id")
+  const { data, error } = await supabase
+    .from("expos")
+    .insert({ title, slug })
+    .select("id,slug")
     .single();
 
-  if (dbErr){
-    toast("Subió a Storage pero falló DB ❌ " + dbErr.message, true);
+  if(error){
+    toast("No se pudo crear ❌", error.message);
     return;
   }
 
-  // 4) linkea con la expo
-  const { error: linkErr } = await supabase
+  toast("Expo creada ✅", slug);
+  $("expoTitle").value = "";
+  $("expoSlug").value = "";
+  await refreshExpos(false);
+  // seleccionar nueva
+  $("expoSelect").value = data.id;
+  updateExpoLink();
+  await refreshExpoStats();
+});
+
+$("btnRefreshExpos").addEventListener("click", ()=>refreshExpos(true));
+
+async function refreshExpoStats(){
+  const expoId = $("expoSelect").value;
+  if(!expoId){
+    $("statItems").textContent = "0";
+    return;
+  }
+  // contamos items en expo_items
+  const { count, error } = await supabase
     .from("expo_items")
-    .insert({ expo_id: expo.expoId, drawing_id: drow.id });
+    .select("id", { count:"exact", head:true })
+    .eq("expo_id", expoId);
 
-  if (linkErr){
-    toast("Guardó dibujo pero no linkeó expo ❌ " + linkErr.message, true);
+  if(error){
+    $("statItems").textContent = "0";
     return;
   }
-
-  toast("Subido y guardado ✅");
-  $("file").value = "";
-  $("drawingTitle").value = "";
-  await refreshKpis();
+  $("statItems").textContent = String(count || 0);
 }
 
+/* ---------- Upload ---------- */
+$("btnGoGallery").addEventListener("click", ()=>{
+  document.querySelector(`.tab[data-tab="galeria"]`).click();
+});
+
+$("btnUpload").addEventListener("click", async ()=>{
+  const expoId = $("expoSelect").value;
+  const expoSlug = $("expoSelect").options[$("expoSelect").selectedIndex]?.getAttribute("data-slug") || "";
+  if(!expoId || !expoSlug){
+    toast("Elegí una expo primero");
+    return;
+  }
+
+  const file = $("file").files && $("file").files[0];
+  if(!file){
+    toast("Elegí una foto");
+    return;
+  }
+
+  const title = $("drawTitle").value.trim() || "Dibujo";
+
+  // path en storage
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g,"");
+  const safeExt = ext || "jpg";
+  const rand = Math.random().toString(16).slice(2);
+  const path = `${expoSlug}/${Date.now()}-${rand}.${safeExt}`;
+
+  $("btnUpload").setAttribute("disabled","disabled");
+  try{
+    // 1) SUBIR A STORAGE
+    const up = await supabase.storage
+      .from(BUCKET)
+      .upload(path, file, { upsert:false, contentType:file.type || undefined });
+
+    if(up.error) throw up.error;
+
+    // 2) URL PUBLICA
+    const pub = supabase.storage.from(BUCKET).getPublicUrl(path);
+    const publicUrl = pub?.data?.publicUrl;
+    if(!publicUrl) throw new Error("No pude obtener publicUrl");
+
+    // 3) INSERT DRAWING
+    const insDraw = await supabase
+      .from("drawings")
+      .insert({ title, image_url: publicUrl })
+      .select("id")
+      .single();
+
+    if(insDraw.error) throw insDraw.error;
+
+    // 4) LINK A EXPO (expo_items)
+    const insItem = await supabase
+      .from("expo_items")
+      .insert({ expo_id: expoId, drawing_id: insDraw.data.id });
+
+    if(insItem.error) throw insItem.error;
+
+    toast("Subió ✅", "Ya debería aparecer en galería");
+    $("file").value = "";
+    $("drawTitle").value = "";
+    await refreshExpoStats();
+  }catch(e){
+    toast("No subió / no guardó ❌", e?.message || "Error");
+  }finally{
+    $("btnUpload").removeAttribute("disabled");
+  }
+});
+
+/* ---------- Gallery ---------- */
 async function loadGallery(){
-  const ok = await testConn();
-  if (!ok) return;
+  const expoId = $("expoSelect").value;
+  if(!expoId){
+    toast("Elegí una expo primero");
+    return;
+  }
 
-  const expo = await ensureExpoSelected();
-  if (!expo) return;
+  const grid = $("galleryGrid");
+  grid.innerHTML = "";
 
-  // trae drawings por join con expo_items
   const { data, error } = await supabase
     .from("expo_items")
-    .select("drawing_id, drawings:drawings(id,title,image_url,created_at)")
-    .eq("expo_id", expo.expoId)
-    .order("drawing_id", { ascending:false });
+    .select("id, created_at, drawings ( id, title, image_url, created_at )")
+    .eq("expo_id", expoId)
+    .order("created_at", { ascending:false });
 
-  if (error){
-    toast("Error cargando galería ❌ " + error.message, true);
+  if(error){
+    toast("Error cargando galería ❌", error.message);
     return;
   }
 
-  const items = (data||[])
-    .map(x => x.drawings)
-    .filter(Boolean)
-    .filter(d => d.image_url);
+  const rows = (data || [])
+    .map(x=>x.drawings)
+    .filter(Boolean);
 
-  const g = $("gallery");
-  if (!items.length){
-    g.innerHTML = `<div class="muted">No hay dibujos todavía en esta expo.</div>`;
-    $("kpiDrawings").textContent = "0";
+  if(rows.length===0){
+    grid.innerHTML = `<div class="hint">No hay dibujos todavía en esta expo.</div>`;
     return;
   }
 
-  g.innerHTML = items.map(d=>{
-    const t = (d.title || "Sin título").replace(/</g,"&lt;");
-    const dt = d.created_at ? new Date(d.created_at).toLocaleString() : "";
+  grid.innerHTML = rows.map(r=>{
+    const t = escapeHtml(r.title || "Dibujo");
+    const u = escapeAttr(r.image_url || "");
     return `
-      <div class="card">
-        <img class="thumb" src="${d.image_url}" alt="${t}" loading="lazy"/>
+      <div class="imgcard" data-title="${escapeAttr(t)}" data-url="${u}">
+        <img src="${u}" alt="${t}" loading="lazy"/>
         <div class="meta">
-          <div class="title">${t}</div>
-          <div class="small">${dt}</div>
+          <b>${t}</b>
+          <small>${new Date(r.created_at || Date.now()).toLocaleString()}</small>
         </div>
       </div>
     `;
   }).join("");
 
-  $("kpiDrawings").textContent = String(items.length);
-  toast("Galería lista ✅");
-}
-
-/* Tabs */
-document.querySelectorAll(".tab").forEach(t=>{
-  t.addEventListener("click", ()=>{
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    t.classList.add("active");
-    const k = t.dataset.tab;
-    ["expos","upload","gallery"].forEach(id=>{
-      $("tab-"+id).style.display = (id===k) ? "" : "none";
+  document.querySelectorAll(".imgcard").forEach(c=>{
+    c.addEventListener("click", ()=>{
+      const title = c.getAttribute("data-title") || "Dibujo";
+      const url = c.getAttribute("data-url") || "";
+      $("modalTitle").textContent = title;
+      $("modalImg").src = url;
+      $("modal").classList.add("open");
     });
   });
-});
+}
 
-/* Events */
-$("expoName").addEventListener("input", ()=>{
-  $("expoSlug").value = slugify($("expoName").value);
-});
-$("btnCreateExpo").addEventListener("click", createExpo);
-$("btnRefreshExpos").addEventListener("click", ()=>refreshExpos());
-$("expoSelect").addEventListener("change", async ()=>{
-  updateExpoLink();
-  await refreshKpis();
-});
-$("btnCopyLink").addEventListener("click", async ()=>{
-  const v = $("expoLink").value;
-  if (!v){ toast("Elegí una expo", true); return; }
-  await navigator.clipboard.writeText(v);
-  toast("Link copiado ✅");
-});
-$("btnUpload").addEventListener("click", uploadDrawing);
 $("btnLoadGallery").addEventListener("click", loadGallery);
-$("btnGoGallery").addEventListener("click", ()=>{
-  document.querySelector('.tab[data-tab="gallery"]').click();
-  loadGallery();
+
+/* ---------- Modal ---------- */
+$("modalClose").addEventListener("click", ()=> $("modal").classList.remove("open"));
+$("modal").addEventListener("click", (e)=>{
+  if(e.target === $("modal")) $("modal").classList.remove("open");
 });
 
-/* Init */
-(async ()=>{
-  await testConn();
-  await refreshExpos();
+/* ---------- Helpers ---------- */
+function escapeHtml(s){
+  return (s||"").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function escapeAttr(s){
+  return (s||"").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
 
-  // si viene con ?expo=slug en el link compartido, autoselecciona
-  const params = new URLSearchParams(location.search);
-  const slug = params.get("expo");
-  if (slug){
-    await refreshExpos(slug);
-    document.querySelector('.tab[data-tab="gallery"]').click();
+/* ---------- Deep link ?expo=slug ---------- */
+async function selectExpoFromQuery(){
+  const url = new URL(window.location.href);
+  const slug = url.searchParams.get("expo");
+  if(!slug) return;
+
+  // buscamos esa expo por slug
+  const { data, error } = await supabase
+    .from("expos")
+    .select("id, slug")
+    .eq("slug", slug)
+    .limit(1);
+
+  if(!error && data && data[0]){
+    // seleccionar por id (después de cargar dropdown)
+    $("expoSelect").value = data[0].id;
+    updateExpoLink();
+    await refreshExpoStats();
+  }
+}
+
+/* ---------- Boot ---------- */
+$("btnRetry").addEventListener("click", async ()=>{
+  await checkConnection();
+  await refreshExpos(true);
+  await selectExpoFromQuery();
+});
+
+(async function init(){
+  $("footBucket").textContent = "bucket: " + BUCKET;
+
+  await checkConnection();
+  await refreshExpos(true);
+  await selectExpoFromQuery();
+
+  // Si viene con ?expo=..., abrir galería directo (más cómodo para el link compartido)
+  const url = new URL(window.location.href);
+  if(url.searchParams.get("expo")){
+    document.querySelector(`.tab[data-tab="galeria"]`).click();
     await loadGallery();
   }
 })();
