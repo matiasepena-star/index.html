@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba Stella Maris</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg,#0f1115,#1c2230);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  text-align:center;
+}
+
+.card{
+  background:#1f2635;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.5);
+  width:90%;
+  max-width:400px;
+}
+
+h1{
+  margin-top:0;
+  font-size:28px;
+}
+
+button{
+  margin-top:20px;
+  padding:12px 25px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  cursor:pointer;
+  background:#7aa2ff;
+  color:black;
+  font-weight:bold;
+}
+
+button:active{
+  transform:scale(0.97);
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>🚀 Funciona perfecto</h1>
+  <p>Tu archivo <strong>index.html</strong> está activo.</p>
+  <button onclick="saludar()">Probar botón</button>
+</div>
+
+<script>
+function saludar(){
+  alert("Stella Maris online 💪");
+}
+</script>
+
+</body>
+</html>
