@@ -35,6 +35,7 @@ body{
     radial-gradient(900px 600px at 110% 0%, rgba(122,162,255,.18), transparent 55%),
     linear-gradient(135deg, var(--bg1), var(--bg2));
 }
+
 .wrap{max-width:1120px;margin:0 auto;padding:16px 14px 120px}
 .top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
 h1{margin:0;font-size:22px;letter-spacing:.2px}
@@ -178,50 +179,160 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   font-size:14px;
 }
 
-/* Modal base */
+/* ===== Modales (iOS scroll fix) ===== */
 .modal{
   position:fixed; inset:0;
   background:rgba(0,0,0,.72);
   display:none;
   align-items:center;
   justify-content:center;
-  padding:16px;
+  padding:14px;
   z-index:999;
 }
 .modal.open{display:flex}
 .modalCard{
   width:min(980px, 100%);
+  max-height:92vh;
   background:rgba(18,24,40,.96);
   border:1px solid rgba(255,255,255,.14);
   border-radius:22px;
   overflow:hidden;
   box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
 }
 .modalTop{
   display:flex;align-items:center;justify-content:space-between;
-  padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.10);
+  padding:12px 12px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  gap:10px;
 }
-.modalTop .t{font-weight:1000;font-size:14px}
-.closeBtn{
+.modalTop .t{
+  font-weight:1000;
+  font-size:14px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.topBtns{display:flex;gap:10px;align-items:center}
+.topBtn{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(255,255,255,.08);
   color:var(--text);
   border-radius:16px;
-  padding:10px 12px;
+  padding:12px 14px;
   cursor:pointer;
   font-weight:1000;
+  font-size:15px;
 }
-.closeBtn:active{transform:var(--tap)}
+.topBtn.ok{
+  background:linear-gradient(135deg, rgba(68,208,123,.95), rgba(68,208,123,.65));
+  color:#07110b;
+  border-color:rgba(0,0,0,.18);
+}
+.topBtn:active{transform:var(--tap)}
+
+.modalScroll{
+  overflow-y:auto;
+  -webkit-overflow-scrolling: touch;
+  padding:14px;
+}
 .big{
   width:100%;
   height:auto;
   display:block;
-  max-height: 74vh;
-  object-fit: contain;
+  max-height:60vh;
+  object-fit:contain;
   background:#0b0d12;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);
 }
-.modalBody{padding:14px}
-.modalActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.modalActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  margin-top:12px;
+}
+.modalActions .left, .modalActions .right{
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center
+}
+.smallHint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:10px}
+
+/* ===== Editor ===== */
+.cropWrap{
+  width:100%;
+  background:#0b0d12;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+  touch-action:none;
+  user-select:none;
+}
+.cropImg{
+  width:100%;
+  height:auto;
+  display:block;
+  max-height:62vh;
+  object-fit:contain;
+}
+.cropBox{
+  position:absolute;
+  border:2px solid rgba(122,162,255,.98);
+  border-radius:14px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.45);
+}
+.handle{
+  position:absolute;
+  width:18px;height:18px;
+  border-radius:999px;
+  background:rgba(122,162,255,.98);
+  border:2px solid rgba(0,0,0,.35);
+}
+.handle.nw{left:-9px;top:-9px}
+.handle.ne{right:-9px;top:-9px}
+.handle.sw{left:-9px;bottom:-9px}
+.handle.se{right:-9px;bottom:-9px}
+
+.controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;
+  padding:10px 12px;
+  margin-top:12px;
+}
+.controls label{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:900;
+}
+.controls input[type="range"]{width:170px}
+.pill{
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  padding:10px 12px;
+  border-radius:999px;
+  font-weight:950;
+  color:var(--text);
+  cursor:pointer;
+}
+.pill:active{transform:var(--tap)}
+.pill.on{
+  border-color:rgba(68,208,123,.55);
+  background:rgba(68,208,123,.14);
+  color:#d9ffe8;
+}
 
 /* Toast */
 .toast{
@@ -238,6 +349,13 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   font-size:13px;
 }
 .toast.show{display:block}
+
+/* Body lock for iOS */
+body.locked{
+  position:fixed;
+  width:100%;
+  overflow:hidden;
+}
 </style>
 </head>
 
@@ -246,7 +364,7 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   <div class="top">
     <div>
       <h1>🎨 Martu Art</h1>
-      <p>Álbumes + Postal WhatsApp + Libro PDF. Todo desde el celu.</p>
+      <p>Álbumes + Postal WhatsApp + Libro PDF + Editor.</p>
     </div>
     <div class="badge" id="count">0 dibujos</div>
   </div>
@@ -264,7 +382,7 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
       </div>
     </div>
     <div class="mini">
-      Tip: tocá un dibujo para verlo grande. Desde ahí podés hacer <b>Postal</b> o <b>Exportar</b>.
+      Tip: tocá un dibujo para verlo grande. Desde ahí podés <b>Editar</b>, hacer <b>Postal</b> o <b>Exportar</b>.
     </div>
   </div>
 
@@ -279,48 +397,123 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
 <input id="file" type="file" accept="image/*" capture="environment" hidden>
 <input id="importFile" type="file" accept="application/json" hidden>
 
-<!-- Ver grande -->
+<!-- ===== Ver grande ===== -->
 <div class="modal" id="viewModal" aria-hidden="true">
   <div class="modalCard">
     <div class="modalTop">
-      <div class="t" id="viewTitle">Dibujo</div>
-      <button class="closeBtn" id="viewClose">Cerrar ✖</button>
-    </div>
-    <img class="big" id="viewImg" alt="Dibujo ampliado">
-    <div class="modalBody">
-      <div class="modalActions">
-        <button class="btn" id="renameBtn">✏️ Renombrar</button>
-        <button class="btn" id="moveBtn">📁 Mover</button>
-        <button class="btn ok" id="postcardBtn">🖼️ Postal</button>
-        <button class="btn" id="exportBtn">⬇️ Exportar</button>
-        <button class="btn danger" id="deleteBtn">🗑 Borrar</button>
+      <div class="topBtns">
+        <button class="topBtn" id="viewBack">⬅️ Volver</button>
       </div>
-      <div class="mini" id="viewMeta"></div>
+      <div class="t" id="viewTitle">Dibujo</div>
+      <div class="topBtns">
+        <button class="topBtn ok" id="viewOk">✅ Listo</button>
+      </div>
+    </div>
+
+    <div class="modalScroll">
+      <img class="big" id="viewImg" alt="Dibujo ampliado">
+
+      <div class="modalActions">
+        <div class="left">
+          <button class="btn" id="renameBtn">✏️ Renombrar</button>
+          <button class="btn" id="moveBtn">📁 Mover</button>
+          <button class="btn" id="editBtn">✂️ Editar</button>
+        </div>
+        <div class="right">
+          <button class="btn ok" id="postcardBtn">🖼️ Postal</button>
+          <button class="btn" id="exportBtn">⬇️ Exportar</button>
+          <button class="btn danger" id="deleteBtn">🗑 Borrar</button>
+        </div>
+      </div>
+
+      <div class="smallHint" id="viewMeta"></div>
     </div>
   </div>
 </div>
 
-<!-- Gestión de Álbumes -->
+<!-- ===== Gestión de Álbumes ===== -->
 <div class="modal" id="albumModal" aria-hidden="true">
   <div class="modalCard">
     <div class="modalTop">
+      <div class="topBtns">
+        <button class="topBtn" id="albumBack">⬅️ Volver</button>
+      </div>
       <div class="t">📁 Álbumes</div>
-      <button class="closeBtn" id="albumClose">Cerrar ✖</button>
+      <div class="topBtns">
+        <button class="topBtn ok" id="albumOk">✅ Listo</button>
+      </div>
     </div>
-    <div class="modalBody">
+
+    <div class="modalScroll">
       <div class="row" style="margin-bottom:10px">
-        <div class="rowLeft">
-          <input class="input" id="newAlbumName" placeholder="Nuevo álbum (ej: Animales)" />
+        <div class="rowLeft" style="width:100%">
+          <input class="input" id="newAlbumName" placeholder="Nuevo álbum (ej: Animales)" style="flex:1;min-width:220px"/>
           <button class="btn ok" id="createAlbumBtn">Crear</button>
         </div>
+      </div>
+
+      <div class="row" style="margin-bottom:10px">
         <div class="rowLeft">
           <button class="btn" id="backupBtn">📦 Backup</button>
           <button class="btn" id="importBtn">📥 Importar</button>
           <button class="btn danger" id="wipeBtn">🧨 Borrar todo</button>
         </div>
       </div>
+
       <div class="mini">Backup guarda todos los álbumes + dibujos. Importar los suma.</div>
       <div id="albumList" style="margin-top:12px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Editor ===== -->
+<div class="modal" id="editModal" aria-hidden="true">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="topBtns">
+        <button class="topBtn" id="editBack">⬅️ Volver</button>
+      </div>
+      <div class="t">✂️ Editar dibujo</div>
+      <div class="topBtns">
+        <button class="topBtn ok" id="saveBtnTop">✅ Guardar</button>
+      </div>
+    </div>
+
+    <div class="modalScroll">
+      <div class="cropWrap" id="cropWrap">
+        <img class="cropImg" id="cropImg" alt="Editor de recorte">
+        <div class="cropBox" id="cropBox">
+          <div class="handle nw" data-h="nw"></div>
+          <div class="handle ne" data-h="ne"></div>
+          <div class="handle sw" data-h="sw"></div>
+          <div class="handle se" data-h="se"></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="pill" id="bwPill">🖨️ Blanco y negro</div>
+        <label>Contraste
+          <input type="range" id="contrastRange" min="0" max="100" value="35">
+        </label>
+        <label>Vista previa
+          <input type="checkbox" id="previewToggle" checked>
+        </label>
+      </div>
+
+      <div class="modalActions" style="margin-top:12px">
+        <div class="left">
+          <button class="btn" id="rotateBtn">↻ Girar</button>
+          <button class="btn" id="resetBtn">↺ Reset</button>
+        </div>
+        <div class="right">
+          <button class="btn ok" id="saveBtn">✅ Guardar</button>
+        </div>
+      </div>
+
+      <div class="smallHint">
+        Mové el rectángulo para encuadrar. Ajustá las esquinas para recortar.
+        Activá <b>Blanco y negro</b> y subí contraste para efecto escáner.
+      </div>
     </div>
   </div>
 </div>
@@ -329,17 +522,17 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
 
 <script>
 /* ==========================
-   Data model
-   albums: [{id,name}]
-   drawings: [{id,title,albumId,date,data}]
+   Model
 ========================== */
-const LS_KEY = "martu_art_v4";
+const LS_KEY = "martu_art_v202";
 const MAX_ITEMS = 350;
-const MAX_DIM = 1600;
+const MAX_DIM_UPLOAD = 1600;     // compresión al subir
+const MAX_DIM_SAVE = 1400;       // compresión al guardar desde editor (crop)
 const JPEG_Q = 0.84;
 
 const $ = (id)=>document.getElementById(id);
 
+/* DOM */
 const countEl = $("count");
 const albumSelect = $("albumSelect");
 const grid = $("grid");
@@ -353,16 +546,19 @@ const viewModal = $("viewModal");
 const viewTitle = $("viewTitle");
 const viewImg = $("viewImg");
 const viewMeta = $("viewMeta");
-const viewClose = $("viewClose");
+const viewBack = $("viewBack");
+const viewOk = $("viewOk");
 const renameBtn = $("renameBtn");
 const moveBtn = $("moveBtn");
+const editBtn = $("editBtn");
 const postcardBtn = $("postcardBtn");
 const exportBtn = $("exportBtn");
 const deleteBtn = $("deleteBtn");
 
 const albumManageBtn = $("albumManageBtn");
 const albumModal = $("albumModal");
-const albumClose = $("albumClose");
+const albumBack = $("albumBack");
+const albumOk = $("albumOk");
 const newAlbumName = $("newAlbumName");
 const createAlbumBtn = $("createAlbumBtn");
 const albumList = $("albumList");
@@ -371,12 +567,58 @@ const importBtn = $("importBtn");
 const importFile = $("importFile");
 const wipeBtn = $("wipeBtn");
 
+const editModal = $("editModal");
+const editBack = $("editBack");
+const saveBtnTop = $("saveBtnTop");
+const saveBtn = $("saveBtn");
+
+const cropWrap = $("cropWrap");
+const cropImg = $("cropImg");
+const cropBox = $("cropBox");
+const rotateBtn = $("rotateBtn");
+const resetBtn = $("resetBtn");
+const bwPill = $("bwPill");
+const contrastRange = $("contrastRange");
+const previewToggle = $("previewToggle");
+
 const toast = $("toast");
 
+/* ==========================
+   State
+========================== */
 let state = load() || makeDefaultState();
 let currentAlbumId = state.currentAlbumId || state.albums[0].id;
 let viewDrawingId = null;
 
+/* Editor state */
+let editorDrawingId = null;
+let baseDataURL = "";
+let originalImg = null;
+let bwOn = false;
+let contrast = 35;
+let livePreview = true;
+let crop = { x: 40, y: 40, w: 220, h: 220 };
+let drag = { active:false, mode:"move", handle:null, startX:0, startY:0, startCrop:null };
+
+/* iOS modal scroll lock */
+let _scrollY = 0;
+
+function lockBody(){
+  _scrollY = window.scrollY || 0;
+  document.body.classList.add("locked");
+  document.body.style.top = `-${_scrollY}px`;
+}
+function unlockBody(){
+  document.body.classList.remove("locked");
+  const top = document.body.style.top;
+  document.body.style.top = "";
+  const y = top ? -parseInt(top, 10) : _scrollY;
+  window.scrollTo(0, y);
+}
+
+/* ==========================
+   Helpers
+========================== */
 function uid(){
   return Math.random().toString(16).slice(2) + Date.now().toString(16);
 }
@@ -389,7 +631,6 @@ function makeDefaultState(){
   const a3 = { id: uid(), name: "Personajes" };
   return { albums:[a1,a2,a3], drawings:[], currentAlbumId:a1.id };
 }
-
 function load(){
   try{ return JSON.parse(localStorage.getItem(LS_KEY) || ""); }catch{ return null; }
 }
@@ -401,16 +642,25 @@ function showToast(msg){
   toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"), 1500);
 }
-
 function albumById(id){ return state.albums.find(a=>a.id===id); }
 function drawingsInAlbum(albumId){
   return state.drawings.filter(d=>d.albumId===albumId);
 }
+function downloadDataURL(dataURL, filename){
+  const a = document.createElement("a");
+  a.href = dataURL;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
 
+/* ==========================
+   Render
+========================== */
 function updateCount(){
   countEl.textContent = `${state.drawings.length} dibujo${state.drawings.length===1?"":"s"}`;
 }
-
 function renderAlbums(){
   albumSelect.innerHTML = "";
   state.albums.forEach(a=>{
@@ -421,7 +671,6 @@ function renderAlbums(){
   });
   albumSelect.value = currentAlbumId;
 }
-
 function renderGrid(){
   updateCount();
   renderAlbums();
@@ -444,7 +693,7 @@ function renderGrid(){
           <p class="title">${title}</p>
           <div class="rowBtns">
             <button class="smallbtn" data-act="post" data-id="${d.id}">🖼️</button>
-            <button class="smallbtn" data-act="del" data-id="${d.id}">🗑</button>
+            <button class="smallbtn del" data-act="del" data-id="${d.id}">🗑</button>
           </div>
         </div>
       `;
@@ -464,9 +713,27 @@ function renderGrid(){
     });
 }
 
+/* ==========================
+   Modals open/close
+========================== */
+function openModal(el){
+  el.classList.add("open");
+  el.setAttribute("aria-hidden","false");
+  lockBody();
+}
+function closeModal(el){
+  el.classList.remove("open");
+  el.setAttribute("aria-hidden","true");
+  unlockBody();
+}
+
+/* ==========================
+   View (ver grande)
+========================== */
 function openView(id){
   const d = state.drawings.find(x=>x.id===id);
   if(!d) return;
+
   viewDrawingId = id;
   viewTitle.textContent = safeName(d.title, "Dibujo");
   viewImg.src = d.data;
@@ -475,20 +742,20 @@ function openView(id){
   const dt = d.date ? new Date(d.date).toLocaleString("es-AR", {dateStyle:"short", timeStyle:"short"}) : "";
   viewMeta.textContent = `Álbum: ${alb}${dt ? " · " + dt : ""}`;
 
-  viewModal.classList.add("open");
-  viewModal.setAttribute("aria-hidden","false");
+  openModal(viewModal);
 }
 
 function closeView(){
-  viewModal.classList.remove("open");
-  viewModal.setAttribute("aria-hidden","true");
-  viewDrawingId = null;
   viewImg.src = "";
+  viewDrawingId = null;
+  closeModal(viewModal);
 }
-viewClose.addEventListener("click", closeView);
+
+viewBack.addEventListener("click", closeView);
+viewOk.addEventListener("click", closeView);
 viewModal.addEventListener("click", (e)=>{ if(e.target===viewModal) closeView(); });
 
-function renameDrawingFlow(){
+renameBtn.addEventListener("click", ()=>{
   const d = state.drawings.find(x=>x.id===viewDrawingId);
   if(!d) return;
   const next = prompt("Nombre del dibujo:", d.title || "");
@@ -496,11 +763,12 @@ function renameDrawingFlow(){
   d.title = next.trim() || null;
   save();
   renderGrid();
-  openView(d.id);
-}
-renameBtn.addEventListener("click", renameDrawingFlow);
+  // refresca título sin reabrir
+  viewTitle.textContent = safeName(d.title, "Dibujo");
+  showToast("Renombrado ✨");
+});
 
-function moveDrawingFlow(){
+moveBtn.addEventListener("click", ()=>{
   const d = state.drawings.find(x=>x.id===viewDrawingId);
   if(!d) return;
 
@@ -515,29 +783,33 @@ function moveDrawingFlow(){
   }
   d.albumId = state.albums[n-1].id;
   save();
-  closeView();
   renderGrid();
   showToast("Movido ✅");
-}
-moveBtn.addEventListener("click", moveDrawingFlow);
+  // si lo moviste a otro álbum, cerramos y listo
+  closeView();
+});
+
+exportBtn.addEventListener("click", ()=>{
+  const d = state.drawings.find(x=>x.id===viewDrawingId);
+  if(!d) return;
+  const name = safeName(d.title, "dibujo");
+  downloadDataURL(d.data, `${name}.jpg`);
+  showToast("Exportado ⬇️");
+});
+
+deleteBtn.addEventListener("click", ()=>{
+  if(!viewDrawingId) return;
+  delDrawing(viewDrawingId);
+});
 
 function delDrawing(id){
   if(!confirm("¿Borrar este dibujo?")) return;
   state.drawings = state.drawings.filter(d=>d.id!==id);
   save();
-  closeView();
   renderGrid();
   showToast("Borrado 🗑");
+  if(viewDrawingId === id) closeView();
 }
-deleteBtn.addEventListener("click", ()=> delDrawing(viewDrawingId));
-
-function exportDrawing(id){
-  const d = state.drawings.find(x=>x.id===id);
-  if(!d) return;
-  const name = safeName(d.title, "dibujo");
-  downloadDataURL(d.data, `${name}.jpg`);
-}
-exportBtn.addEventListener("click", ()=> exportDrawing(viewDrawingId));
 
 /* ==========================
    Upload drawing
@@ -549,7 +821,7 @@ file.addEventListener("change", async (e)=>{
   if(!f) return;
 
   const dataURL = await fileToDataURL(f);
-  const compressed = await compressDataURL(dataURL, MAX_DIM, JPEG_Q);
+  const compressed = await compressDataURL(dataURL, MAX_DIM_UPLOAD, JPEG_Q);
 
   const title = prompt("Nombre del dibujo (opcional):", "") || "";
 
@@ -564,16 +836,13 @@ file.addEventListener("change", async (e)=>{
   state.drawings.unshift(item);
   if(state.drawings.length > MAX_ITEMS) state.drawings = state.drawings.slice(0, MAX_ITEMS);
 
-  // guardar con fallback por límite
-  try{
-    save();
-  }catch{
-    // recortamos hasta que entre
+  try{ save(); }
+  catch{
     while(state.drawings.length){
       try{ save(); break; }
       catch{ state.drawings.pop(); }
     }
-    alert("El iPhone se estaba quedando sin espacio para la app. Se guardó, pero se borraron algunos viejos para que entre.");
+    alert("Se guardó, pero el celu estaba al límite de almacenamiento de la app y se borraron algunos viejos para que entre.");
   }
 
   file.value = "";
@@ -589,7 +858,6 @@ function fileToDataURL(file){
     r.readAsDataURL(file);
   });
 }
-
 function compressDataURL(dataURL, maxDim, quality){
   return new Promise(async (res)=>{
     const img = new Image();
@@ -609,15 +877,6 @@ function compressDataURL(dataURL, maxDim, quality){
   });
 }
 
-function downloadDataURL(dataURL, filename){
-  const a = document.createElement("a");
-  a.href = dataURL;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
 /* ==========================
    Albums
 ========================== */
@@ -630,45 +889,52 @@ albumSelect.addEventListener("change", ()=>{
 
 albumManageBtn.addEventListener("click", ()=>{
   renderAlbumManager();
-  albumModal.classList.add("open");
-  albumModal.setAttribute("aria-hidden","false");
+  openModal(albumModal);
 });
-albumClose.addEventListener("click", closeAlbumModal);
-albumModal.addEventListener("click", (e)=>{ if(e.target===albumModal) closeAlbumModal(); });
 
 function closeAlbumModal(){
-  albumModal.classList.remove("open");
-  albumModal.setAttribute("aria-hidden","true");
+  closeModal(albumModal);
 }
+albumBack.addEventListener("click", closeAlbumModal);
+albumOk.addEventListener("click", closeAlbumModal);
+albumModal.addEventListener("click", (e)=>{ if(e.target===albumModal) closeAlbumModal(); });
 
 function renderAlbumManager(){
   albumList.innerHTML = "";
-
-  state.albums.forEach((a, idx)=>{
+  state.albums.forEach((a)=>{
     const div = document.createElement("div");
     div.className = "panel";
     div.style.marginBottom = "10px";
 
-    const count = drawingsInAlbum(a.id).length;
+    const c = drawingsInAlbum(a.id).length;
 
     div.innerHTML = `
       <div class="row">
         <div class="rowLeft">
           <div style="font-weight:1000">${a.name}</div>
-          <div class="badge">${count} dibujo${count===1?"":"s"}</div>
+          <div class="badge">${c} dibujo${c===1?"":"s"}</div>
         </div>
         <div class="rowLeft">
-          <button class="btn" data-act="rename" data-id="${a.id}">✏️ Renombrar</button>
-          <button class="btn danger" data-act="del" data-id="${a.id}">🗑 Borrar álbum</button>
+          <button class="btn" data-act="open" data-id="${a.id}">➡️ Abrir</button>
+          <button class="btn" data-act="rename" data-id="${a.id}">✏️</button>
+          <button class="btn danger" data-act="del" data-id="${a.id}">🗑</button>
         </div>
       </div>
-      <div class="mini">Tip: “Borrar álbum” mueve sus dibujos a “Mis dibujos”.</div>
+      <div class="mini">“Abrir” cambia al álbum. “Borrar” mueve sus dibujos al primer álbum.</div>
     `;
 
     div.querySelectorAll("button").forEach(b=>{
       b.addEventListener("click", ()=>{
         const act = b.getAttribute("data-act");
         const id = b.getAttribute("data-id");
+        if(act==="open"){
+          currentAlbumId = id;
+          state.currentAlbumId = currentAlbumId;
+          save();
+          renderGrid();
+          showToast("Álbum abierto ✅");
+          closeAlbumModal();
+        }
         if(act==="rename") renameAlbumFlow(id);
         if(act==="del") deleteAlbumFlow(id);
       });
@@ -708,9 +974,8 @@ function deleteAlbumFlow(id){
     alert("Necesitás al menos 1 álbum.");
     return;
   }
-  if(!confirm(`¿Borrar el álbum "${a.name}"? Sus dibujos se van a mover a "Mis dibujos".`)) return;
+  if(!confirm(`¿Borrar el álbum "${a.name}"? Sus dibujos se van a mover al primer álbum.`)) return;
 
-  // destino: primer álbum (idealmente “Mis dibujos”)
   const fallback = state.albums[0].id === id ? state.albums[1].id : state.albums[0].id;
 
   state.drawings.forEach(d=>{
@@ -726,6 +991,96 @@ function deleteAlbumFlow(id){
   renderGrid();
   showToast("Álbum borrado 🗑");
 }
+
+/* Backup / Import / Wipe */
+backupBtn.addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "martu-art-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  showToast("Backup descargado");
+});
+importBtn.addEventListener("click", ()=> importFile.click());
+
+importFile.addEventListener("change", async (e)=>{
+  const f = e.target.files?.[0];
+  if(!f) return;
+  try{
+    const text = await f.text();
+    const incoming = JSON.parse(text);
+
+    if(!incoming || typeof incoming !== "object") throw new Error("bad");
+    if(!Array.isArray(incoming.albums) || !Array.isArray(incoming.drawings)) throw new Error("bad");
+
+    if(!confirm("¿Importar backup? Se van a sumar álbumes y dibujos.")){
+      importFile.value = "";
+      return;
+    }
+
+    const albumMapByName = new Map(state.albums.map(a=>[a.name.toLowerCase(), a.id]));
+    incoming.albums.forEach(a=>{
+      if(!a || !a.name) return;
+      const key = a.name.toLowerCase();
+      if(!albumMapByName.has(key)){
+        const na = { id: uid(), name: a.name };
+        state.albums.push(na);
+        albumMapByName.set(key, na.id);
+      }
+    });
+
+    const existingIds = new Set(state.drawings.map(d=>d.id));
+    incoming.drawings.forEach(d=>{
+      if(!d || typeof d.data !== "string") return;
+      const id = d.id && !existingIds.has(d.id) ? d.id : uid();
+
+      const sourceAlbumName = (incoming.albums.find(a=>a.id===d.albumId)?.name) || "Mis dibujos";
+      const targetAlbumId = albumMapByName.get(sourceAlbumName.toLowerCase()) || state.albums[0].id;
+
+      state.drawings.unshift({
+        id,
+        title: d.title || null,
+        albumId: targetAlbumId,
+        date: d.date || nowISO(),
+        data: d.data
+      });
+      existingIds.add(id);
+    });
+
+    if(state.drawings.length > MAX_ITEMS) state.drawings = state.drawings.slice(0, MAX_ITEMS);
+
+    try{ save(); }
+    catch{
+      while(state.drawings.length){
+        try{ save(); break; }
+        catch{ state.drawings.pop(); }
+      }
+      alert("Se importó una parte (límite de almacenamiento).");
+    }
+
+    renderGrid();
+    renderAlbumManager();
+    showToast("Importado ✅");
+  }catch{
+    alert("Ese archivo no parece un backup válido.");
+  }
+  importFile.value = "";
+});
+
+wipeBtn.addEventListener("click", ()=>{
+  if(!confirm("¿BORRAR TODO? (álbumes y dibujos)")) return;
+  if(!confirm("Último aviso 😅 ¿Seguro?")) return;
+  state = makeDefaultState();
+  currentAlbumId = state.currentAlbumId;
+  save();
+  renderGrid();
+  renderAlbumManager();
+  showToast("Todo limpio");
+});
 
 /* ==========================
    Postcard (WhatsApp)
@@ -745,25 +1100,21 @@ async function makePostcardFlow(id){
     watermark: "Martu Art ✨"
   });
 
-  // intentamos compartir como archivo (iOS/Android modernos)
   const blob = await (await fetch(png)).blob();
-  const file = new File([blob], `${title}.png`, { type:"image/png" });
+  const fileObj = new File([blob], `${title}.png`, { type:"image/png" });
 
-  if(navigator.canShare && navigator.canShare({ files:[file] })){
+  if(navigator.canShare && navigator.canShare({ files:[fileObj] })){
     try{
       await navigator.share({
         title: "Martu Art",
         text: "Mirá mi dibujo 😄",
-        files: [file]
+        files: [fileObj]
       });
       showToast("Compartido ✅");
       return;
-    }catch{
-      // si cancela, no pasa nada
-    }
+    }catch{}
   }
 
-  // fallback: descargar
   downloadDataURL(png, `${title}.png`);
   showToast("Postal descargada");
 }
@@ -773,14 +1124,11 @@ async function buildPostcard(imageDataURL, opts){
   img.src = imageDataURL;
   await new Promise(ok=> img.complete ? ok() : (img.onload=ok));
 
-  // formato postal vertical (1080x1350) ideal para WhatsApp/IG
   const W = 1080, H = 1350;
-
   const c = document.createElement("canvas");
   c.width = W; c.height = H;
   const ctx = c.getContext("2d");
 
-  // Fondo
   const grad = ctx.createLinearGradient(0,0,W,H);
   grad.addColorStop(0, "#0b1020");
   grad.addColorStop(0.5, "#141c33");
@@ -788,7 +1136,6 @@ async function buildPostcard(imageDataURL, opts){
   ctx.fillStyle = grad;
   ctx.fillRect(0,0,W,H);
 
-  // Card principal
   const pad = 72;
   const cardX = pad, cardY = pad+90;
   const cardW = W - pad*2;
@@ -801,14 +1148,12 @@ async function buildPostcard(imageDataURL, opts){
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  // Área imagen dentro del card
   const imgPad = 34;
   const imgX = cardX + imgPad;
   const imgY = cardY + imgPad;
   const imgW = cardW - imgPad*2;
   const imgH = cardH - imgPad*2 - 170;
 
-  // marco imagen
   roundRect(ctx, imgX, imgY, imgW, imgH, 36);
   ctx.fillStyle = "rgba(0,0,0,0.35)";
   ctx.fill();
@@ -816,7 +1161,6 @@ async function buildPostcard(imageDataURL, opts){
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  // dibujar imagen con contain
   const scale = Math.min(imgW / img.width, imgH / img.height);
   const dw = img.width * scale;
   const dh = img.height * scale;
@@ -829,18 +1173,15 @@ async function buildPostcard(imageDataURL, opts){
   ctx.drawImage(img, dx, dy, dw, dh);
   ctx.restore();
 
-  // Título
   ctx.fillStyle = "rgba(238,242,255,0.96)";
   ctx.font = "900 64px system-ui, -apple-system, Segoe UI, Roboto, Arial";
   ctx.textAlign = "left";
   ctx.fillText(emojiSafe(opts.title || "Martu Art"), cardX + 44, imgY + imgH + 92);
 
-  // Subtítulo
   ctx.fillStyle = "rgba(238,242,255,0.70)";
   ctx.font = "700 34px system-ui, -apple-system, Segoe UI, Roboto, Arial";
   ctx.fillText(emojiSafe(opts.subtitle || ""), cardX + 44, imgY + imgH + 140);
 
-  // Watermark
   ctx.textAlign = "right";
   ctx.fillStyle = "rgba(122,162,255,0.85)";
   ctx.font = "900 32px system-ui, -apple-system, Segoe UI, Roboto, Arial";
@@ -859,10 +1200,7 @@ function roundRect(ctx, x,y,w,h,r){
   ctx.arcTo(x, y, x+w, y, rr);
   ctx.closePath();
 }
-function emojiSafe(s){
-  // evita cosas raras; igual iOS banca emojis en canvas la mayoría de veces
-  return (s || "").toString().slice(0, 40);
-}
+function emojiSafe(s){ return (s || "").toString().slice(0, 40); }
 
 /* ==========================
    PDF Book
@@ -880,22 +1218,17 @@ pdfBtn.addEventListener("click", async ()=>{
 });
 
 async function makePDF(bookTitle, albumName, drawings){
-  // esperar jsPDF
   const jsPDF = await waitForJsPDF();
   if(!jsPDF){
     alert("No cargó la librería de PDF. Probá de nuevo.");
     return false;
   }
-
   const { jsPDF: PDF } = jsPDF;
-
-  // A4
   const doc = new PDF({ unit:"pt", format:"a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 44;
 
-  // Cover
   doc.setFillColor(11,16,32);
   doc.rect(0,0,pageW,pageH,"F");
   doc.setTextColor(238,242,255);
@@ -913,12 +1246,10 @@ async function makePDF(bookTitle, albumName, drawings){
   doc.setFontSize(14);
   doc.text("Martu Art ✨", margin, pageH - 70);
 
-  // Pages
   for(let i=0;i<drawings.length;i++){
     const d = drawings[i];
     doc.addPage();
 
-    // header
     doc.setTextColor(238,242,255);
     doc.setFont("helvetica","bold");
     doc.setFontSize(18);
@@ -930,13 +1261,11 @@ async function makePDF(bookTitle, albumName, drawings){
     const dt = d.date ? new Date(d.date).toLocaleDateString("es-AR") : "";
     doc.text(dt, margin, 74);
 
-    // image (contain)
-    const imgData = d.data; // jpeg base64
+    const imgData = d.data;
     const boxX = margin, boxY = 100;
     const boxW = pageW - margin*2;
     const boxH = pageH - 180;
 
-    // get image dims
     const dims = await getImageDims(imgData);
     const s = Math.min(boxW / dims.w, boxH / dims.h);
     const dw = dims.w * s;
@@ -944,7 +1273,6 @@ async function makePDF(bookTitle, albumName, drawings){
     const dx = boxX + (boxW - dw)/2;
     const dy = boxY + (boxH - dh)/2;
 
-    // light frame
     doc.setDrawColor(255,255,255);
     doc.setLineWidth(1);
     doc.setFillColor(18,24,40);
@@ -952,7 +1280,6 @@ async function makePDF(bookTitle, albumName, drawings){
 
     doc.addImage(imgData, "JPEG", dx, dy, dw, dh, undefined, "FAST");
 
-    // footer
     doc.setTextColor(122,162,255);
     doc.setFont("helvetica","bold");
     doc.setFontSize(11);
@@ -981,7 +1308,6 @@ function waitForJsPDF(){
     }, 100);
   });
 }
-
 async function getImageDims(dataURL){
   const img = new Image();
   img.src = dataURL;
@@ -990,104 +1316,354 @@ async function getImageDims(dataURL){
 }
 
 /* ==========================
-   Backup / Import / Wipe
+   Editor (recorte + filtros)
 ========================== */
-backupBtn.addEventListener("click", ()=>{
-  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "martu-art-backup.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url), 1000);
-  showToast("Backup descargado");
+editBtn.addEventListener("click", async ()=>{
+  const d = state.drawings.find(x=>x.id===viewDrawingId);
+  if(!d) return;
+  editorDrawingId = d.id;
+  await setupEditorFromDataURL(d.data);
+  closeView();
+  openModal(editModal);
 });
 
-importBtn.addEventListener("click", ()=> importFile.click());
+function closeEditor(){
+  baseDataURL = "";
+  originalImg = null;
+  editorDrawingId = null;
+  bwOn = false;
+  contrast = 35;
+  livePreview = true;
+  bwPill.classList.remove("on");
+  contrastRange.value = String(contrast);
+  previewToggle.checked = true;
+  cropImg.style.filter = "";
+  closeModal(editModal);
+}
 
-importFile.addEventListener("change", async (e)=>{
-  const f = e.target.files?.[0];
-  if(!f) return;
-  try{
-    const text = await f.text();
-    const incoming = JSON.parse(text);
+editBack.addEventListener("click", closeEditor);
+editModal.addEventListener("click", (e)=>{ if(e.target===editModal) closeEditor(); });
 
-    if(!incoming || typeof incoming !== "object") throw new Error("bad");
-    if(!Array.isArray(incoming.albums) || !Array.isArray(incoming.drawings)) throw new Error("bad");
+saveBtn.addEventListener("click", saveEdit);
+saveBtnTop.addEventListener("click", saveEdit);
 
-    if(!confirm("¿Importar backup? Se van a sumar álbumes y dibujos.")){
-      importFile.value = "";
-      return;
+async function setupEditorFromDataURL(dataURL){
+  baseDataURL = dataURL;
+  bwOn = false;
+  contrast = 35;
+  livePreview = true;
+  bwPill.classList.remove("on");
+  contrastRange.value = String(contrast);
+  previewToggle.checked = true;
+
+  cropImg.src = dataURL;
+  await waitImg(cropImg);
+
+  originalImg = new Image();
+  originalImg.src = dataURL;
+  await waitImg(originalImg);
+
+  requestAnimationFrame(()=>{
+    const rect = cropWrap.getBoundingClientRect();
+    const W = rect.width;
+    const H = rect.height;
+    const side = Math.min(W, H) * 0.78;
+
+    crop.w = side;
+    crop.h = side;
+    crop.x = (W - side) / 2;
+    crop.y = (H - side) / 2;
+
+    applyCropBox();
+    applyPreviewFilter();
+  });
+}
+
+function waitImg(img){
+  return new Promise(res=> img.complete ? res() : (img.onload = ()=>res()));
+}
+
+function applyCropBox(){
+  cropBox.style.left = crop.x + "px";
+  cropBox.style.top  = crop.y + "px";
+  cropBox.style.width  = crop.w + "px";
+  cropBox.style.height = crop.h + "px";
+}
+
+function clampCrop(){
+  const rect = cropWrap.getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+  const minSize = 90;
+
+  crop.w = Math.max(minSize, crop.w);
+  crop.h = Math.max(minSize, crop.h);
+
+  crop.x = Math.max(0, Math.min(crop.x, W - crop.w));
+  crop.y = Math.max(0, Math.min(crop.y, H - crop.h));
+}
+
+function pointerXY(ev){
+  const p = ev.touches?.[0] || ev;
+  return { x: p.clientX, y: p.clientY };
+}
+
+cropWrap.addEventListener("mousedown", startDrag);
+cropWrap.addEventListener("touchstart", startDrag, {passive:false});
+
+function startDrag(ev){
+  ev.preventDefault();
+  const {x,y} = pointerXY(ev);
+  const wrapRect = cropWrap.getBoundingClientRect();
+  const px = x - wrapRect.left;
+  const py = y - wrapRect.top;
+
+  const target = ev.target;
+  const isHandle = target.classList?.contains("handle");
+
+  drag.active = true;
+  drag.startX = px;
+  drag.startY = py;
+  drag.startCrop = {...crop};
+
+  if(isHandle){
+    drag.mode = "resize";
+    drag.handle = target.getAttribute("data-h");
+  }else{
+    const inside =
+      px >= crop.x && px <= crop.x + crop.w &&
+      py >= crop.y && py <= crop.y + crop.h;
+
+    drag.mode = "move";
+    drag.handle = null;
+
+    if(!inside){
+      crop.x = px - crop.w/2;
+      crop.y = py - crop.h/2;
+      clampCrop();
+      applyCropBox();
+      drag.startCrop = {...crop};
     }
+  }
 
-    // merge albums by name (simple)
-    const albumMapByName = new Map(state.albums.map(a=>[a.name.toLowerCase(), a.id]));
-    incoming.albums.forEach(a=>{
-      if(!a || !a.name) return;
-      const key = a.name.toLowerCase();
-      if(!albumMapByName.has(key)){
-        const na = { id: uid(), name: a.name };
-        state.albums.push(na);
-        albumMapByName.set(key, na.id);
-      }
-    });
+  window.addEventListener("mousemove", onDrag);
+  window.addEventListener("mouseup", endDrag);
+  window.addEventListener("touchmove", onDrag, {passive:false});
+  window.addEventListener("touchend", endDrag);
+}
 
-    // merge drawings
-    const existingIds = new Set(state.drawings.map(d=>d.id));
-    incoming.drawings.forEach(d=>{
-      if(!d || typeof d.data !== "string") return;
-      const id = d.id && !existingIds.has(d.id) ? d.id : uid();
-      const albumName = (incoming.albums.find(a=>a.id===d.albumId)?.name) || "Mis dibujos";
-      const targetAlbumId = albumMapByName.get(albumName.toLowerCase()) || state.albums[0].id;
+function onDrag(ev){
+  if(!drag.active) return;
+  ev.preventDefault();
 
-      state.drawings.unshift({
-        id,
-        title: d.title || null,
-        albumId: targetAlbumId,
-        date: d.date || nowISO(),
-        data: d.data
-      });
-      existingIds.add(id);
-    });
+  const {x,y} = pointerXY(ev);
+  const wrapRect = cropWrap.getBoundingClientRect();
+  const px = x - wrapRect.left;
+  const py = y - wrapRect.top;
 
-    if(state.drawings.length > MAX_ITEMS) state.drawings = state.drawings.slice(0, MAX_ITEMS);
+  const dx = px - drag.startX;
+  const dy = py - drag.startY;
+
+  if(drag.mode === "move"){
+    crop.x = drag.startCrop.x + dx;
+    crop.y = drag.startCrop.y + dy;
+    clampCrop();
+    applyCropBox();
+    return;
+  }
+
+  const h = drag.handle;
+  const c0 = drag.startCrop;
+
+  let nx = c0.x, ny = c0.y, nw = c0.w, nh = c0.h;
+
+  if(h === "se"){ nw = c0.w + dx; nh = c0.h + dy; }
+  else if(h === "sw"){ nx = c0.x + dx; nw = c0.w - dx; nh = c0.h + dy; }
+  else if(h === "ne"){ ny = c0.y + dy; nh = c0.h - dy; nw = c0.w + dx; }
+  else if(h === "nw"){ nx = c0.x + dx; ny = c0.y + dy; nw = c0.w - dx; nh = c0.h - dy; }
+
+  crop.x = nx; crop.y = ny; crop.w = nw; crop.h = nh;
+  clampCrop();
+  applyCropBox();
+}
+
+function endDrag(){
+  drag.active = false;
+  window.removeEventListener("mousemove", onDrag);
+  window.removeEventListener("mouseup", endDrag);
+  window.removeEventListener("touchmove", onDrag);
+  window.removeEventListener("touchend", endDrag);
+}
+
+/* Preview filters */
+bwPill.addEventListener("click", ()=>{
+  bwOn = !bwOn;
+  bwPill.classList.toggle("on", bwOn);
+  applyPreviewFilter();
+});
+contrastRange.addEventListener("input", ()=>{
+  contrast = Number(contrastRange.value);
+  applyPreviewFilter();
+});
+previewToggle.addEventListener("change", ()=>{
+  livePreview = previewToggle.checked;
+  applyPreviewFilter();
+});
+
+function applyPreviewFilter(){
+  if(!livePreview){
+    cropImg.style.filter = "";
+    return;
+  }
+  const c = 1 + (contrast / 100) * 1.6;
+  const bw = bwOn ? "grayscale(1) saturate(0)" : "grayscale(0)";
+  cropImg.style.filter = `${bw} contrast(${c})`;
+}
+
+/* Rotate */
+rotateBtn.addEventListener("click", async ()=>{
+  if(!baseDataURL) return;
+  baseDataURL = await rotateDataURL(baseDataURL, 90);
+  await setupEditorFromDataURL(baseDataURL);
+  showToast("Girada ↻");
+});
+
+resetBtn.addEventListener("click", ()=>{
+  bwOn = false; bwPill.classList.remove("on");
+  contrast = 35; contrastRange.value = String(contrast);
+  livePreview = true; previewToggle.checked = true;
+  applyPreviewFilter();
+
+  requestAnimationFrame(()=>{
+    const rect = cropWrap.getBoundingClientRect();
+    const W = rect.width, H = rect.height;
+    const side = Math.min(W, H) * 0.78;
+    crop.w = side; crop.h = side;
+    crop.x = (W - side) / 2;
+    crop.y = (H - side) / 2;
+    applyCropBox();
+  });
+
+  showToast("Reset ↺");
+});
+
+function rotateDataURL(dataURL, deg){
+  return new Promise(async (res)=>{
+    const img = new Image();
+    img.src = dataURL;
+    await waitImg(img);
+
+    const rad = deg * Math.PI / 180;
+    const cw = (deg % 180 === 0) ? img.width : img.height;
+    const ch = (deg % 180 === 0) ? img.height : img.width;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = cw; canvas.height = ch;
+    const ctx = canvas.getContext("2d");
+
+    ctx.translate(cw/2, ch/2);
+    ctx.rotate(rad);
+    ctx.drawImage(img, -img.width/2, -img.height/2);
+
+    res(canvas.toDataURL("image/jpeg", 0.92));
+  });
+}
+
+/* Save */
+async function saveEdit(){
+  if(!originalImg || !editorDrawingId) return;
+
+  const idx = state.drawings.findIndex(x=>x.id===editorDrawingId);
+  if(idx < 0) return;
+
+  try{
+    const out = await cropAndProcess(originalImg, cropWrap, crop, { bwOn, contrast });
+    state.drawings[idx].data = out;
+    state.drawings[idx].date = nowISO();
 
     try{ save(); }
     catch{
-      // recortar hasta que entre
-      while(state.drawings.length){
-        try{ save(); break; }
-        catch{ state.drawings.pop(); }
-      }
-      alert("Se importó una parte (límite de almacenamiento).");
+      alert("No se pudo guardar (límite de almacenamiento). Probá borrar algunos dibujos viejos.");
+      return;
     }
 
     renderGrid();
-    renderAlbumManager();
-    showToast("Importado ✅");
+    showToast("Guardado ✅");
+    closeEditor();
   }catch{
-    alert("Ese archivo no parece un backup válido.");
+    alert("No se pudo guardar. Probá con un recorte un poco más chico.");
   }
-  importFile.value = "";
-});
+}
 
-wipeBtn.addEventListener("click", ()=>{
-  if(!confirm("¿BORRAR TODO? (álbumes y dibujos)")) return;
-  if(!confirm("Último aviso 😅 ¿Seguro?")) return;
-  state = makeDefaultState();
-  currentAlbumId = state.currentAlbumId;
-  save();
-  closeAlbumModal();
-  renderGrid();
-  showToast("Todo limpio");
-});
+async function cropAndProcess(img, wrapEl, cropRect, fx){
+  const wrap = wrapEl.getBoundingClientRect();
+  const W = wrap.width;
+  const H = wrap.height;
+
+  const iw = img.width;
+  const ih = img.height;
+
+  const scale = Math.min(W / iw, H / ih);
+  const drawnW = iw * scale;
+  const drawnH = ih * scale;
+  const offsetX = (W - drawnW) / 2;
+  const offsetY = (H - drawnH) / 2;
+
+  const cx = (cropRect.x - offsetX) / scale;
+  const cy = (cropRect.y - offsetY) / scale;
+  const cw = cropRect.w / scale;
+  const ch = cropRect.h / scale;
+
+  const sx = Math.max(0, Math.min(cx, iw - 1));
+  const sy = Math.max(0, Math.min(cy, ih - 1));
+  const sw = Math.max(1, Math.min(cw, iw - sx));
+  const sh = Math.max(1, Math.min(ch, ih - sy));
+
+  const outScale = Math.min(1, MAX_DIM_SAVE / Math.max(sw, sh));
+  const outW = Math.max(1, Math.round(sw * outScale));
+  const outH = Math.max(1, Math.round(sh * outScale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = outW;
+  canvas.height = outH;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+
+  if(fx && (fx.bwOn || fx.contrast > 0)){
+    const im = ctx.getImageData(0,0,outW,outH);
+    const data = im.data;
+    const factor = 1 + (Number(fx.contrast || 0) / 100) * 1.8;
+
+    for(let i=0;i<data.length;i+=4){
+      let r = data[i], g = data[i+1], b = data[i+2];
+
+      r = (r - 128) * factor + 128;
+      g = (g - 128) * factor + 128;
+      b = (b - 128) * factor + 128;
+
+      r = r < 0 ? 0 : (r > 255 ? 255 : r);
+      g = g < 0 ? 0 : (g > 255 ? 255 : g);
+      b = b < 0 ? 0 : (b > 255 ? 255 : b);
+
+      if(fx.bwOn){
+        const y = 0.2126*r + 0.7152*g + 0.0722*b;
+        const t = 145;
+        const v = y > t ? 255 : 0;
+        r = g = b = v;
+      }
+
+      data[i] = r; data[i+1] = g; data[i+2] = b;
+    }
+    ctx.putImageData(im,0,0);
+  }
+
+  return canvas.toDataURL("image/jpeg", JPEG_Q);
+}
 
 /* ==========================
    Init
 ========================== */
-save(); // asegura estructura en LS
+save();
 renderGrid();
 </script>
 </body>
