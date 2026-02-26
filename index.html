@@ -10,8 +10,7 @@
 
 <style>
 :root{
-  --bg1:#0b1020;
-  --bg2:#121a2f;
+  --bg1:#0b1020; --bg2:#121a2f;
   --card:rgba(255,255,255,.07);
   --stroke:rgba(255,255,255,.14);
   --text:#eef2ff;
@@ -35,19 +34,16 @@ body{
     radial-gradient(900px 600px at 110% 0%, rgba(122,162,255,.18), transparent 55%),
     linear-gradient(135deg, var(--bg1), var(--bg2));
 }
-
 .wrap{max-width:1120px;margin:0 auto;padding:16px 14px 120px}
 .top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
 h1{margin:0;font-size:22px;letter-spacing:.2px}
 p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
-
 .badge{
   border:1px solid var(--stroke);
   background:rgba(255,255,255,.06);
   padding:8px 10px;border-radius:999px;
   color:var(--muted);font-size:12px;white-space:nowrap;
 }
-
 .panel{
   background:rgba(255,255,255,.05);
   border:1px solid var(--stroke);
@@ -56,10 +52,8 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   box-shadow:0 12px 40px rgba(0,0,0,.25);
   margin-bottom:12px;
 }
-
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .rowLeft{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-
 .btn{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(255,255,255,.08);
@@ -94,7 +88,6 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   color:#ffd7dc;
 }
 .btn:active{transform:var(--tap)}
-
 .select, .input{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(0,0,0,.25);
@@ -106,21 +99,14 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   outline:none;
 }
 .select{appearance:none}
-.mini{
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.35;
-  margin:10px 0 0;
-}
+.mini{font-size:12px;color:var(--muted);line-height:1.35;margin:10px 0 0}
 
 .grid{
   display:grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
   gap:12px;
 }
-@media(min-width:740px){
-  .grid{grid-template-columns: repeat(4, minmax(0,1fr)); gap:14px;}
-}
+@media(min-width:740px){ .grid{grid-template-columns: repeat(4, minmax(0,1fr)); gap:14px;} }
 .card{
   background:var(--card);
   border:1px solid var(--stroke);
@@ -138,18 +124,13 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
 }
 .meta{
   padding:10px 10px 12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
 }
 .title{
   margin:0;
   font-size:13px;
   color:var(--muted);
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
   max-width:56%;
 }
 .rowBtns{display:flex;gap:8px;align-items:center}
@@ -157,10 +138,8 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   border:1px solid rgba(255,255,255,.18);
   background:rgba(255,255,255,.08);
   color:var(--text);
-  padding:10px 12px;
-  border-radius:16px;
-  cursor:pointer;
-  font-weight:950;
+  padding:10px 12px;border-radius:16px;
+  cursor:pointer;font-weight:950;
 }
 .smallbtn:active{transform:var(--tap)}
 .smallbtn.del{
@@ -168,7 +147,6 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   background:rgba(255,91,107,.14);
   color:#ffd7dc;
 }
-
 .empty{
   padding:16px 14px;
   border:1px dashed rgba(255,255,255,.22);
@@ -179,7 +157,7 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   font-size:14px;
 }
 
-/* ===== Modales (iOS scroll fix) ===== */
+/* ===== Modales iOS scroll ===== */
 .modal{
   position:fixed; inset:0;
   background:rgba(0,0,0,.72);
@@ -198,21 +176,16 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   border-radius:22px;
   overflow:hidden;
   box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:column;
+  display:flex;flex-direction:column;
 }
 .modalTop{
   display:flex;align-items:center;justify-content:space-between;
-  padding:12px 12px;
-  border-bottom:1px solid rgba(255,255,255,.10);
+  padding:12px 12px;border-bottom:1px solid rgba(255,255,255,.10);
   gap:10px;
 }
 .modalTop .t{
-  font-weight:1000;
-  font-size:14px;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
+  font-weight:1000;font-size:14px;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
 }
 .topBtns{display:flex;gap:10px;align-items:center}
 .topBtn{
@@ -227,11 +200,9 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
 }
 .topBtn.ok{
   background:linear-gradient(135deg, rgba(68,208,123,.95), rgba(68,208,123,.65));
-  color:#07110b;
-  border-color:rgba(0,0,0,.18);
+  color:#07110b;border-color:rgba(0,0,0,.18);
 }
 .topBtn:active{transform:var(--tap)}
-
 .modalScroll{
   overflow-y:auto;
   -webkit-overflow-scrolling: touch;
@@ -248,10 +219,7 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   border:1px solid rgba(255,255,255,.10);
 }
 .modalActions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:space-between;
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;
   margin-top:12px;
 }
 .modalActions .left, .modalActions .right{
@@ -285,8 +253,7 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
 }
 .handle{
   position:absolute;
-  width:18px;height:18px;
-  border-radius:999px;
+  width:18px;height:18px;border-radius:999px;
   background:rgba(122,162,255,.98);
   border:2px solid rgba(0,0,0,.35);
 }
@@ -294,12 +261,8 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
 .handle.ne{right:-9px;top:-9px}
 .handle.sw{left:-9px;bottom:-9px}
 .handle.se{right:-9px;bottom:-9px}
-
 .controls{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
   background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.10);
   border-radius:16px;
@@ -307,24 +270,16 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   margin-top:12px;
 }
 .controls label{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  color:var(--muted);
-  font-size:13px;
-  font-weight:900;
+  display:flex;gap:10px;align-items:center;
+  color:var(--muted);font-size:13px;font-weight:900;
 }
 .controls input[type="range"]{width:170px}
 .pill{
-  display:inline-flex;
-  gap:10px;
-  align-items:center;
+  display:inline-flex;gap:10px;align-items:center;
   border:1px solid rgba(255,255,255,.14);
   background:rgba(255,255,255,.06);
-  padding:10px 12px;
-  border-radius:999px;
-  font-weight:950;
-  color:var(--text);
+  padding:10px 12px;border-radius:999px;
+  font-weight:950;color:var(--text);
   cursor:pointer;
 }
 .pill:active{transform:var(--tap)}
@@ -340,17 +295,14 @@ p{margin:6px 0 0;color:var(--muted);line-height:1.35;font-size:14px}
   background:rgba(18,24,40,.96);
   border:1px solid rgba(255,255,255,.14);
   color:var(--text);
-  padding:10px 12px;
-  border-radius:16px;
+  padding:10px 12px;border-radius:16px;
   box-shadow:0 12px 40px rgba(0,0,0,.6);
-  display:none;
-  z-index:2000;
-  font-weight:950;
-  font-size:13px;
+  display:none;z-index:2000;
+  font-weight:950;font-size:13px;
 }
 .toast.show{display:block}
 
-/* Body lock for iOS */
+/* Body lock */
 body.locked{
   position:fixed;
   width:100%;
@@ -364,7 +316,7 @@ body.locked{
   <div class="top">
     <div>
       <h1>🎨 Martu Art</h1>
-      <p>Álbumes + Postal WhatsApp + Libro PDF + Editor.</p>
+      <p>Álbumes + Postal WhatsApp + Libro PDF + Editor (guardado PRO).</p>
     </div>
     <div class="badge" id="count">0 dibujos</div>
   </div>
@@ -375,15 +327,12 @@ body.locked{
         <select class="select" id="albumSelect"></select>
         <button class="btn" id="albumManageBtn">📁 Álbumes</button>
       </div>
-
       <div class="rowLeft">
         <button class="btn primary" id="addBtn">📷 Subir dibujo</button>
         <button class="btn pink" id="pdfBtn">📘 Libro PDF</button>
       </div>
     </div>
-    <div class="mini">
-      Tip: tocá un dibujo para verlo grande. Desde ahí podés <b>Editar</b>, hacer <b>Postal</b> o <b>Exportar</b>.
-    </div>
+    <div class="mini" id="storageHint">Tip: tocá un dibujo para verlo grande.</div>
   </div>
 
   <div id="empty" class="empty" style="display:none">
@@ -401,18 +350,12 @@ body.locked{
 <div class="modal" id="viewModal" aria-hidden="true">
   <div class="modalCard">
     <div class="modalTop">
-      <div class="topBtns">
-        <button class="topBtn" id="viewBack">⬅️ Volver</button>
-      </div>
+      <div class="topBtns"><button class="topBtn" id="viewBack">⬅️ Volver</button></div>
       <div class="t" id="viewTitle">Dibujo</div>
-      <div class="topBtns">
-        <button class="topBtn ok" id="viewOk">✅ Listo</button>
-      </div>
+      <div class="topBtns"><button class="topBtn ok" id="viewOk">✅ Listo</button></div>
     </div>
-
     <div class="modalScroll">
       <img class="big" id="viewImg" alt="Dibujo ampliado">
-
       <div class="modalActions">
         <div class="left">
           <button class="btn" id="renameBtn">✏️ Renombrar</button>
@@ -425,25 +368,19 @@ body.locked{
           <button class="btn danger" id="deleteBtn">🗑 Borrar</button>
         </div>
       </div>
-
       <div class="smallHint" id="viewMeta"></div>
     </div>
   </div>
 </div>
 
-<!-- ===== Gestión de Álbumes ===== -->
+<!-- ===== Álbumes ===== -->
 <div class="modal" id="albumModal" aria-hidden="true">
   <div class="modalCard">
     <div class="modalTop">
-      <div class="topBtns">
-        <button class="topBtn" id="albumBack">⬅️ Volver</button>
-      </div>
+      <div class="topBtns"><button class="topBtn" id="albumBack">⬅️ Volver</button></div>
       <div class="t">📁 Álbumes</div>
-      <div class="topBtns">
-        <button class="topBtn ok" id="albumOk">✅ Listo</button>
-      </div>
+      <div class="topBtns"><button class="topBtn ok" id="albumOk">✅ Listo</button></div>
     </div>
-
     <div class="modalScroll">
       <div class="row" style="margin-bottom:10px">
         <div class="rowLeft" style="width:100%">
@@ -460,7 +397,9 @@ body.locked{
         </div>
       </div>
 
-      <div class="mini">Backup guarda todos los álbumes + dibujos. Importar los suma.</div>
+      <div class="mini">
+        Backup es un archivo grande (incluye fotos). Importar suma.
+      </div>
       <div id="albumList" style="margin-top:12px"></div>
     </div>
   </div>
@@ -470,15 +409,10 @@ body.locked{
 <div class="modal" id="editModal" aria-hidden="true">
   <div class="modalCard">
     <div class="modalTop">
-      <div class="topBtns">
-        <button class="topBtn" id="editBack">⬅️ Volver</button>
-      </div>
+      <div class="topBtns"><button class="topBtn" id="editBack">⬅️ Volver</button></div>
       <div class="t">✂️ Editar dibujo</div>
-      <div class="topBtns">
-        <button class="topBtn ok" id="saveBtnTop">✅ Guardar</button>
-      </div>
+      <div class="topBtns"><button class="topBtn ok" id="saveBtnTop">✅ Guardar</button></div>
     </div>
-
     <div class="modalScroll">
       <div class="cropWrap" id="cropWrap">
         <img class="cropImg" id="cropImg" alt="Editor de recorte">
@@ -511,8 +445,8 @@ body.locked{
       </div>
 
       <div class="smallHint">
-        Mové el rectángulo para encuadrar. Ajustá las esquinas para recortar.
-        Activá <b>Blanco y negro</b> y subí contraste para efecto escáner.
+        Mové el rectángulo para encuadrar. Ajustá las esquinas.
+        Blanco y negro + contraste = efecto escáner.
       </div>
     </div>
   </div>
@@ -522,18 +456,23 @@ body.locked{
 
 <script>
 /* ==========================
-   Model
+   v203: IndexedDB (para no reventar storage)
 ========================== */
-const LS_KEY = "martu_art_v202";
-const MAX_ITEMS = 350;
-const MAX_DIM_UPLOAD = 1600;     // compresión al subir
-const MAX_DIM_SAVE = 1400;       // compresión al guardar desde editor (crop)
-const JPEG_Q = 0.84;
+const META_KEY = "martu_art_meta_v203";
+const DB_NAME = "martu_art_db_v203";
+const DB_VER = 1;
+const STORE = "images";
+
+const MAX_ITEMS = 800;           // ahora puede ser grande
+const MAX_DIM_UPLOAD = 1400;     // más chico para iPhone + calidad buena
+const MAX_DIM_SAVE = 1400;
+const JPEG_Q = 0.80;
 
 const $ = (id)=>document.getElementById(id);
 
 /* DOM */
 const countEl = $("count");
+const storageHint = $("storageHint");
 const albumSelect = $("albumSelect");
 const grid = $("grid");
 const empty = $("empty");
@@ -583,26 +522,8 @@ const previewToggle = $("previewToggle");
 
 const toast = $("toast");
 
-/* ==========================
-   State
-========================== */
-let state = load() || makeDefaultState();
-let currentAlbumId = state.currentAlbumId || state.albums[0].id;
-let viewDrawingId = null;
-
-/* Editor state */
-let editorDrawingId = null;
-let baseDataURL = "";
-let originalImg = null;
-let bwOn = false;
-let contrast = 35;
-let livePreview = true;
-let crop = { x: 40, y: 40, w: 220, h: 220 };
-let drag = { active:false, mode:"move", handle:null, startX:0, startY:0, startCrop:null };
-
-/* iOS modal scroll lock */
+/* iOS modal lock */
 let _scrollY = 0;
-
 function lockBody(){
   _scrollY = window.scrollY || 0;
   document.body.classList.add("locked");
@@ -615,48 +536,131 @@ function unlockBody(){
   const y = top ? -parseInt(top, 10) : _scrollY;
   window.scrollTo(0, y);
 }
+function openModal(el){ el.classList.add("open"); el.setAttribute("aria-hidden","false"); lockBody(); }
+function closeModal(el){ el.classList.remove("open"); el.setAttribute("aria-hidden","true"); unlockBody(); }
 
-/* ==========================
-   Helpers
-========================== */
-function uid(){
-  return Math.random().toString(16).slice(2) + Date.now().toString(16);
-}
+/* Helpers */
+function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
 function nowISO(){ return new Date().toISOString(); }
 function safeName(s, fallback){ s=(s||"").trim(); return s? s : fallback; }
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 1500);
+}
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 800);
+}
+function emojiSafe(s){ return (s || "").toString().slice(0, 40); }
 
+/* ==========================
+   IndexedDB
+========================== */
+let db = null;
+
+function openDB(){
+  return new Promise((resolve, reject)=>{
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = (e)=>{
+      const d = req.result;
+      if(!d.objectStoreNames.contains(STORE)){
+        d.createObjectStore(STORE, { keyPath:"id" });
+      }
+    };
+    req.onsuccess = ()=>{ db = req.result; resolve(db); };
+    req.onerror = ()=>reject(req.error);
+  });
+}
+function txStore(mode="readonly"){
+  const t = db.transaction(STORE, mode);
+  return t.objectStore(STORE);
+}
+function idbPutImage(id, blob){
+  return new Promise((res, rej)=>{
+    const store = txStore("readwrite");
+    const req = store.put({ id, blob });
+    req.onsuccess = ()=>res();
+    req.onerror = ()=>rej(req.error);
+  });
+}
+function idbGetImage(id){
+  return new Promise((res, rej)=>{
+    const store = txStore("readonly");
+    const req = store.get(id);
+    req.onsuccess = ()=>res(req.result ? req.result.blob : null);
+    req.onerror = ()=>rej(req.error);
+  });
+}
+function idbDelImage(id){
+  return new Promise((res, rej)=>{
+    const store = txStore("readwrite");
+    const req = store.delete(id);
+    req.onsuccess = ()=>res();
+    req.onerror = ()=>rej(req.error);
+  });
+}
+function idbClear(){
+  return new Promise((res, rej)=>{
+    const store = txStore("readwrite");
+    const req = store.clear();
+    req.onsuccess = ()=>res();
+    req.onerror = ()=>rej(req.error);
+  });
+}
+
+/* ==========================
+   State (solo metadata en localStorage)
+   drawings: [{id,title,albumId,date}]
+========================== */
 function makeDefaultState(){
   const a1 = { id: uid(), name: "Mis dibujos" };
   const a2 = { id: uid(), name: "Animales" };
   const a3 = { id: uid(), name: "Personajes" };
   return { albums:[a1,a2,a3], drawings:[], currentAlbumId:a1.id };
 }
-function load(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY) || ""); }catch{ return null; }
+function loadMeta(){
+  try{ return JSON.parse(localStorage.getItem(META_KEY) || ""); }catch{ return null; }
 }
-function save(){
-  localStorage.setItem(LS_KEY, JSON.stringify(state));
-}
-function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"), 1500);
-}
-function albumById(id){ return state.albums.find(a=>a.id===id); }
-function drawingsInAlbum(albumId){
-  return state.drawings.filter(d=>d.albumId===albumId);
-}
-function downloadDataURL(dataURL, filename){
-  const a = document.createElement("a");
-  a.href = dataURL;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+function saveMeta(){
+  localStorage.setItem(META_KEY, JSON.stringify(state));
 }
 
+let state = loadMeta() || makeDefaultState();
+let currentAlbumId = state.currentAlbumId || state.albums[0].id;
+let viewDrawingId = null;
+
+/* URLs cache */
+const urlCache = new Map(); // id -> objectURL
+function revokeAllURLs(){
+  for(const [id,url] of urlCache.entries()){
+    URL.revokeObjectURL(url);
+  }
+  urlCache.clear();
+}
+
+/* Editor state */
+let editorDrawingId = null;
+let baseBlob = null;
+let baseURL = "";
+let originalImg = null;
+let bwOn = false;
+let contrast = 35;
+let livePreview = true;
+let crop = { x: 40, y: 40, w: 220, h: 220 };
+let drag = { active:false, mode:"move", handle:null, startX:0, startY:0, startCrop:null };
+
+function albumById(id){ return state.albums.find(a=>a.id===id); }
+function drawingsInAlbum(albumId){ return state.drawings.filter(d=>d.albumId===albumId); }
+
 /* ==========================
-   Render
+   Rendering
 ========================== */
 function updateCount(){
   countEl.textContent = `${state.drawings.length} dibujo${state.drawings.length===1?"":"s"}`;
@@ -671,86 +675,104 @@ function renderAlbums(){
   });
   albumSelect.value = currentAlbumId;
 }
-function renderGrid(){
+async function renderGrid(){
   updateCount();
   renderAlbums();
 
-  const list = drawingsInAlbum(currentAlbumId);
+  revokeAllURLs();
+
+  const list = drawingsInAlbum(currentAlbumId)
+    .slice()
+    .sort((a,b)=> (b.date||"").localeCompare(a.date||""));
+
   empty.style.display = list.length ? "none" : "block";
   grid.innerHTML = "";
 
-  list
-    .slice()
-    .sort((a,b)=> (b.date||"").localeCompare(a.date||""))
-    .forEach(d=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      const title = safeName(d.title, "Sin nombre");
+  for(const d of list){
+    const blob = await idbGetImage(d.id);
+    if(!blob) continue;
 
-      card.innerHTML = `
-        <img class="thumb" src="${d.data}" alt="${title}">
-        <div class="meta">
-          <p class="title">${title}</p>
-          <div class="rowBtns">
-            <button class="smallbtn" data-act="post" data-id="${d.id}">🖼️</button>
-            <button class="smallbtn del" data-act="del" data-id="${d.id}">🗑</button>
-          </div>
+    const url = URL.createObjectURL(blob);
+    urlCache.set(d.id, url);
+
+    const card = document.createElement("div");
+    card.className = "card";
+    const title = safeName(d.title, "Sin nombre");
+    card.innerHTML = `
+      <img class="thumb" src="${url}" alt="${title}">
+      <div class="meta">
+        <p class="title">${title}</p>
+        <div class="rowBtns">
+          <button class="smallbtn" data-act="post" data-id="${d.id}">🖼️</button>
+          <button class="smallbtn del" data-act="del" data-id="${d.id}">🗑</button>
         </div>
-      `;
-
-      card.querySelector(".thumb").addEventListener("click", ()=>openView(d.id));
-      card.querySelectorAll("button").forEach(b=>{
-        b.addEventListener("click", (e)=>{
-          const act = b.getAttribute("data-act");
-          const id = b.getAttribute("data-id");
-          if(act==="del") delDrawing(id);
-          if(act==="post") makePostcardFlow(id);
-          e.stopPropagation();
-        });
+      </div>
+    `;
+    card.querySelector(".thumb").addEventListener("click", ()=>openView(d.id));
+    card.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click", (e)=>{
+        const act = b.getAttribute("data-act");
+        const id = b.getAttribute("data-id");
+        if(act==="del") delDrawing(id);
+        if(act==="post") makePostcardFlow(id);
+        e.stopPropagation();
       });
-
-      grid.appendChild(card);
     });
+    grid.appendChild(card);
+  }
 }
 
 /* ==========================
-   Modals open/close
+   Storage hint (iOS)
 ========================== */
-function openModal(el){
-  el.classList.add("open");
-  el.setAttribute("aria-hidden","false");
-  lockBody();
-}
-function closeModal(el){
-  el.classList.remove("open");
-  el.setAttribute("aria-hidden","true");
-  unlockBody();
+async function updateStorageHint(){
+  if(!navigator.storage || !navigator.storage.estimate){
+    storageHint.textContent = "Tip: tocá un dibujo para verlo grande.";
+    return;
+  }
+  try{
+    const est = await navigator.storage.estimate();
+    const used = est.usage || 0;
+    const quota = est.quota || 0;
+    const mb = (n)=> (n/1024/1024).toFixed(1);
+    storageHint.textContent = `Guardado PRO: usando ${mb(used)}MB de ${mb(quota)}MB.`;
+  }catch{
+    storageHint.textContent = "Tip: tocá un dibujo para verlo grande.";
+  }
 }
 
 /* ==========================
-   View (ver grande)
+   View modal
 ========================== */
-function openView(id){
-  const d = state.drawings.find(x=>x.id===id);
-  if(!d) return;
+async function openView(id){
+  const meta = state.drawings.find(x=>x.id===id);
+  if(!meta) return;
 
   viewDrawingId = id;
-  viewTitle.textContent = safeName(d.title, "Dibujo");
-  viewImg.src = d.data;
+  viewTitle.textContent = safeName(meta.title, "Dibujo");
 
-  const alb = albumById(d.albumId)?.name || "—";
-  const dt = d.date ? new Date(d.date).toLocaleString("es-AR", {dateStyle:"short", timeStyle:"short"}) : "";
+  const blob = await idbGetImage(id);
+  if(!blob) return;
+
+  // url (view)
+  const url = URL.createObjectURL(blob);
+  // no lo guardo en cache (es modal) para poder revocar al cerrar
+  viewImg.dataset.tmpUrl = url;
+  viewImg.src = url;
+
+  const alb = albumById(meta.albumId)?.name || "—";
+  const dt = meta.date ? new Date(meta.date).toLocaleString("es-AR", {dateStyle:"short", timeStyle:"short"}) : "";
   viewMeta.textContent = `Álbum: ${alb}${dt ? " · " + dt : ""}`;
 
   openModal(viewModal);
 }
-
 function closeView(){
+  const u = viewImg.dataset.tmpUrl;
+  if(u){ URL.revokeObjectURL(u); viewImg.dataset.tmpUrl=""; }
   viewImg.src = "";
   viewDrawingId = null;
   closeModal(viewModal);
 }
-
 viewBack.addEventListener("click", closeView);
 viewOk.addEventListener("click", closeView);
 viewModal.addEventListener("click", (e)=>{ if(e.target===viewModal) closeView(); });
@@ -761,94 +783,107 @@ renameBtn.addEventListener("click", ()=>{
   const next = prompt("Nombre del dibujo:", d.title || "");
   if(next===null) return;
   d.title = next.trim() || null;
-  save();
-  renderGrid();
-  // refresca título sin reabrir
+  saveMeta();
   viewTitle.textContent = safeName(d.title, "Dibujo");
+  renderGrid();
   showToast("Renombrado ✨");
 });
 
 moveBtn.addEventListener("click", ()=>{
   const d = state.drawings.find(x=>x.id===viewDrawingId);
   if(!d) return;
-
   const choices = state.albums.map((a,i)=> `${i+1}) ${a.name}`).join("\n");
   const ans = prompt(`Mover a qué álbum?\n\n${choices}\n\nEscribí el número:`, "1");
   if(ans===null) return;
-
   const n = Number(ans);
   if(!Number.isFinite(n) || n<1 || n>state.albums.length){
-    alert("Número inválido.");
-    return;
+    alert("Número inválido."); return;
   }
   d.albumId = state.albums[n-1].id;
-  save();
-  renderGrid();
+  saveMeta();
   showToast("Movido ✅");
-  // si lo moviste a otro álbum, cerramos y listo
   closeView();
+  renderGrid();
 });
 
-exportBtn.addEventListener("click", ()=>{
+exportBtn.addEventListener("click", async ()=>{
   const d = state.drawings.find(x=>x.id===viewDrawingId);
   if(!d) return;
-  const name = safeName(d.title, "dibujo");
-  downloadDataURL(d.data, `${name}.jpg`);
+  const blob = await idbGetImage(d.id);
+  if(!blob) return;
+  downloadBlob(blob, `${safeName(d.title,"dibujo")}.jpg`);
   showToast("Exportado ⬇️");
 });
 
-deleteBtn.addEventListener("click", ()=>{
-  if(!viewDrawingId) return;
-  delDrawing(viewDrawingId);
-});
+deleteBtn.addEventListener("click", ()=> delDrawing(viewDrawingId));
 
-function delDrawing(id){
+async function delDrawing(id){
+  if(!id) return;
   if(!confirm("¿Borrar este dibujo?")) return;
+
   state.drawings = state.drawings.filter(d=>d.id!==id);
-  save();
-  renderGrid();
+  saveMeta();
+  await idbDelImage(id);
+
   showToast("Borrado 🗑");
-  if(viewDrawingId === id) closeView();
+  if(viewDrawingId===id) closeView();
+  await renderGrid();
+  await updateStorageHint();
 }
 
 /* ==========================
-   Upload drawing
+   Upload
 ========================== */
 addBtn.addEventListener("click", ()=> file.click());
 
 file.addEventListener("change", async (e)=>{
   const f = e.target.files?.[0];
   if(!f) return;
+  try{
+    const blob = await compressFileToJpegBlob(f, MAX_DIM_UPLOAD, JPEG_Q);
+    const title = prompt("Nombre del dibujo (opcional):", "") || "";
+    const id = uid();
 
-  const dataURL = await fileToDataURL(f);
-  const compressed = await compressDataURL(dataURL, MAX_DIM_UPLOAD, JPEG_Q);
-
-  const title = prompt("Nombre del dibujo (opcional):", "") || "";
-
-  const item = {
-    id: uid(),
-    title: title.trim() || null,
-    albumId: currentAlbumId,
-    date: nowISO(),
-    data: compressed
-  };
-
-  state.drawings.unshift(item);
-  if(state.drawings.length > MAX_ITEMS) state.drawings = state.drawings.slice(0, MAX_ITEMS);
-
-  try{ save(); }
-  catch{
-    while(state.drawings.length){
-      try{ save(); break; }
-      catch{ state.drawings.pop(); }
+    await idbPutImage(id, blob);
+    state.drawings.unshift({
+      id,
+      title: title.trim() || null,
+      albumId: currentAlbumId,
+      date: nowISO()
+    });
+    if(state.drawings.length > MAX_ITEMS){
+      // si excede, borramos los más viejos (y sus blobs)
+      const removed = state.drawings.splice(MAX_ITEMS);
+      for(const r of removed){ await idbDelImage(r.id); }
     }
-    alert("Se guardó, pero el celu estaba al límite de almacenamiento de la app y se borraron algunos viejos para que entre.");
+    saveMeta();
+    file.value = "";
+    showToast("Guardado ✅");
+    await renderGrid();
+    await updateStorageHint();
+  }catch(err){
+    alert("No se pudo guardar. Probá con una foto un poco más liviana.");
   }
-
-  file.value = "";
-  renderGrid();
-  showToast("Guardado ✅");
 });
+
+async function compressFileToJpegBlob(file, maxDim, quality){
+  const dataURL = await fileToDataURL(file);
+  const img = new Image();
+  img.src = dataURL;
+  await waitImg(img);
+
+  let w = img.width, h = img.height;
+  const scale = Math.min(1, maxDim / Math.max(w,h));
+  w = Math.max(1, Math.round(w * scale));
+  h = Math.max(1, Math.round(h * scale));
+
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const ctx = c.getContext("2d");
+  ctx.drawImage(img, 0,0,w,h);
+
+  return new Promise((res)=> c.toBlob((b)=>res(b), "image/jpeg", quality));
+}
 
 function fileToDataURL(file){
   return new Promise((res, rej)=>{
@@ -858,43 +893,25 @@ function fileToDataURL(file){
     r.readAsDataURL(file);
   });
 }
-function compressDataURL(dataURL, maxDim, quality){
-  return new Promise(async (res)=>{
-    const img = new Image();
-    img.src = dataURL;
-    await new Promise(ok=> img.complete ? ok() : (img.onload=ok));
-
-    let w = img.width, h = img.height;
-    const scale = Math.min(1, maxDim / Math.max(w,h));
-    w = Math.max(1, Math.round(w * scale));
-    h = Math.max(1, Math.round(h * scale));
-
-    const c = document.createElement("canvas");
-    c.width = w; c.height = h;
-    const ctx = c.getContext("2d");
-    ctx.drawImage(img, 0,0,w,h);
-    res(c.toDataURL("image/jpeg", quality));
-  });
+function waitImg(img){
+  return new Promise(res=> img.complete ? res() : (img.onload=()=>res()));
 }
 
 /* ==========================
    Albums
 ========================== */
-albumSelect.addEventListener("change", ()=>{
+albumSelect.addEventListener("change", async ()=>{
   currentAlbumId = albumSelect.value;
   state.currentAlbumId = currentAlbumId;
-  save();
-  renderGrid();
+  saveMeta();
+  await renderGrid();
 });
 
 albumManageBtn.addEventListener("click", ()=>{
   renderAlbumManager();
   openModal(albumModal);
 });
-
-function closeAlbumModal(){
-  closeModal(albumModal);
-}
+function closeAlbumModal(){ closeModal(albumModal); }
 albumBack.addEventListener("click", closeAlbumModal);
 albumOk.addEventListener("click", closeAlbumModal);
 albumModal.addEventListener("click", (e)=>{ if(e.target===albumModal) closeAlbumModal(); });
@@ -905,9 +922,7 @@ function renderAlbumManager(){
     const div = document.createElement("div");
     div.className = "panel";
     div.style.marginBottom = "10px";
-
     const c = drawingsInAlbum(a.id).length;
-
     div.innerHTML = `
       <div class="row">
         <div class="rowLeft">
@@ -920,26 +935,50 @@ function renderAlbumManager(){
           <button class="btn danger" data-act="del" data-id="${a.id}">🗑</button>
         </div>
       </div>
-      <div class="mini">“Abrir” cambia al álbum. “Borrar” mueve sus dibujos al primer álbum.</div>
     `;
-
     div.querySelectorAll("button").forEach(b=>{
-      b.addEventListener("click", ()=>{
+      b.addEventListener("click", async ()=>{
         const act = b.getAttribute("data-act");
         const id = b.getAttribute("data-id");
         if(act==="open"){
           currentAlbumId = id;
           state.currentAlbumId = currentAlbumId;
-          save();
-          renderGrid();
-          showToast("Álbum abierto ✅");
+          saveMeta();
           closeAlbumModal();
+          showToast("Álbum abierto ✅");
+          await renderGrid();
         }
-        if(act==="rename") renameAlbumFlow(id);
-        if(act==="del") deleteAlbumFlow(id);
+        if(act==="rename"){
+          const al = albumById(id);
+          const next = prompt("Nuevo nombre del álbum:", al?.name || "");
+          if(next===null || !al) return;
+          al.name = next.trim() || al.name;
+          saveMeta();
+          renderAlbumManager();
+          renderAlbums();
+          showToast("Listo ✨");
+        }
+        if(act==="del"){
+          const al = albumById(id);
+          if(!al) return;
+          if(state.albums.length<=1){ alert("Necesitás al menos 1 álbum."); return; }
+          if(!confirm(`¿Borrar el álbum "${al.name}"? Sus dibujos se mueven al primer álbum.`)) return;
+
+          const fallback = state.albums[0].id===id ? state.albums[1].id : state.albums[0].id;
+          state.drawings.forEach(d=>{ if(d.albumId===id) d.albumId=fallback; });
+          state.albums = state.albums.filter(x=>x.id!==id);
+
+          if(currentAlbumId===id) currentAlbumId=fallback;
+          state.currentAlbumId = currentAlbumId;
+
+          saveMeta();
+          renderAlbumManager();
+          renderAlbums();
+          showToast("Álbum borrado 🗑");
+          await renderGrid();
+        }
       });
     });
-
     albumList.appendChild(div);
   });
 }
@@ -949,181 +988,55 @@ createAlbumBtn.addEventListener("click", ()=>{
   if(!name){ showToast("Poné un nombre"); return; }
   state.albums.push({ id: uid(), name });
   newAlbumName.value = "";
-  save();
+  saveMeta();
   renderAlbumManager();
-  renderGrid();
+  renderAlbums();
   showToast("Álbum creado ✅");
 });
 
-function renameAlbumFlow(id){
-  const a = albumById(id);
-  if(!a) return;
-  const next = prompt("Nuevo nombre del álbum:", a.name);
-  if(next===null) return;
-  a.name = next.trim() || a.name;
-  save();
-  renderAlbumManager();
-  renderGrid();
-  showToast("Listo ✨");
-}
-
-function deleteAlbumFlow(id){
-  const a = albumById(id);
-  if(!a) return;
-  if(state.albums.length <= 1){
-    alert("Necesitás al menos 1 álbum.");
-    return;
-  }
-  if(!confirm(`¿Borrar el álbum "${a.name}"? Sus dibujos se van a mover al primer álbum.`)) return;
-
-  const fallback = state.albums[0].id === id ? state.albums[1].id : state.albums[0].id;
-
-  state.drawings.forEach(d=>{
-    if(d.albumId === id) d.albumId = fallback;
-  });
-  state.albums = state.albums.filter(x=>x.id!==id);
-
-  if(currentAlbumId === id) currentAlbumId = fallback;
-  state.currentAlbumId = currentAlbumId;
-
-  save();
-  renderAlbumManager();
-  renderGrid();
-  showToast("Álbum borrado 🗑");
-}
-
-/* Backup / Import / Wipe */
-backupBtn.addEventListener("click", ()=>{
-  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "martu-art-backup.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url), 1000);
-  showToast("Backup descargado");
-});
-importBtn.addEventListener("click", ()=> importFile.click());
-
-importFile.addEventListener("change", async (e)=>{
-  const f = e.target.files?.[0];
-  if(!f) return;
-  try{
-    const text = await f.text();
-    const incoming = JSON.parse(text);
-
-    if(!incoming || typeof incoming !== "object") throw new Error("bad");
-    if(!Array.isArray(incoming.albums) || !Array.isArray(incoming.drawings)) throw new Error("bad");
-
-    if(!confirm("¿Importar backup? Se van a sumar álbumes y dibujos.")){
-      importFile.value = "";
-      return;
-    }
-
-    const albumMapByName = new Map(state.albums.map(a=>[a.name.toLowerCase(), a.id]));
-    incoming.albums.forEach(a=>{
-      if(!a || !a.name) return;
-      const key = a.name.toLowerCase();
-      if(!albumMapByName.has(key)){
-        const na = { id: uid(), name: a.name };
-        state.albums.push(na);
-        albumMapByName.set(key, na.id);
-      }
-    });
-
-    const existingIds = new Set(state.drawings.map(d=>d.id));
-    incoming.drawings.forEach(d=>{
-      if(!d || typeof d.data !== "string") return;
-      const id = d.id && !existingIds.has(d.id) ? d.id : uid();
-
-      const sourceAlbumName = (incoming.albums.find(a=>a.id===d.albumId)?.name) || "Mis dibujos";
-      const targetAlbumId = albumMapByName.get(sourceAlbumName.toLowerCase()) || state.albums[0].id;
-
-      state.drawings.unshift({
-        id,
-        title: d.title || null,
-        albumId: targetAlbumId,
-        date: d.date || nowISO(),
-        data: d.data
-      });
-      existingIds.add(id);
-    });
-
-    if(state.drawings.length > MAX_ITEMS) state.drawings = state.drawings.slice(0, MAX_ITEMS);
-
-    try{ save(); }
-    catch{
-      while(state.drawings.length){
-        try{ save(); break; }
-        catch{ state.drawings.pop(); }
-      }
-      alert("Se importó una parte (límite de almacenamiento).");
-    }
-
-    renderGrid();
-    renderAlbumManager();
-    showToast("Importado ✅");
-  }catch{
-    alert("Ese archivo no parece un backup válido.");
-  }
-  importFile.value = "";
-});
-
-wipeBtn.addEventListener("click", ()=>{
-  if(!confirm("¿BORRAR TODO? (álbumes y dibujos)")) return;
-  if(!confirm("Último aviso 😅 ¿Seguro?")) return;
-  state = makeDefaultState();
-  currentAlbumId = state.currentAlbumId;
-  save();
-  renderGrid();
-  renderAlbumManager();
-  showToast("Todo limpio");
-});
-
 /* ==========================
-   Postcard (WhatsApp)
+   Postcard (WhatsApp) - desde Blob
 ========================== */
 postcardBtn.addEventListener("click", ()=> makePostcardFlow(viewDrawingId));
 
 async function makePostcardFlow(id){
-  const d = state.drawings.find(x=>x.id===id);
-  if(!d) return;
+  const meta = state.drawings.find(x=>x.id===id);
+  if(!meta) return;
+  const blob = await idbGetImage(id);
+  if(!blob) return;
 
-  const title = safeName(d.title, "Martu Art");
-  const albumName = albumById(d.albumId)?.name || "Mis dibujos";
+  const title = safeName(meta.title, "Martu Art");
+  const albumName = albumById(meta.albumId)?.name || "Mis dibujos";
 
-  const png = await buildPostcard(d.data, {
-    title,
-    subtitle: albumName,
-    watermark: "Martu Art ✨"
+  const pngBlob = await buildPostcardBlob(blob, {
+    title, subtitle: albumName, watermark:"Martu Art ✨"
   });
 
-  const blob = await (await fetch(png)).blob();
-  const fileObj = new File([blob], `${title}.png`, { type:"image/png" });
+  const fileObj = new File([pngBlob], `${title}.png`, { type:"image/png" });
 
   if(navigator.canShare && navigator.canShare({ files:[fileObj] })){
     try{
-      await navigator.share({
-        title: "Martu Art",
-        text: "Mirá mi dibujo 😄",
-        files: [fileObj]
-      });
+      await navigator.share({ title:"Martu Art", text:"Mirá mi dibujo 😄", files:[fileObj] });
       showToast("Compartido ✅");
       return;
     }catch{}
   }
 
-  downloadDataURL(png, `${title}.png`);
+  downloadBlob(pngBlob, `${title}.png`);
   showToast("Postal descargada");
 }
 
-async function buildPostcard(imageDataURL, opts){
+async function blobToImage(blob){
+  const url = URL.createObjectURL(blob);
   const img = new Image();
-  img.src = imageDataURL;
-  await new Promise(ok=> img.complete ? ok() : (img.onload=ok));
+  img.src = url;
+  await waitImg(img);
+  URL.revokeObjectURL(url);
+  return img;
+}
 
+async function buildPostcardBlob(sourceBlob, opts){
+  const img = await blobToImage(sourceBlob);
   const W = 1080, H = 1350;
   const c = document.createElement("canvas");
   c.width = W; c.height = H;
@@ -1187,7 +1100,7 @@ async function buildPostcard(imageDataURL, opts){
   ctx.font = "900 32px system-ui, -apple-system, Segoe UI, Roboto, Arial";
   ctx.fillText(emojiSafe(opts.watermark || "Martu Art"), W - pad, pad+58);
 
-  return c.toDataURL("image/png");
+  return await new Promise((res)=> c.toBlob((b)=>res(b), "image/png"));
 }
 
 function roundRect(ctx, x,y,w,h,r){
@@ -1200,7 +1113,6 @@ function roundRect(ctx, x,y,w,h,r){
   ctx.arcTo(x, y, x+w, y, rr);
   ctx.closePath();
 }
-function emojiSafe(s){ return (s || "").toString().slice(0, 40); }
 
 /* ==========================
    PDF Book
@@ -1217,12 +1129,22 @@ pdfBtn.addEventListener("click", async ()=>{
   if(ok) showToast("PDF descargado 📘");
 });
 
+async function waitForJsPDF(){
+  return new Promise((res)=>{
+    const t0 = Date.now();
+    const timer = setInterval(()=>{
+      if(window.jspdf && window.jspdf.jsPDF){
+        clearInterval(timer); res(window.jspdf);
+      }else if(Date.now() - t0 > 6000){
+        clearInterval(timer); res(null);
+      }
+    }, 100);
+  });
+}
+
 async function makePDF(bookTitle, albumName, drawings){
   const jsPDF = await waitForJsPDF();
-  if(!jsPDF){
-    alert("No cargó la librería de PDF. Probá de nuevo.");
-    return false;
-  }
+  if(!jsPDF){ alert("No cargó la librería de PDF. Probá de nuevo."); return false; }
   const { jsPDF: PDF } = jsPDF;
   const doc = new PDF({ unit:"pt", format:"a4" });
   const pageW = doc.internal.pageSize.getWidth();
@@ -1247,26 +1169,30 @@ async function makePDF(bookTitle, albumName, drawings){
   doc.text("Martu Art ✨", margin, pageH - 70);
 
   for(let i=0;i<drawings.length;i++){
-    const d = drawings[i];
+    const meta = drawings[i];
+    const blob = await idbGetImage(meta.id);
+    if(!blob) continue;
+
+    const dataURL = await blobToDataURL(blob); // jsPDF needs dataURL for addImage
     doc.addPage();
 
     doc.setTextColor(238,242,255);
     doc.setFont("helvetica","bold");
     doc.setFontSize(18);
-    doc.text(safeName(d.title, `Dibujo ${i+1}`), margin, 54, { maxWidth: pageW - margin*2 });
+    doc.text(safeName(meta.title, `Dibujo ${i+1}`), margin, 54, { maxWidth: pageW - margin*2 });
 
     doc.setTextColor(200,210,255);
     doc.setFont("helvetica","normal");
     doc.setFontSize(11);
-    const dt = d.date ? new Date(d.date).toLocaleDateString("es-AR") : "";
+    const dt = meta.date ? new Date(meta.date).toLocaleDateString("es-AR") : "";
     doc.text(dt, margin, 74);
 
-    const imgData = d.data;
+    const dims = await getDataURLDims(dataURL);
+
     const boxX = margin, boxY = 100;
     const boxW = pageW - margin*2;
     const boxH = pageH - 180;
 
-    const dims = await getImageDims(imgData);
     const s = Math.min(boxW / dims.w, boxH / dims.h);
     const dw = dims.w * s;
     const dh = dims.h * s;
@@ -1278,7 +1204,7 @@ async function makePDF(bookTitle, albumName, drawings){
     doc.setFillColor(18,24,40);
     doc.roundedRect(boxX, boxY, boxW, boxH, 14, 14, "FD");
 
-    doc.addImage(imgData, "JPEG", dx, dy, dw, dh, undefined, "FAST");
+    doc.addImage(dataURL, "JPEG", dx, dy, dw, dh, undefined, "FAST");
 
     doc.setTextColor(122,162,255);
     doc.setFont("helvetica","bold");
@@ -1294,41 +1220,40 @@ async function makePDF(bookTitle, albumName, drawings){
   return true;
 }
 
-function waitForJsPDF(){
-  return new Promise((res)=>{
-    const t0 = Date.now();
-    const timer = setInterval(()=>{
-      if(window.jspdf && window.jspdf.jsPDF){
-        clearInterval(timer);
-        res(window.jspdf);
-      }else if(Date.now() - t0 > 6000){
-        clearInterval(timer);
-        res(null);
-      }
-    }, 100);
+function blobToDataURL(blob){
+  return new Promise((res, rej)=>{
+    const r = new FileReader();
+    r.onload = ()=>res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(blob);
   });
 }
-async function getImageDims(dataURL){
+async function getDataURLDims(dataURL){
   const img = new Image();
   img.src = dataURL;
-  await new Promise(ok=> img.complete ? ok() : (img.onload=ok));
+  await waitImg(img);
   return { w: img.width, h: img.height };
 }
 
 /* ==========================
-   Editor (recorte + filtros)
+   Editor
 ========================== */
 editBtn.addEventListener("click", async ()=>{
-  const d = state.drawings.find(x=>x.id===viewDrawingId);
-  if(!d) return;
-  editorDrawingId = d.id;
-  await setupEditorFromDataURL(d.data);
+  const meta = state.drawings.find(x=>x.id===viewDrawingId);
+  if(!meta) return;
+  editorDrawingId = meta.id;
+
+  baseBlob = await idbGetImage(meta.id);
+  if(!baseBlob) return;
+
+  await setupEditorFromBlob(baseBlob);
   closeView();
   openModal(editModal);
 });
 
 function closeEditor(){
-  baseDataURL = "";
+  if(baseURL){ URL.revokeObjectURL(baseURL); baseURL=""; }
+  baseBlob = null;
   originalImg = null;
   editorDrawingId = null;
   bwOn = false;
@@ -1340,15 +1265,13 @@ function closeEditor(){
   cropImg.style.filter = "";
   closeModal(editModal);
 }
-
 editBack.addEventListener("click", closeEditor);
 editModal.addEventListener("click", (e)=>{ if(e.target===editModal) closeEditor(); });
 
 saveBtn.addEventListener("click", saveEdit);
 saveBtnTop.addEventListener("click", saveEdit);
 
-async function setupEditorFromDataURL(dataURL){
-  baseDataURL = dataURL;
+async function setupEditorFromBlob(blob){
   bwOn = false;
   contrast = 35;
   livePreview = true;
@@ -1356,31 +1279,26 @@ async function setupEditorFromDataURL(dataURL){
   contrastRange.value = String(contrast);
   previewToggle.checked = true;
 
-  cropImg.src = dataURL;
+  if(baseURL) URL.revokeObjectURL(baseURL);
+  baseURL = URL.createObjectURL(blob);
+  cropImg.src = baseURL;
   await waitImg(cropImg);
 
-  originalImg = new Image();
-  originalImg.src = dataURL;
-  await waitImg(originalImg);
+  const img = new Image();
+  img.src = baseURL;
+  await waitImg(img);
+  originalImg = img;
 
   requestAnimationFrame(()=>{
     const rect = cropWrap.getBoundingClientRect();
-    const W = rect.width;
-    const H = rect.height;
+    const W = rect.width, H = rect.height;
     const side = Math.min(W, H) * 0.78;
-
-    crop.w = side;
-    crop.h = side;
+    crop.w = side; crop.h = side;
     crop.x = (W - side) / 2;
     crop.y = (H - side) / 2;
-
     applyCropBox();
     applyPreviewFilter();
   });
-}
-
-function waitImg(img){
-  return new Promise(res=> img.complete ? res() : (img.onload = ()=>res()));
 }
 
 function applyCropBox(){
@@ -1389,19 +1307,15 @@ function applyCropBox(){
   cropBox.style.width  = crop.w + "px";
   cropBox.style.height = crop.h + "px";
 }
-
 function clampCrop(){
   const rect = cropWrap.getBoundingClientRect();
   const W = rect.width, H = rect.height;
   const minSize = 90;
-
   crop.w = Math.max(minSize, crop.w);
   crop.h = Math.max(minSize, crop.h);
-
   crop.x = Math.max(0, Math.min(crop.x, W - crop.w));
   crop.y = Math.max(0, Math.min(crop.y, H - crop.h));
 }
-
 function pointerXY(ev){
   const p = ev.touches?.[0] || ev;
   return { x: p.clientX, y: p.clientY };
@@ -1429,13 +1343,9 @@ function startDrag(ev){
     drag.mode = "resize";
     drag.handle = target.getAttribute("data-h");
   }else{
-    const inside =
-      px >= crop.x && px <= crop.x + crop.w &&
-      py >= crop.y && py <= crop.y + crop.h;
-
+    const inside = px>=crop.x && px<=crop.x+crop.w && py>=crop.y && py<=crop.y+crop.h;
     drag.mode = "move";
     drag.handle = null;
-
     if(!inside){
       crop.x = px - crop.w/2;
       crop.y = py - crop.h/2;
@@ -1450,7 +1360,6 @@ function startDrag(ev){
   window.addEventListener("touchmove", onDrag, {passive:false});
   window.addEventListener("touchend", endDrag);
 }
-
 function onDrag(ev){
   if(!drag.active) return;
   ev.preventDefault();
@@ -1466,14 +1375,12 @@ function onDrag(ev){
   if(drag.mode === "move"){
     crop.x = drag.startCrop.x + dx;
     crop.y = drag.startCrop.y + dy;
-    clampCrop();
-    applyCropBox();
+    clampCrop(); applyCropBox();
     return;
   }
 
   const h = drag.handle;
   const c0 = drag.startCrop;
-
   let nx = c0.x, ny = c0.y, nw = c0.w, nh = c0.h;
 
   if(h === "se"){ nw = c0.w + dx; nh = c0.h + dy; }
@@ -1482,10 +1389,8 @@ function onDrag(ev){
   else if(h === "nw"){ nx = c0.x + dx; ny = c0.y + dy; nw = c0.w - dx; nh = c0.h - dy; }
 
   crop.x = nx; crop.y = ny; crop.w = nw; crop.h = nh;
-  clampCrop();
-  applyCropBox();
+  clampCrop(); applyCropBox();
 }
-
 function endDrag(){
   drag.active = false;
   window.removeEventListener("mousemove", onDrag);
@@ -1494,7 +1399,6 @@ function endDrag(){
   window.removeEventListener("touchend", endDrag);
 }
 
-/* Preview filters */
 bwPill.addEventListener("click", ()=>{
   bwOn = !bwOn;
   bwPill.classList.toggle("on", bwOn);
@@ -1510,20 +1414,17 @@ previewToggle.addEventListener("change", ()=>{
 });
 
 function applyPreviewFilter(){
-  if(!livePreview){
-    cropImg.style.filter = "";
-    return;
-  }
+  if(!livePreview){ cropImg.style.filter = ""; return; }
   const c = 1 + (contrast / 100) * 1.6;
   const bw = bwOn ? "grayscale(1) saturate(0)" : "grayscale(0)";
   cropImg.style.filter = `${bw} contrast(${c})`;
 }
 
-/* Rotate */
 rotateBtn.addEventListener("click", async ()=>{
-  if(!baseDataURL) return;
-  baseDataURL = await rotateDataURL(baseDataURL, 90);
-  await setupEditorFromDataURL(baseDataURL);
+  if(!baseBlob) return;
+  const rotated = await rotateBlob(baseBlob, 90);
+  baseBlob = rotated;
+  await setupEditorFromBlob(baseBlob);
   showToast("Girada ↻");
 });
 
@@ -1546,55 +1447,41 @@ resetBtn.addEventListener("click", ()=>{
   showToast("Reset ↺");
 });
 
-function rotateDataURL(dataURL, deg){
-  return new Promise(async (res)=>{
-    const img = new Image();
-    img.src = dataURL;
-    await waitImg(img);
+async function rotateBlob(blob, deg){
+  const img = await blobToImage(blob);
+  const rad = deg * Math.PI / 180;
+  const cw = (deg % 180 === 0) ? img.width : img.height;
+  const ch = (deg % 180 === 0) ? img.height : img.width;
 
-    const rad = deg * Math.PI / 180;
-    const cw = (deg % 180 === 0) ? img.width : img.height;
-    const ch = (deg % 180 === 0) ? img.height : img.width;
+  const canvas = document.createElement("canvas");
+  canvas.width = cw; canvas.height = ch;
+  const ctx = canvas.getContext("2d");
+  ctx.translate(cw/2, ch/2);
+  ctx.rotate(rad);
+  ctx.drawImage(img, -img.width/2, -img.height/2);
 
-    const canvas = document.createElement("canvas");
-    canvas.width = cw; canvas.height = ch;
-    const ctx = canvas.getContext("2d");
-
-    ctx.translate(cw/2, ch/2);
-    ctx.rotate(rad);
-    ctx.drawImage(img, -img.width/2, -img.height/2);
-
-    res(canvas.toDataURL("image/jpeg", 0.92));
-  });
+  const outBlob = await new Promise((res)=> canvas.toBlob((b)=>res(b), "image/jpeg", 0.90));
+  return outBlob;
 }
 
-/* Save */
 async function saveEdit(){
   if(!originalImg || !editorDrawingId) return;
 
-  const idx = state.drawings.findIndex(x=>x.id===editorDrawingId);
-  if(idx < 0) return;
+  const outBlob = await cropAndProcessToBlob(originalImg, cropWrap, crop, { bwOn, contrast });
 
-  try{
-    const out = await cropAndProcess(originalImg, cropWrap, crop, { bwOn, contrast });
-    state.drawings[idx].data = out;
-    state.drawings[idx].date = nowISO();
+  await idbPutImage(editorDrawingId, outBlob);
 
-    try{ save(); }
-    catch{
-      alert("No se pudo guardar (límite de almacenamiento). Probá borrar algunos dibujos viejos.");
-      return;
-    }
+  const meta = state.drawings.find(x=>x.id===editorDrawingId);
+  if(meta) meta.date = nowISO();
+  saveMeta();
 
-    renderGrid();
-    showToast("Guardado ✅");
-    closeEditor();
-  }catch{
-    alert("No se pudo guardar. Probá con un recorte un poco más chico.");
-  }
+  showToast("Guardado ✅");
+  closeEditor();
+  await renderGrid();
+  await updateStorageHint();
 }
 
-async function cropAndProcess(img, wrapEl, cropRect, fx){
+async function cropAndProcessToBlob(img, wrapEl, cropRect, fx){
   const wrap = wrapEl.getBoundingClientRect();
   const W = wrap.width;
   const H = wrap.height;
@@ -1623,9 +1510,8 @@ async function cropAndProcess(img, wrapEl, cropRect, fx){
   const outH = Math.max(1, Math.round(sh * outScale));
 
   const canvas = document.createElement("canvas");
-  canvas.width = outW;
-  canvas.height = outH;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  canvas.width = outW; canvas.height = outH;
+  const ctx = canvas.getContext("2d", { willReadFrequently:true });
 
   ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
 
@@ -1657,14 +1543,124 @@ async function cropAndProcess(img, wrapEl, cropRect, fx){
     ctx.putImageData(im,0,0);
   }
 
-  return canvas.toDataURL("image/jpeg", JPEG_Q);
+  const outBlob = await new Promise((res)=> canvas.toBlob((b)=>res(b), "image/jpeg", JPEG_Q));
+  return outBlob;
+}
+
+/* ==========================
+   Backup / Import / Wipe
+   (Backup en JSON con fotos en base64: grande, pero funcional)
+========================== */
+backupBtn.addEventListener("click", async ()=>{
+  const payload = {
+    version:"v203",
+    meta: state,
+    images: []
+  };
+  for(const d of state.drawings){
+    const blob = await idbGetImage(d.id);
+    if(!blob) continue;
+    const dataURL = await blobToDataURL(blob);
+    payload.images.push({ id:d.id, dataURL });
+  }
+  const blob = new Blob([JSON.stringify(payload)], {type:"application/json"});
+  downloadBlob(blob, "martu-art-backup-v203.json");
+  showToast("Backup descargado");
+});
+
+importBtn.addEventListener("click", ()=> importFile.click());
+
+importFile.addEventListener("change", async (e)=>{
+  const f = e.target.files?.[0];
+  if(!f) return;
+  try{
+    const txt = await f.text();
+    const payload = JSON.parse(txt);
+
+    if(!payload || !payload.meta || !Array.isArray(payload.images)) throw new Error("bad");
+    if(!confirm("¿Importar backup? Se van a sumar álbumes y dibujos.")){
+      importFile.value=""; return;
+    }
+
+    // merge albums by name
+    const map = new Map(state.albums.map(a=>[a.name.toLowerCase(), a.id]));
+    for(const a of payload.meta.albums || []){
+      if(!a?.name) continue;
+      const key = a.name.toLowerCase();
+      if(!map.has(key)){
+        const na = { id: uid(), name: a.name };
+        state.albums.push(na);
+        map.set(key, na.id);
+      }
+    }
+
+    // merge drawings
+    const existing = new Set(state.drawings.map(d=>d.id));
+    for(const d of payload.meta.drawings || []){
+      const id = d.id && !existing.has(d.id) ? d.id : uid();
+      const albumName = (payload.meta.albums?.find(a=>a.id===d.albumId)?.name) || "Mis dibujos";
+      const albumId = map.get(albumName.toLowerCase()) || state.albums[0].id;
+
+      state.drawings.unshift({
+        id,
+        title: d.title || null,
+        albumId,
+        date: d.date || nowISO()
+      });
+      existing.add(id);
+    }
+
+    // put images
+    for(const it of payload.images){
+      if(!it?.id || !it?.dataURL) continue;
+      const blob = await dataURLToBlob(it.dataURL);
+      await idbPutImage(it.id, blob);
+    }
+
+    if(state.drawings.length > MAX_ITEMS){
+      const removed = state.drawings.splice(MAX_ITEMS);
+      for(const r of removed){ await idbDelImage(r.id); }
+    }
+
+    saveMeta();
+    importFile.value="";
+    showToast("Importado ✅");
+    await renderGrid();
+    await updateStorageHint();
+  }catch{
+    alert("Ese archivo no parece un backup válido.");
+    importFile.value="";
+  }
+});
+
+wipeBtn.addEventListener("click", async ()=>{
+  if(!confirm("¿BORRAR TODO? (álbumes y dibujos)")) return;
+  if(!confirm("Último aviso 😅 ¿Seguro?")) return;
+
+  state = makeDefaultState();
+  currentAlbumId = state.currentAlbumId;
+
+  saveMeta();
+  await idbClear();
+  showToast("Todo limpio");
+  closeAlbumModal();
+  await renderGrid();
+  await updateStorageHint();
+});
+
+function dataURLToBlob(dataURL){
+  return fetch(dataURL).then(r=>r.blob());
 }
 
 /* ==========================
    Init
 ========================== */
-save();
-renderGrid();
+(async function init(){
+  await openDB();
+  saveMeta();
+  await renderGrid();
+  await updateStorageHint();
+})();
 </script>
 </body>
 </html>
