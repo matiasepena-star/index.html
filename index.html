@@ -1,58 +1,1075 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Martu Art</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Martu-art · Dibujos</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase JS (v2) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
-body{
-  margin:0;
-  font-family: system-ui;
-  background:#111;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  text-align:center;
-}
-.card{
-  background:#1e1e1e;
-  padding:40px;
-  border-radius:20px;
-}
-</style>
+  <style>
+    :root{
+      --bg:#0f1115;
+      --card:#141923;
+      --card2:#101520;
+      --stroke:rgba(255,255,255,.10);
+      --text:#e8ecf6;
+      --muted:rgba(232,236,246,.62);
+      --brand:#7aa2ff;
+      --good:#44d07b;
+      --bad:#ff5b6b;
+      --warn:#ffd36a;
+      --r:18px;
+      --shadow: 0 16px 50px rgba(0,0,0,.55);
+      --press: translateY(1px) scale(.99);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1100px 700px at 20% -10%, rgba(122,162,255,.18), transparent 55%),
+                  radial-gradient(900px 650px at 110% 20%, rgba(68,208,123,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:1050px;margin:0 auto;padding:14px 14px 90px}
+    .top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      margin: 8px 0 14px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      font-weight:800; letter-spacing:.2px;
+    }
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background: linear-gradient(135deg, rgba(122,162,255,.85), rgba(122,162,255,.25));
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+    .sub{color:var(--muted);font-size:12.5px;margin-top:1px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color:var(--muted);
+      font-size:12.5px;
+      white-space:nowrap;
+    }
+    .dot{width:8px;height:8px;border-radius:50%}
+    .dot.good{background:var(--good)}
+    .dot.bad{background:var(--bad)}
+    .dot.warn{background:var(--warn)}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:12px;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--stroke);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 14px 10px;
+      display:flex;align-items:flex-end;justify-content:space-between;gap:10px;
+      border-bottom:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+    }
+    .card .hd h2{margin:0;font-size:15px;letter-spacing:.2px}
+    .card .hd .hint{color:var(--muted);font-size:12px}
+    .card .bd{padding:14px}
+
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row > *{flex:1}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:180px}
+    label{font-size:12px;color:var(--muted)}
+    input, select, textarea{
+      width:100%;
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--stroke);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 12px;
+      outline:none;
+    }
+    textarea{min-height:84px;resize:vertical}
+    input::file-selector-button{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 10px;
+      padding:8px 10px;
+      margin-right:10px;
+      cursor:pointer;
+    }
+
+    .btns{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 11px 12px;
+      cursor:pointer;
+      user-select:none;
+      display:inline-flex;gap:10px;align-items:center;justify-content:center;
+      font-weight:700;
+    }
+    .btn.primary{background: rgba(122,162,255,.18); border-color: rgba(122,162,255,.35)}
+    .btn.danger{background: rgba(255,91,107,.12); border-color: rgba(255,91,107,.35)}
+    .btn:active{transform: var(--press)}
+    .btn small{opacity:.7;font-weight:600}
+    .btn[disabled]{opacity:.5;cursor:not-allowed}
+
+    .tabs{
+      display:flex;gap:8px;flex-wrap:wrap;
+      padding:10px;
+      border-bottom:1px solid var(--stroke);
+      background: rgba(0,0,0,.10);
+    }
+    .tab{
+      padding:9px 10px;border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color:var(--muted);
+      cursor:pointer;
+      font-size:12.5px;
+      font-weight:800;
+    }
+    .tab.active{
+      background: rgba(122,162,255,.18);
+      border-color: rgba(122,162,255,.35);
+      color: var(--text);
+    }
+
+    .list{
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .item{
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      border-radius: 16px;
+      padding: 12px;
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+    }
+    .item .meta{display:flex;flex-direction:column;gap:4px}
+    .item .t{font-weight:900}
+    .item .s{font-size:12px;color:var(--muted)}
+    .item .actions{display:flex;gap:8px;align-items:center}
+    .chip{
+      font-size:12px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 920px){ .gallery{grid-template-columns: repeat(2, 1fr);} }
+    @media (max-width: 520px){ .gallery{grid-template-columns: 1fr;} }
+
+    .g{
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      border-radius: 18px;
+      overflow:hidden;
+      cursor:pointer;
+    }
+    .g .thumb{
+      aspect-ratio: 4/3;
+      background:#0b0f16;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .g img{width:100%;height:100%;object-fit:cover;display:block}
+    .g .info{padding:10px 10px 11px}
+    .g .name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .g .sub{margin-top:3px}
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.80);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .2s ease;
+      max-width: 92vw;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      font-weight:800;
+    }
+    .toast.show{opacity:1}
+
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.65);
+      display:none; align-items:center; justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modal.open{display:flex}
+    .modal .box{
+      width:min(980px, 96vw);
+      background: rgba(15,17,21,.92);
+      border:1px solid var(--stroke);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modal .box .bar{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding: 10px 12px;
+      border-bottom:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+    }
+    .modal .box .bar .ttl{font-weight:900}
+    .modal .box .bar .x{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .modal .imgwrap{background:#070a10}
+    .modal img{width:100%;height:auto;display:block}
+    .muted{color:var(--muted)}
+    .small{font-size:12px}
+    .sep{height:1px;background:var(--stroke);margin:12px 0}
+    .kpi{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 520px){ .kpi{grid-template-columns: 1fr;} }
+    .k{
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      border-radius: 16px;
+      padding: 10px;
+    }
+    .k .n{font-weight:950;font-size:18px}
+    .k .l{color:var(--muted);font-size:12px;margin-top:2px}
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div style="font-size:16px">Martu-art</div>
+          <div class="sub">Expos + Dibujos (GitHub Pages + Supabase)</div>
+        </div>
+      </div>
+      <div class="pill" id="pill">
+        <span class="dot warn" id="dot"></span>
+        <span id="pillText">Conectando…</span>
+      </div>
+    </div>
 
-<div class="card">
-  <h1>Probando conexión</h1>
-  <div id="estado">Esperando...</div>
-</div>
+    <div class="grid">
+      <!-- IZQ -->
+      <div class="card">
+        <div class="tabs">
+          <div class="tab active" data-tab="expo">📁 Expos</div>
+          <div class="tab" data-tab="upload">⬆️ Subir dibujo</div>
+          <div class="tab" data-tab="gallery">🖼️ Galería</div>
+        </div>
+
+        <!-- TAB: EXPO -->
+        <div class="bd" id="tab_expo">
+          <div class="row">
+            <div class="field">
+              <label>Nombre de la expo</label>
+              <input id="expoTitle" placeholder="Ej: Primavera 2026, Dinosaurios, etc."/>
+            </div>
+            <div class="field">
+              <label>Slug (se autogenera)</label>
+              <input id="expoSlug" placeholder="ej: primavera-2026" disabled/>
+            </div>
+          </div>
+
+          <div class="btns" style="margin-top:10px">
+            <button class="btn primary" id="btnCreateExpo">Crear expo</button>
+            <button class="btn" id="btnReloadExpos">Actualizar lista</button>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="row">
+            <div class="field">
+              <label>Expo seleccionada</label>
+              <select id="expoSelect"></select>
+            </div>
+            <div class="field">
+              <label>Link de la expo (para compartir)</label>
+              <input id="expoLink" readonly />
+            </div>
+          </div>
+
+          <div class="btns" style="margin-top:10px">
+            <button class="btn" id="btnCopyExpoLink">Copiar link</button>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="kpi">
+            <div class="k">
+              <div class="n" id="kExpos">0</div>
+              <div class="l">Expos creadas</div>
+            </div>
+            <div class="k">
+              <div class="n" id="kDrawings">0</div>
+              <div class="l">Dibujos en esta expo</div>
+            </div>
+            <div class="k">
+              <div class="n" id="kStorage">—</div>
+              <div class="l">Bucket</div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="list" id="expoList"></div>
+        </div>
+
+        <!-- TAB: UPLOAD -->
+        <div class="bd" id="tab_upload" style="display:none">
+          <div class="muted small">Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda en la expo seleccionada.</div>
+
+          <div class="sep"></div>
+
+          <div class="row">
+            <div class="field">
+              <label>Archivo (foto del dibujo)</label>
+              <input id="file" type="file" accept="image/*"/>
+            </div>
+            <div class="field">
+              <label>Título (opcional)</label>
+              <input id="drawingTitle" placeholder="Ej: Gatito, Arcoiris, etc."/>
+            </div>
+          </div>
+
+          <div class="btns" style="margin-top:10px">
+            <button class="btn primary" id="btnUpload">Subir</button>
+            <button class="btn" id="btnOpenGalleryFromUpload">Ver galería</button>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="muted small" id="uploadHelp">Tip: si no te deja guardar, es por permisos (RLS). Abajo te dejé el SQL necesario (más abajo en el código).</div>
+        </div>
+
+        <!-- TAB: GALLERY -->
+        <div class="bd" id="tab_gallery" style="display:none">
+          <div class="row" style="align-items:end">
+            <div class="field">
+              <label>Expo</label>
+              <select id="expoSelect2"></select>
+            </div>
+            <div class="btns">
+              <button class="btn" id="btnReloadGallery">Actualizar</button>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="gallery" id="gallery"></div>
+          <div class="muted small" id="emptyGallery" style="display:none;margin-top:10px">
+            No hay dibujos todavía en esta expo. Andá a “Subir dibujo”.
+          </div>
+        </div>
+      </div>
+
+      <!-- DER -->
+      <div class="card">
+        <div class="hd">
+          <div>
+            <h2>Estado</h2>
+            <div class="hint">Si esto está verde, ya está. Si está rojo, te falta permisos o algo no coincide.</div>
+          </div>
+          <div class="chip" id="chipMode">Público (sin login)</div>
+        </div>
+        <div class="bd">
+          <div class="item">
+            <div class="meta">
+              <div class="t">Bucket</div>
+              <div class="s" id="bucketName">—</div>
+            </div>
+            <div class="actions">
+              <span class="chip" id="bucketPublic">—</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="meta">
+              <div class="t">Base URL</div>
+              <div class="s" id="baseUrl">—</div>
+            </div>
+            <div class="actions">
+              <button class="btn" id="btnCopyBase">Copiar</button>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="meta">
+              <div class="t">Diagnóstico rápido</div>
+              <div class="s" id="diag">—</div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="muted small">
+            Si te aparece “Pantalla negra” en iPhone, casi siempre es:
+            <ul>
+              <li>URL mal escrita (falta <b>.co</b>), o</li>
+              <li>key cortada, o</li>
+              <li>RLS bloqueando inserts/select.</li>
+            </ul>
+            Esta versión te avisa con mensaje (no se queda “muda”).
+          </div>
+
+          <div class="sep"></div>
+
+          <details>
+            <summary style="cursor:pointer;font-weight:900">🧱 SQL (si no te deja guardar por permisos)</summary>
+            <div class="muted small" style="margin-top:10px">
+              Pegalo en <b>SQL Editor</b> y ejecutalo. Esto deja la app pública (sin login).  
+              Si después querés seguridad, lo ajustamos.
+            </div>
+<pre style="white-space:pre-wrap; background:rgba(0,0,0,.25); border:1px solid var(--stroke); padding:10px; border-radius:14px; margin-top:10px; color:var(--text)">
+-- TABLAS (si ya las tenés, no lo corras)
+-- create extension if not exists "uuid-ossp";
+
+-- Tabla expos
+create table if not exists expos (
+  id uuid primary key default uuid_generate_v4(),
+  title text not null,
+  slug text unique not null,
+  created_at timestamp with time zone default now()
+);
+
+-- Tabla dibujos (metadata)
+create table if not exists drawings (
+  id uuid primary key default uuid_generate_v4(),
+  title text,
+  file_path text not null,
+  public_url text not null,
+  mime text,
+  size bigint,
+  created_at timestamp with time zone default now()
+);
+
+-- Relación expo-dibujo (muchos a muchos)
+create table if not exists expo_items (
+  id uuid primary key default uuid_generate_v4(),
+  expo_id uuid references expos(id) on delete cascade,
+  drawing_id uuid references drawings(id) on delete cascade,
+  created_at timestamp with time zone default now(),
+  unique(expo_id, drawing_id)
+);
+
+-- RLS + POLICIES (modo público)
+alter table expos enable row level security;
+alter table drawings enable row level security;
+alter table expo_items enable row level security;
+
+drop policy if exists "public_select_expos" on expos;
+drop policy if exists "public_insert_expos" on expos;
+drop policy if exists "public_select_drawings" on drawings;
+drop policy if exists "public_insert_drawings" on drawings;
+drop policy if exists "public_select_expo_items" on expo_items;
+drop policy if exists "public_insert_expo_items" on expo_items;
+
+create policy "public_select_expos" on expos for select to anon using (true);
+create policy "public_insert_expos" on expos for insert to anon with check (true);
+
+create policy "public_select_drawings" on drawings for select to anon using (true);
+create policy "public_insert_drawings" on drawings for insert to anon with check (true);
+
+create policy "public_select_expo_items" on expo_items for select to anon using (true);
+create policy "public_insert_expo_items" on expo_items for insert to anon with check (true);
+</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <div class="bar">
+        <div class="ttl" id="mTitle">Dibujo</div>
+        <button class="x" id="mClose">Cerrar</button>
+      </div>
+      <div class="imgwrap">
+        <img id="mImg" alt=""/>
+      </div>
+      <div class="bd" style="padding:12px">
+        <div class="muted small" id="mSub"></div>
+        <div class="btns" style="margin-top:10px">
+          <button class="btn" id="btnCopyImg">Copiar link de imagen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Listo</div>
 
 <script>
-const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+/* ===========================
+   CONFIG (PEGÁ TUS DATOS)
+   =========================== */
 
-const estado = document.getElementById("estado");
+// 1) PEGÁ ACÁ TU URL (la que termina en .supabase.co)
+const SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// 2) PEGÁ ACÁ TU PUBLISHABLE KEY (sb_publishable_...)
+// (NO uses la secret key)
+const SUPABASE_ANON_KEY = "sb_publishable_TU_KEY_AQUI";
 
-(async () => {
-  try {
-    estado.innerText = "Probando conexión...";
-    const { data, error } = await supabase.auth.getSession();
-    if (error) throw error;
-    estado.innerText = "✅ Conectado a Supabase correctamente";
-  } catch (e) {
-    estado.innerText = "❌ Error Supabase: " + (e?.message || e);
+// 3) BUCKET (en tu Supabase se ve como: drawings)
+const BUCKET = "drawings";
+
+/* ===========================
+   APP
+   =========================== */
+const $ = (id)=>document.getElementById(id);
+const toast = $("toast");
+const dot = $("dot");
+const pillText = $("pillText");
+const pill = $("pill");
+const diag = $("diag");
+
+const tabBtns = Array.from(document.querySelectorAll(".tab"));
+const tabs = {
+  expo: $("tab_expo"),
+  upload: $("tab_upload"),
+  gallery: $("tab_gallery"),
+};
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>toast.classList.remove("show"), 2200);
+}
+
+function setStatus(type, msg){
+  pillText.textContent = msg;
+  dot.classList.remove("good","bad","warn");
+  dot.classList.add(type);
+}
+
+function slugify(s){
+  return (s||"")
+    .toString()
+    .trim()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/(^-|-$)/g,"")
+    .slice(0,60);
+}
+
+function extFromName(name){
+  const m = (name||"").toLowerCase().match(/\.([a-z0-9]+)$/);
+  return m ? m[1] : "jpg";
+}
+
+function nowNice(){
+  const d = new Date();
+  return d.toLocaleString("es-AR", {hour12:false});
+}
+
+function pageUrlForExpo(slug){
+  const u = new URL(location.href);
+  u.searchParams.set("expo", slug);
+  return u.toString();
+}
+
+async function copyText(txt){
+  try{
+    await navigator.clipboard.writeText(txt);
+    showToast("Copiado ✅");
+  }catch{
+    // fallback iOS viejo
+    const ta = document.createElement("textarea");
+    ta.value = txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    showToast("Copiado ✅");
   }
-})();
-</script>
+}
 
+let sb = null;
+let expos = [];
+let currentExpo = null; // {id,title,slug}
+let currentExpo2 = null;
+
+function setTab(name){
+  tabBtns.forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
+  Object.keys(tabs).forEach(k=>tabs[k].style.display = (k===name ? "" : "none"));
+}
+
+tabBtns.forEach(b=>{
+  b.addEventListener("click", ()=>setTab(b.dataset.tab));
+});
+
+$("btnCopyBase").addEventListener("click", ()=>{
+  copyText(SUPABASE_URL);
+});
+
+$("expoTitle").addEventListener("input", (e)=>{
+  $("expoSlug").value = slugify(e.target.value);
+});
+
+$("btnCopyExpoLink").addEventListener("click", ()=>{
+  const v = $("expoLink").value;
+  if(v) copyText(v);
+});
+
+$("btnOpenGalleryFromUpload").addEventListener("click", ()=>{
+  setTab("gallery");
+});
+
+$("mClose").addEventListener("click", ()=>closeModal());
+$("modal").addEventListener("click", (e)=>{
+  if(e.target.id==="modal") closeModal();
+});
+
+let modalState = { url:"", title:"", sub:"" };
+function openModal(url, title, sub){
+  modalState = { url, title, sub };
+  $("mImg").src = url;
+  $("mImg").alt = title || "dibujo";
+  $("mTitle").textContent = title || "Dibujo";
+  $("mSub").textContent = sub || "";
+  $("modal").classList.add("open");
+}
+function closeModal(){
+  $("modal").classList.remove("open");
+}
+
+$("btnCopyImg").addEventListener("click", ()=>{
+  if(modalState.url) copyText(modalState.url);
+});
+
+function setExpoSelectOptions(){
+  const sel1 = $("expoSelect");
+  const sel2 = $("expoSelect2");
+  sel1.innerHTML = "";
+  sel2.innerHTML = "";
+
+  for(const e of expos){
+    const o1 = document.createElement("option");
+    o1.value = e.id;
+    o1.textContent = `${e.title} (${e.slug})`;
+    sel1.appendChild(o1);
+
+    const o2 = document.createElement("option");
+    o2.value = e.id;
+    o2.textContent = `${e.title} (${e.slug})`;
+    sel2.appendChild(o2);
+  }
+
+  // elegir expo actual
+  const saved = localStorage.getItem("martu_current_expo_id");
+  const pick = expos.find(x=>x.id===saved) || expos[0] || null;
+
+  if(pick){
+    sel1.value = pick.id;
+    sel2.value = pick.id;
+    setCurrentExpoById(pick.id);
+    setCurrentExpo2ById(pick.id);
+  }else{
+    currentExpo = null;
+    currentExpo2 = null;
+    $("expoLink").value = "";
+  }
+
+  $("kExpos").textContent = expos.length;
+}
+
+function setCurrentExpoById(id){
+  const e = expos.find(x=>x.id===id);
+  currentExpo = e || null;
+  if(currentExpo){
+    localStorage.setItem("martu_current_expo_id", currentExpo.id);
+    $("expoLink").value = pageUrlForExpo(currentExpo.slug);
+    loadExpoCount();
+    renderExpoList();
+  }
+}
+
+function setCurrentExpo2ById(id){
+  const e = expos.find(x=>x.id===id);
+  currentExpo2 = e || null;
+  if(currentExpo2){
+    loadGallery();
+  }
+}
+
+$("expoSelect").addEventListener("change", (e)=>{
+  setCurrentExpoById(e.target.value);
+});
+$("expoSelect2").addEventListener("change", (e)=>{
+  setCurrentExpo2ById(e.target.value);
+});
+
+async function checkBasic(){
+  try{
+    // check that supabase-js loaded and client can be created
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    $("baseUrl").textContent = SUPABASE_URL;
+    $("bucketName").textContent = BUCKET;
+    $("kStorage").textContent = BUCKET;
+
+    // quick query to verify API reachability
+    const { data, error } = await sb.from("expos").select("id").limit(1);
+    if(error){
+      setStatus("bad", "Conectado pero bloqueado (RLS o tablas)");
+      diag.textContent = `Error leyendo expos: ${error.message}`;
+      $("bucketPublic").textContent = "revisar policies";
+      return false;
+    }
+    setStatus("good", "Conectado ✅");
+    diag.textContent = `OK · ${nowNice()}`;
+    $("bucketPublic").textContent = "PUBLIC (según tu bucket)";
+    return true;
+  }catch(e){
+    setStatus("bad", "No conecta");
+    diag.textContent = e.message || String(e);
+    return false;
+  }
+}
+
+async function loadExpos(){
+  $("expoList").innerHTML = `<div class="muted small">Cargando expos…</div>`;
+  const { data, error } = await sb
+    .from("expos")
+    .select("id,title,slug,created_at")
+    .order("created_at", {ascending:false});
+
+  if(error){
+    $("expoList").innerHTML = `<div class="muted small">Error: ${error.message}</div>`;
+    showToast("Error cargando expos ❌");
+    return;
+  }
+
+  expos = data || [];
+  setExpoSelectOptions();
+  renderExpoList();
+
+  // Si viene expo por URL (?expo=...)
+  const params = new URLSearchParams(location.search);
+  const wanted = params.get("expo");
+  if(wanted){
+    const bySlug = expos.find(x=>x.slug===wanted);
+    if(bySlug){
+      $("expoSelect").value = bySlug.id;
+      $("expoSelect2").value = bySlug.id;
+      setCurrentExpoById(bySlug.id);
+      setCurrentExpo2ById(bySlug.id);
+      setTab("gallery");
+    }
+  }
+}
+
+function renderExpoList(){
+  const box = $("expoList");
+  if(!expos.length){
+    box.innerHTML = `<div class="muted small">Todavía no hay expos. Creá una arriba.</div>`;
+    return;
+  }
+
+  box.innerHTML = "";
+  for(const e of expos){
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <div class="meta">
+        <div class="t">${escapeHtml(e.title)}</div>
+        <div class="s">${escapeHtml(e.slug)} · ${new Date(e.created_at).toLocaleString("es-AR",{hour12:false})}</div>
+      </div>
+      <div class="actions">
+        <span class="chip">expo</span>
+        <button class="btn" data-open="${e.id}">Abrir</button>
+        <button class="btn" data-copy="${e.slug}">Copiar link</button>
+      </div>
+    `;
+    box.appendChild(div);
+  }
+
+  box.querySelectorAll("[data-open]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-open");
+      $("expoSelect").value = id;
+      $("expoSelect2").value = id;
+      setCurrentExpoById(id);
+      setCurrentExpo2ById(id);
+      setTab("gallery");
+      showToast("Expo abierta ✅");
+    });
+  });
+
+  box.querySelectorAll("[data-copy]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const slug = btn.getAttribute("data-copy");
+      copyText(pageUrlForExpo(slug));
+    });
+  });
+}
+
+function escapeHtml(s){
+  return (s||"").replace(/[&<>"']/g, (c)=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+async function loadExpoCount(){
+  if(!currentExpo) return;
+  const { data, error, count } = await sb
+    .from("expo_items")
+    .select("id", { count:"exact", head:true })
+    .eq("expo_id", currentExpo.id);
+
+  if(error){
+    $("kDrawings").textContent = "—";
+    return;
+  }
+  $("kDrawings").textContent = count ?? 0;
+}
+
+$("btnReloadExpos").addEventListener("click", loadExpos);
+
+$("btnCreateExpo").addEventListener("click", async ()=>{
+  const title = $("expoTitle").value.trim();
+  if(!title){
+    showToast("Poné un nombre de expo");
+    return;
+  }
+  const slug = slugify(title);
+  $("expoSlug").value = slug;
+
+  $("btnCreateExpo").disabled = true;
+  try{
+    const { data, error } = await sb
+      .from("expos")
+      .insert({ title, slug })
+      .select("id,title,slug,created_at")
+      .single();
+
+    if(error){
+      showToast("No se pudo crear ❌");
+      diag.textContent = `Error creando expo: ${error.message}`;
+      return;
+    }
+    showToast("Expo creada ✅");
+    $("expoTitle").value = "";
+    $("expoSlug").value = "";
+    await loadExpos();
+
+    // seleccionar la nueva
+    if(data?.id){
+      $("expoSelect").value = data.id;
+      $("expoSelect2").value = data.id;
+      setCurrentExpoById(data.id);
+      setCurrentExpo2ById(data.id);
+    }
+  } finally {
+    $("btnCreateExpo").disabled = false;
+  }
+});
+
+$("btnUpload").addEventListener("click", async ()=>{
+  if(!currentExpo){
+    showToast("Creá o elegí una expo primero");
+    setTab("expo");
+    return;
+  }
+  const f = $("file").files && $("file").files[0];
+  if(!f){
+    showToast("Elegí una imagen");
+    return;
+  }
+
+  $("btnUpload").disabled = true;
+
+  try{
+    // 1) subir a storage
+    const ext = extFromName(f.name);
+    const id = crypto.randomUUID();
+    const safeTitle = ($("drawingTitle").value || "").trim();
+    const path = `${currentExpo.slug}/${id}.${ext}`;
+
+    const up = await sb.storage.from(BUCKET).upload(path, f, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: f.type || undefined
+    });
+
+    if(up.error){
+      showToast("No subió ❌");
+      diag.textContent = `Storage error: ${up.error.message}`;
+      return;
+    }
+
+    // 2) url pública
+    const pub = sb.storage.from(BUCKET).getPublicUrl(path);
+    const publicUrl = pub?.data?.publicUrl || "";
+
+    if(!publicUrl){
+      showToast("Subió pero no tengo URL");
+      diag.textContent = "No se pudo obtener publicUrl";
+      return;
+    }
+
+    // 3) guardar metadata en tabla drawings
+    const insD = await sb
+      .from("drawings")
+      .insert({
+        title: safeTitle || null,
+        file_path: path,
+        public_url: publicUrl,
+        mime: f.type || null,
+        size: f.size || null
+      })
+      .select("id,title,public_url,created_at")
+      .single();
+
+    if(insD.error){
+      showToast("Subió pero no guardó en DB ❌");
+      diag.textContent = `DB drawings error: ${insD.error.message}`;
+      return;
+    }
+
+    // 4) linkear con la expo
+    const insL = await sb
+      .from("expo_items")
+      .insert({
+        expo_id: currentExpo.id,
+        drawing_id: insD.data.id
+      });
+
+    if(insL.error){
+      showToast("Falta link con la expo ❌");
+      diag.textContent = `DB expo_items error: ${insL.error.message}`;
+      return;
+    }
+
+    showToast("Subido ✅");
+    $("file").value = "";
+    $("drawingTitle").value = "";
+    await loadExpoCount();
+    await loadGallery();
+    setTab("gallery");
+  } finally {
+    $("btnUpload").disabled = false;
+  }
+});
+
+$("btnReloadGallery").addEventListener("click", loadGallery);
+
+async function loadGallery(){
+  const g = $("gallery");
+  const empty = $("emptyGallery");
+  g.innerHTML = "";
+  empty.style.display = "none";
+
+  const expo = currentExpo2 || currentExpo;
+  if(!expo){
+    g.innerHTML = `<div class="muted small">No hay expo seleccionada.</div>`;
+    return;
+  }
+
+  // Traer dibujos por expo_items -> drawings
+  const { data, error } = await sb
+    .from("expo_items")
+    .select("id, created_at, drawings:drawings(id,title,public_url,created_at)")
+    .eq("expo_id", expo.id)
+    .order("created_at", {ascending:false});
+
+  if(error){
+    g.innerHTML = `<div class="muted small">Error: ${escapeHtml(error.message)}</div>`;
+    showToast("Error cargando galería ❌");
+    return;
+  }
+
+  const rows = (data || []).map(x=>({
+    link_id: x.id,
+    created_at: x.created_at,
+    d: x.drawings
+  })).filter(x=>x.d && x.d.public_url);
+
+  if(!rows.length){
+    empty.style.display = "";
+    return;
+  }
+
+  for(const r of rows){
+    const d = r.d;
+    const card = document.createElement("div");
+    card.className = "g";
+    const title = d.title || "Sin título";
+    const sub = new Date(d.created_at).toLocaleString("es-AR",{hour12:false});
+    card.innerHTML = `
+      <div class="thumb"><img loading="lazy" src="${escapeHtml(d.public_url)}" alt="${escapeHtml(title)}"/></div>
+      <div class="info">
+        <div class="name">${escapeHtml(title)}</div>
+        <div class="sub">${escapeHtml(sub)}</div>
+      </div>
+    `;
+    card.addEventListener("click", ()=>{
+      openModal(d.public_url, title, sub);
+    });
+    g.appendChild(card);
+  }
+}
+
+async function boot(){
+  setStatus("warn", "Conectando…");
+  const ok = await checkBasic();
+  if(!ok){
+    // aunque falle, igual intentar mostrar algo
+    return;
+  }
+  await loadExpos();
+}
+
+boot();
+</script>
 </body>
 </html>
