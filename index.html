@@ -61,7 +61,7 @@
       border:1px solid var(--stroke);
       border-radius: 999px;
       padding:10px 12px;
-      min-width: 160px;
+      min-width: 170px;
       justify-content: space-between;
     }
     .dot{
@@ -73,7 +73,6 @@
     .stText{font-weight:750}
     .stSub{color:var(--muted);font-size:12px;margin-top:2px}
 
-    /* Tabs */
     .tabs{
       padding:14px 18px 0;
       display:grid;
@@ -98,7 +97,6 @@
       border-color: rgba(122,162,255,.35);
     }
 
-    /* Buttons (PRESS FEEL) */
     .btn{
       display:inline-flex;align-items:center;justify-content:center;
       gap:10px;
@@ -124,21 +122,15 @@
       filter: brightness(1.05);
       box-shadow: 0 6px 14px rgba(0,0,0,.35);
     }
-    .pressed{ /* para iOS (pointerdown) */
+    .pressed{
       transform: var(--press2) !important;
       filter: brightness(1.06);
       box-shadow: 0 5px 12px rgba(0,0,0,.35) !important;
     }
-    .btn:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-      transform:none !important;
-    }
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none !important}
 
-    /* Layout */
     .body{padding:18px}
     .muted{color:var(--muted)}
-    .grid2{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
     .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
     .field label{
       display:block;
@@ -160,7 +152,6 @@
     .hint{font-size:13px;color:var(--muted);margin-top:8px}
     .hr{height:1px;background:var(--stroke);margin:16px 0}
 
-    /* Gallery */
     .gallery{
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -211,7 +202,6 @@
     }
     .tileMeta b{color: rgba(232,236,246,.80);font-weight:850}
 
-    /* Modal */
     .modal{
       position:fixed;inset:0;
       background: rgba(0,0,0,.72);
@@ -259,7 +249,6 @@
       display:block;
     }
 
-    /* Toast */
     .toast{
       position:fixed;
       left:50%;
@@ -361,6 +350,7 @@
           <div class="field">
             <label>Expo seleccionada</label>
             <select id="expoSelect"></select>
+            <div class="hint" id="expoHint"></div>
           </div>
 
           <div class="field">
@@ -486,15 +476,13 @@
   }
 
   function publicUrl(path){
-    // URL pública REAL (la que te abre el navegador)
     return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${encodePath(path)}`;
   }
 
   function prettyTitleFromFilename(filename){
-    // filename: "arbol-2026-02-26T...-image.jpg" -> "arbol"
     const name = (filename||"").split("/").pop() || "";
-    const base = name.replace(/\.[^/.]+$/,""); // sin extensión
-    const cut = base.split("-202").shift();    // corta el timestamp ISO (202x)
+    const base = name.replace(/\.[^/.]+$/,"");
+    const cut = base.split("-202").shift();
     const t = (cut || base).replace(/-image$/i,"").replaceAll("-", " ").trim();
     return t;
   }
@@ -506,7 +494,6 @@
   }
 
   function pressifyAll(){
-    // Hace que en iPhone se "sienta" apretado SIEMPRE
     const pressables = document.querySelectorAll(".btn, .tab, .tile, .xbtn");
     pressables.forEach(el=>{
       el.addEventListener("pointerdown", ()=> el.classList.add("pressed"), {passive:true});
@@ -526,14 +513,29 @@
     const headers = new Headers(opts.headers || {});
     headers.set("apikey", SUPABASE_KEY);
     headers.set("Authorization", `Bearer ${SUPABASE_KEY}`);
-    if(!(opts.body instanceof Blob) && typeof opts.body === "string"){
-      // ok
-    }
     return fetch(`${API}${path}`, { ...opts, headers });
   }
 
-  async function listAllObjects(prefix=""){
-    // Lista objetos del bucket (hasta 1000). Para este uso alcanza.
+  async function listRoot(){
+    // Root del bucket: supabase suele devolver CARPETAS acá
+    const res = await sbFetch(`/object/list/${BUCKET}`, {
+      method:"POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        prefix: "",
+        limit: 1000,
+        offset: 0,
+        sortBy: { column: "name", order: "asc" }
+      })
+    });
+    if(!res.ok){
+      const txt = await res.text();
+      throw new Error(txt || "No pude listar root");
+    }
+    return res.json();
+  }
+
+  async function listPrefix(prefix){
     const res = await sbFetch(`/object/list/${BUCKET}`, {
       method:"POST",
       headers: {"Content-Type":"application/json"},
@@ -546,13 +548,12 @@
     });
     if(!res.ok){
       const txt = await res.text();
-      throw new Error(txt || "No pude listar objetos");
+      throw new Error(txt || "No pude listar");
     }
     return res.json();
   }
 
   async function ensureExpoFolder(slug){
-    // Crea un ".keep" para que exista la carpeta aunque esté vacía
     const blob = new Blob(["keep"], {type:"text/plain"});
     const path = `${slug}/.keep`;
     const res = await sbFetch(`/object/${BUCKET}/${encodePath(path)}`, {
@@ -596,20 +597,42 @@
   }
 
   async function listExpos(){
-    // Expos = carpetas de primer nivel (antes del '/')
-    const objs = await listAllObjects("");
+    // FIX: supabase puede devolver carpetas en root SIN "/"
+    const root = await listRoot();
     const set = new Set();
-    for(const o of objs){
-      const name = o?.name || "";
-      if(!name.includes("/")) continue;
-      const folder = name.split("/")[0];
-      if(folder) set.add(folder);
+
+    for(const o of root){
+      const name = (o?.name || "").trim();
+      if(!name) continue;
+
+      // Caso A: carpeta (metadata suele ser null en carpetas)
+      if(o?.metadata == null && !name.includes(".")){
+        set.add(name);
+        continue;
+      }
+
+      // Caso B: objeto con "/" (archivo dentro de carpeta)
+      if(name.includes("/")){
+        const folder = name.split("/")[0];
+        if(folder) set.add(folder);
+      }
     }
+
+    // fallback: si root vino raro, igual tratamos de sacar carpetas por ".keep"
+    if(set.size === 0){
+      // intenta “descubrir” por archivos .keep/imagenes: no es perfecto pero ayuda
+      const guess = await listPrefix("");
+      for(const o of guess){
+        const n = (o?.name||"");
+        if(n.includes("/")) set.add(n.split("/")[0]);
+      }
+    }
+
     return Array.from(set).sort((a,b)=>a.localeCompare(b));
   }
 
   async function listExpoImages(slug){
-    const objs = await listAllObjects(`${slug}/`);
+    const objs = await listPrefix(`${slug}/`);
     const imgs = [];
     for(const o of objs){
       const name = o?.name || "";
@@ -621,7 +644,6 @@
         label: prettyTitleFromFilename(name)
       });
     }
-    // más nuevo primero (por timestamp en el nombre)
     imgs.sort((a,b)=> b.path.localeCompare(a.path));
     return imgs;
   }
@@ -650,6 +672,7 @@
   function fillSelect(selId, expos, keepValue){
     const sel = $(selId);
     const prev = keepValue ?? sel.value;
+
     sel.innerHTML = "";
     const opt0 = document.createElement("option");
     opt0.value = "";
@@ -669,11 +692,15 @@
     const slug = $("expoSelect").value;
     $("shareLink").value = slug ? expoShareLink(slug) : "";
   }
-  $("expoSelect").addEventListener("change", ()=>{
-    syncShareLink();
-    // sincroniza los otros selects
+
+  function syncAllSelectsFromMain(){
     $("expoSelectUpload").value = $("expoSelect").value;
     $("expoSelectGallery").value = $("expoSelect").value;
+  }
+
+  $("expoSelect").addEventListener("change", ()=>{
+    syncShareLink();
+    syncAllSelectsFromMain();
   });
 
   $("btnCopyLink").onclick = async ()=>{
@@ -683,7 +710,7 @@
       await navigator.clipboard.writeText(v);
       toast("Link copiado ✅");
     }catch{
-      toast("No pude copiar (iPhone a veces se pone exquisito). Mantené apretado y copiá.", true);
+      toast("No pude copiar. Mantené apretado el link y copiá.", true);
     }
   };
 
@@ -693,6 +720,10 @@
     fillSelect("expoSelectUpload", expos, selectSlug);
     fillSelect("expoSelectGallery", expos, selectSlug);
     syncShareLink();
+
+    $("expoHint").textContent =
+      expos.length ? `Expos encontradas: ${expos.length}` : `No hay expos todavía. Creá una con “Crear expo”.`;
+
     return expos;
   }
 
@@ -718,6 +749,9 @@
       $("btnCreateExpo").disabled = true;
       await ensureExpoFolder(slug);
       await refreshAllExpos(slug);
+      $("expoSelect").value = slug;
+      syncAllSelectsFromMain();
+      syncShareLink();
       toast("Expo creada ✅");
     }catch(e){
       toast(String(e.message||e), true);
@@ -737,9 +771,8 @@
 
     try{
       $("btnUpload").disabled = true;
-      const out = await uploadImage(slug, file, title);
+      await uploadImage(slug, file, title);
       toast("Subió ✅");
-      // opcional: limpiar
       $("fileInput").value = "";
       $("imgTitle").value = "";
     }catch(e){
@@ -794,7 +827,7 @@
         tile.onclick = ()=> openModal(it.url, it.label||"");
         g.appendChild(tile);
       }
-      pressifyAll(); // porque agregamos tiles nuevos
+      pressifyAll();
       toast("Galería cargada ✅");
     }catch(e){
       toast(String(e.message||e), true);
@@ -815,7 +848,6 @@
     $("expoSelectUpload").value = $("expoSelectGallery").value;
   };
 
-  // si abrís con ?expo=...
   function getExpoFromUrl(){
     try{
       const u = new URL(location.href);
@@ -823,15 +855,11 @@
     }catch{return ""}
   }
 
-  /* =========================================================
-     5) Boot
-  ========================================================= */
   async function boot(){
     pressifyAll();
 
     try{
-      // test simple: listar algo (si está vacío igual responde)
-      await listAllObjects("");
+      await listRoot();
       setStatus(true, "Conectado", "Storage OK");
     }catch(e){
       setStatus(false, "Error", "No pude hablar con Storage");
@@ -844,11 +872,9 @@
 
       if(requested){
         $("expoSelect").value = requested;
-        $("expoSelectUpload").value = requested;
-        $("expoSelectGallery").value = requested;
+        syncAllSelectsFromMain();
         syncShareLink();
         showPanel("gallery");
-        // auto carga galería
         await loadGallery();
       }
     }catch(e){
