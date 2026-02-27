@@ -98,12 +98,14 @@
       box-shadow: var(--btnShadow);
       transition: transform .06s ease, filter .12s ease, box-shadow .12s ease, background .12s ease;
       display:flex;align-items:center;justify-content:center;gap:10px;
+      touch-action: manipulation;
     }
     .btn.primary{
       background: rgba(122,162,255,.14);
       border-color: rgba(122,162,255,.35);
     }
-    .btn:active{
+    .btn:active,
+    .btn.pressed{
       transform: var(--press);
       box-shadow: var(--pressShadow);
       filter: brightness(1.08);
@@ -157,6 +159,8 @@
       background: rgba(0,0,0,.38);
       font-weight:900;
       font-size:12px;
+      z-index:2;
+      backdrop-filter: blur(6px);
     }
     .imgCard img{
       width:100%;
@@ -433,7 +437,7 @@
       return u.toString();
     };
 
-    // ✅ FIX: arma URL pública sin romper "/" (iOS friendly)
+    // ✅ URL pública (no encodea "/")
     function publicUrl(path){
       const safe = String(path)
         .split("/")
@@ -450,12 +454,11 @@
     async function sbFetch(path, opts={}){
       const headers = new Headers(opts.headers || {});
       headers.set("apikey", SUPABASE_KEY);
-      // publishable key también va como bearer (para list/upload cuando hay policies)
       headers.set("authorization", `Bearer ${SUPABASE_KEY}`);
       return fetch(`${API}${path}`, { ...opts, headers });
     }
 
-    // crea una "carpeta" (sube .keep) para que exista el slug
+    // crea "carpeta" subiendo .keep
     async function ensureExpo(slug){
       const keepPath = `${slug}/.keep`;
       const res = await sbFetch(`/object/${BUCKET}/${keepPath}`, {
@@ -471,7 +474,6 @@
     }
 
     async function listAllObjects(prefix=""){
-      // endpoint: /object/list/{bucket}
       const res = await sbFetch(`/object/list/${BUCKET}`, {
         method:"POST",
         headers: { "Content-Type":"application/json" },
@@ -503,8 +505,8 @@
     async function uploadImage(slug, file, title=""){
       const stamp = new Date().toISOString().replaceAll(":","-");
       const base = title ? slugify(title).slice(0,30) : "dibujo";
-      const safeName = (file.name || "image").split(".").pop() || "jpg";
-      const filename = `${base}-${stamp}-image.${safeName}`;
+      const ext = (file.name || "image").split(".").pop() || "jpg";
+      const filename = `${base}-${stamp}-image.${ext}`;
       const path = `${slug}/${filename}`;
 
       const res = await sbFetch(`/object/${BUCKET}/${path}`, {
@@ -532,7 +534,6 @@
         if(!(/\.(png|jpg|jpeg|webp|gif)$/i).test(name)) continue;
         imgs.push({ path:name, url: publicUrl(name) });
       }
-      // más nuevo primero (timestamp en nombre)
       imgs.sort((a,b)=> b.path.localeCompare(a.path));
       return imgs;
     }
@@ -540,6 +541,19 @@
     /* ==========================================================
       4) App logic
     ========================================================== */
+
+    // feedback "presionado" incluso en taps cortos
+    function installPressFeedback(){
+      document.querySelectorAll(".btn").forEach(btn=>{
+        const down = ()=> btn.classList.add("pressed");
+        const up = ()=> btn.classList.remove("pressed");
+        btn.addEventListener("pointerdown", down, {passive:true});
+        btn.addEventListener("pointerup", up, {passive:true});
+        btn.addEventListener("pointercancel", up, {passive:true});
+        btn.addEventListener("pointerleave", up, {passive:true});
+      });
+    }
+
     function syncExpoSelects(slugs){
       const sels = [$("expoSelect"), $("expoSelectUp"), $("expoSelectGal")];
       for(const sel of sels){
@@ -547,7 +561,6 @@
         sel.innerHTML = `<option value="">— Elegí una expo —</option>` + slugs.map(s=>(
           `<option value="${s}">${s} (${s})</option>`
         )).join("");
-        // intenta mantener selección
         if(cur && slugs.includes(cur)) sel.value = cur;
       }
     }
@@ -565,21 +578,17 @@
       $("shareLink").value = slug ? expoShareLink(slug) : "";
     }
 
-    // autocompleta slug
     $("expoName").addEventListener("input", ()=>{
       $("expoSlug").value = slugify($("expoName").value);
     });
 
-    // elegir expo en panel expos
     $("expoSelect").addEventListener("change", ()=>{
       const slug = $("expoSelect").value;
       $("shareLink").value = slug ? expoShareLink(slug) : "";
-      // sincroniza los otros selects
       $("expoSelectUp").value = slug;
       $("expoSelectGal").value = slug;
     });
 
-    // copiar link
     $("btnCopyLink").onclick = async ()=>{
       const v = $("shareLink").value.trim();
       if(!v) return toast("Elegí una expo primero.", true);
@@ -592,7 +601,6 @@
       }
     };
 
-    // crear expo
     $("btnCreateExpo").onclick = async ()=>{
       const name = $("expoName").value.trim();
       const slug = slugify(name);
@@ -616,7 +624,6 @@
       }
     };
 
-    // subir
     $("btnUpload").onclick = async ()=>{
       const slug = $("expoSelectUp").value;
       const file = $("fileInput").files?.[0];
@@ -640,7 +647,6 @@
       if(slug) $("expoSelectGal").value = slug;
     };
 
-    // galería
     function openModal(url){
       $("modalImg").src = url;
       $("modal").classList.add("show");
@@ -663,17 +669,16 @@
         return `
           <div class="imgCard">
             <div class="tag">Dibujo · ${slug}</div>
-            <img src="${x.url}" alt="${file}"
-              loading="lazy"
-              onerror="this.dataset.err='1'; this.style.opacity='.3';"
-            />
+            <img src="${x.url}" alt="${file}" loading="lazy"/>
             <div class="meta">${file}</div>
           </div>
         `;
       }).join("");
 
-      // click para agrandar
       grid.querySelectorAll(".imgCard img").forEach(img=>{
+        img.addEventListener("error", ()=>{
+          img.style.opacity = ".25";
+        });
         img.addEventListener("click", ()=>{
           openModal(img.src);
         });
@@ -686,8 +691,13 @@
       try{
         const imgs = await listExpoImages(slug);
 
-        // truquito: cache-bust para que iOS no te deje el cuadrito roto en memoria
-        const bumped = imgs.map(x=>({ ...x, url: x.url + (x.url.includes("?") ? "&" : "?") + "v=" + Date.now() }));
+        // cache-bust en cada imagen (clave en iOS)
+        const ts = Date.now();
+        const bumped = imgs.map(x=>{
+          const u = new URL(x.url);
+          u.searchParams.set("v", String(ts));
+          return { ...x, url: u.toString() };
+        });
 
         renderGallery(slug, bumped);
         toast("Galería cargada ✅");
@@ -696,7 +706,6 @@
       }
     };
 
-    // si abrís con ?expo=slug, selecciona esa expo
     function applyQueryExpo(){
       const u = new URL(location.href);
       const slug = (u.searchParams.get("expo") || "").trim();
@@ -709,6 +718,7 @@
     (async ()=>{
       try{
         setStatus(false, "Conectando…", "Chequeando Storage");
+        installPressFeedback();
         await refreshExpos();
         applyQueryExpo();
         setStatus(true, "Conectado ✅", "");
