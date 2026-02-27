@@ -8,6 +8,7 @@
   <style>
     :root{
       --bg:#0f1115;
+      --card:#141822;
       --stroke:rgba(255,255,255,.10);
       --text:#e8ecf6;
       --muted:rgba(232,236,246,.62);
@@ -15,7 +16,9 @@
       --good:#44d07b;
       --bad:#ff5b6b;
       --shadow: 0 18px 50px rgba(0,0,0,.55);
+      --r:18px;
 
+      /* sensación de botón presionado */
       --press: translateY(1.5px) scale(.985);
       --pressShadow: 0 10px 24px rgba(0,0,0,.55);
       --btnShadow: 0 14px 34px rgba(0,0,0,.45);
@@ -81,9 +84,9 @@
       padding:12px 16px 8px;
     }
 
+    /* botones con feedback */
     .btn{
-      appearance:none;
-      border:1px solid var(--stroke);
+      appearance:none; border:1px solid var(--stroke);
       background: rgba(255,255,255,.04);
       color: var(--text);
       border-radius: 20px;
@@ -92,8 +95,6 @@
       letter-spacing: .2px;
       cursor:pointer;
       user-select:none;
-      -webkit-user-select:none;
-      touch-action: manipulation;
       box-shadow: var(--btnShadow);
       transition: transform .06s ease, filter .12s ease, box-shadow .12s ease, background .12s ease;
       display:flex;align-items:center;justify-content:center;gap:10px;
@@ -102,12 +103,10 @@
       background: rgba(122,162,255,.14);
       border-color: rgba(122,162,255,.35);
     }
-    /* iOS: a veces :active es tímido, por eso también usamos .is-pressed vía JS */
-    .btn:active,
-    .btn.is-pressed{
+    .btn:active{
       transform: var(--press);
       box-shadow: var(--pressShadow);
-      filter: brightness(1.10);
+      filter: brightness(1.08);
     }
     .btn:focus{outline:none}
     .btn.small{padding:12px 14px;border-radius:16px;font-weight:800}
@@ -158,7 +157,6 @@
       background: rgba(0,0,0,.38);
       font-weight:900;
       font-size:12px;
-      z-index:2;
     }
     .imgCard img{
       width:100%;
@@ -184,6 +182,7 @@
       font-weight:700;
     }
 
+    /* toast */
     .toast{
       position:fixed;
       left:50%;
@@ -211,6 +210,7 @@
       cursor:pointer;
     }
 
+    /* modal */
     .modal{
       position:fixed; inset:0;
       background: rgba(0,0,0,.72);
@@ -375,12 +375,15 @@
     /* ==========================================================
       1) CONFIG (TOCÁ SOLO ESTO)
     ========================================================== */
-    const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
-    const SUPABASE_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
-    const BUCKET = "drawings";
 
-    /* build id para cache-bust (GitHub Pages + Safari) */
-    const BUILD = Date.now();
+    // ✅ Tu Project URL
+    const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
+
+    // ✅ Tu publishable key
+    const SUPABASE_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+
+    // ✅ Bucket
+    const BUCKET = "drawings";
 
     /* ==========================================================
       2) UI helpers
@@ -427,13 +430,15 @@
     const expoShareLink = (slug)=>{
       const u = new URL(location.href);
       u.searchParams.set("expo", slug);
-      u.searchParams.set("v", BUILD); // fuerza refresh del link compartido
       return u.toString();
     };
 
-    /* URL pública EXACTA estilo "Get URL" */
+    // ✅ FIX: arma URL pública sin romper "/" (iOS friendly)
     function publicUrl(path){
-      const safe = String(path).split("/").map(encodeURIComponent).join("/");
+      const safe = String(path)
+        .split("/")
+        .map(encodeURIComponent)
+        .join("/");
       return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${safe}`;
     }
 
@@ -445,10 +450,12 @@
     async function sbFetch(path, opts={}){
       const headers = new Headers(opts.headers || {});
       headers.set("apikey", SUPABASE_KEY);
+      // publishable key también va como bearer (para list/upload cuando hay policies)
       headers.set("authorization", `Bearer ${SUPABASE_KEY}`);
       return fetch(`${API}${path}`, { ...opts, headers });
     }
 
+    // crea una "carpeta" (sube .keep) para que exista el slug
     async function ensureExpo(slug){
       const keepPath = `${slug}/.keep`;
       const res = await sbFetch(`/object/${BUCKET}/${keepPath}`, {
@@ -464,6 +471,7 @@
     }
 
     async function listAllObjects(prefix=""){
+      // endpoint: /object/list/{bucket}
       const res = await sbFetch(`/object/list/${BUCKET}`, {
         method:"POST",
         headers: { "Content-Type":"application/json" },
@@ -495,8 +503,8 @@
     async function uploadImage(slug, file, title=""){
       const stamp = new Date().toISOString().replaceAll(":","-");
       const base = title ? slugify(title).slice(0,30) : "dibujo";
-      const ext = (file.name || "image").split(".").pop() || "jpg";
-      const filename = `${base}-${stamp}-image.${ext}`;
+      const safeName = (file.name || "image").split(".").pop() || "jpg";
+      const filename = `${base}-${stamp}-image.${safeName}`;
       const path = `${slug}/${filename}`;
 
       const res = await sbFetch(`/object/${BUCKET}/${path}`, {
@@ -524,6 +532,7 @@
         if(!(/\.(png|jpg|jpeg|webp|gif)$/i).test(name)) continue;
         imgs.push({ path:name, url: publicUrl(name) });
       }
+      // más nuevo primero (timestamp en nombre)
       imgs.sort((a,b)=> b.path.localeCompare(a.path));
       return imgs;
     }
@@ -535,9 +544,10 @@
       const sels = [$("expoSelect"), $("expoSelectUp"), $("expoSelectGal")];
       for(const sel of sels){
         const cur = sel.value;
-        sel.innerHTML =
-          `<option value="">— Elegí una expo —</option>` +
-          slugs.map(s=> `<option value="${s}">${s} (${s})</option>`).join("");
+        sel.innerHTML = `<option value="">— Elegí una expo —</option>` + slugs.map(s=>(
+          `<option value="${s}">${s} (${s})</option>`
+        )).join("");
+        // intenta mantener selección
         if(cur && slugs.includes(cur)) sel.value = cur;
       }
     }
@@ -555,17 +565,21 @@
       $("shareLink").value = slug ? expoShareLink(slug) : "";
     }
 
+    // autocompleta slug
     $("expoName").addEventListener("input", ()=>{
       $("expoSlug").value = slugify($("expoName").value);
     });
 
+    // elegir expo en panel expos
     $("expoSelect").addEventListener("change", ()=>{
       const slug = $("expoSelect").value;
       $("shareLink").value = slug ? expoShareLink(slug) : "";
+      // sincroniza los otros selects
       $("expoSelectUp").value = slug;
       $("expoSelectGal").value = slug;
     });
 
+    // copiar link
     $("btnCopyLink").onclick = async ()=>{
       const v = $("shareLink").value.trim();
       if(!v) return toast("Elegí una expo primero.", true);
@@ -578,6 +592,7 @@
       }
     };
 
+    // crear expo
     $("btnCreateExpo").onclick = async ()=>{
       const name = $("expoName").value.trim();
       const slug = slugify(name);
@@ -601,6 +616,7 @@
       }
     };
 
+    // subir
     $("btnUpload").onclick = async ()=>{
       const slug = $("expoSelectUp").value;
       const file = $("fileInput").files?.[0];
@@ -624,6 +640,7 @@
       if(slug) $("expoSelectGal").value = slug;
     };
 
+    // galería
     function openModal(url){
       $("modalImg").src = url;
       $("modal").classList.add("show");
@@ -646,29 +663,32 @@
         return `
           <div class="imgCard">
             <div class="tag">Dibujo · ${slug}</div>
-            <img src="${x.url}" alt="${file}" loading="lazy"
-                 onerror="this.style.opacity='.35';" />
+            <img src="${x.url}" alt="${file}"
+              loading="lazy"
+              onerror="this.dataset.err='1'; this.style.opacity='.3';"
+            />
             <div class="meta">${file}</div>
           </div>
         `;
       }).join("");
 
+      // click para agrandar
       grid.querySelectorAll(".imgCard img").forEach(img=>{
-        img.addEventListener("click", ()=> openModal(img.src));
+        img.addEventListener("click", ()=>{
+          openModal(img.src);
+        });
       });
     }
 
     $("btnLoadGallery").onclick = async ()=>{
       const slug = $("expoSelectGal").value;
       if(!slug) return toast("Elegí una expo.", true);
-
       try{
         const imgs = await listExpoImages(slug);
-        // cache-bust por imagen (Safari no jode más)
-        const bumped = imgs.map(x=>{
-          const sep = x.url.includes("?") ? "&" : "?";
-          return { ...x, url: x.url + sep + "v=" + Date.now() };
-        });
+
+        // truquito: cache-bust para que iOS no te deje el cuadrito roto en memoria
+        const bumped = imgs.map(x=>({ ...x, url: x.url + (x.url.includes("?") ? "&" : "?") + "v=" + Date.now() }));
+
         renderGallery(slug, bumped);
         toast("Galería cargada ✅");
       }catch(e){
@@ -676,32 +696,18 @@
       }
     };
 
+    // si abrís con ?expo=slug, selecciona esa expo
     function applyQueryExpo(){
       const u = new URL(location.href);
       const slug = (u.searchParams.get("expo") || "").trim();
-      if(slug) setSelectedExpo(slug);
+      if(slug){
+        setSelectedExpo(slug);
+      }
     }
 
-    /* ==========================================================
-      5) “botón presionado” real en iPhone (touch)
-    ========================================================== */
-    function addPressFX(el){
-      const on = ()=> el.classList.add("is-pressed");
-      const off = ()=> el.classList.remove("is-pressed");
-      el.addEventListener("touchstart", on, {passive:true});
-      el.addEventListener("touchend", off, {passive:true});
-      el.addEventListener("touchcancel", off, {passive:true});
-      el.addEventListener("mouseup", off);
-      el.addEventListener("mouseleave", off);
-    }
-    function initPressFX(){
-      document.querySelectorAll(".btn").forEach(addPressFX);
-    }
-
-    /* init */
+    // init
     (async ()=>{
       try{
-        initPressFX();
         setStatus(false, "Conectando…", "Chequeando Storage");
         await refreshExpos();
         applyQueryExpo();
