@@ -433,7 +433,7 @@ function expoShareLink(slug){
 }
 
 function publicUrl(path){
-  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${encodeURI(path)}`;
+  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
 }
 
 /* ============================================================
