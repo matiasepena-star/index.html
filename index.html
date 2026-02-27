@@ -8,7 +8,6 @@
   <style>
     :root{
       --bg:#0f1115;
-      --card:#141822;
       --stroke:rgba(255,255,255,.10);
       --text:#e8ecf6;
       --muted:rgba(232,236,246,.62);
@@ -16,9 +15,7 @@
       --good:#44d07b;
       --bad:#ff5b6b;
       --shadow: 0 18px 50px rgba(0,0,0,.55);
-      --r:18px;
 
-      /* sensación de botón presionado */
       --press: translateY(1.5px) scale(.985);
       --pressShadow: 0 10px 24px rgba(0,0,0,.55);
       --btnShadow: 0 14px 34px rgba(0,0,0,.45);
@@ -84,9 +81,9 @@
       padding:12px 16px 8px;
     }
 
-    /* botones con feedback */
     .btn{
-      appearance:none; border:1px solid var(--stroke);
+      appearance:none;
+      border:1px solid var(--stroke);
       background: rgba(255,255,255,.04);
       color: var(--text);
       border-radius: 20px;
@@ -95,6 +92,8 @@
       letter-spacing: .2px;
       cursor:pointer;
       user-select:none;
+      -webkit-user-select:none;
+      touch-action: manipulation;
       box-shadow: var(--btnShadow);
       transition: transform .06s ease, filter .12s ease, box-shadow .12s ease, background .12s ease;
       display:flex;align-items:center;justify-content:center;gap:10px;
@@ -103,10 +102,12 @@
       background: rgba(122,162,255,.14);
       border-color: rgba(122,162,255,.35);
     }
-    .btn:active{
+    /* iOS: a veces :active es tímido, por eso también usamos .is-pressed vía JS */
+    .btn:active,
+    .btn.is-pressed{
       transform: var(--press);
       box-shadow: var(--pressShadow);
-      filter: brightness(1.08);
+      filter: brightness(1.10);
     }
     .btn:focus{outline:none}
     .btn.small{padding:12px 14px;border-radius:16px;font-weight:800}
@@ -157,6 +158,7 @@
       background: rgba(0,0,0,.38);
       font-weight:900;
       font-size:12px;
+      z-index:2;
     }
     .imgCard img{
       width:100%;
@@ -182,7 +184,6 @@
       font-weight:700;
     }
 
-    /* toast */
     .toast{
       position:fixed;
       left:50%;
@@ -210,7 +211,6 @@
       cursor:pointer;
     }
 
-    /* modal */
     .modal{
       position:fixed; inset:0;
       background: rgba(0,0,0,.72);
@@ -372,13 +372,19 @@
   </div>
 
   <script>
-    // ✅ Tu Project URL
+    /* ==========================================================
+      1) CONFIG (TOCÁ SOLO ESTO)
+    ========================================================== */
     const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
-    // ✅ Tu publishable key
     const SUPABASE_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
-    // ✅ Bucket
     const BUCKET = "drawings";
 
+    /* build id para cache-bust (GitHub Pages + Safari) */
+    const BUILD = Date.now();
+
+    /* ==========================================================
+      2) UI helpers
+    ========================================================== */
     const $ = (id)=>document.getElementById(id);
 
     const toast = (msg, bad=false)=>{
@@ -421,15 +427,19 @@
     const expoShareLink = (slug)=>{
       const u = new URL(location.href);
       u.searchParams.set("expo", slug);
+      u.searchParams.set("v", BUILD); // fuerza refresh del link compartido
       return u.toString();
     };
 
-    // URL pública (no rompe / y anda en iOS)
+    /* URL pública EXACTA estilo "Get URL" */
     function publicUrl(path){
       const safe = String(path).split("/").map(encodeURIComponent).join("/");
       return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${safe}`;
     }
 
+    /* ==========================================================
+      3) Supabase Storage REST (sin librerías)
+    ========================================================== */
     const API = `${SUPABASE_URL}/storage/v1`;
 
     async function sbFetch(path, opts={}){
@@ -518,13 +528,16 @@
       return imgs;
     }
 
+    /* ==========================================================
+      4) App logic
+    ========================================================== */
     function syncExpoSelects(slugs){
       const sels = [$("expoSelect"), $("expoSelectUp"), $("expoSelectGal")];
       for(const sel of sels){
         const cur = sel.value;
-        sel.innerHTML = `<option value="">— Elegí una expo —</option>` + slugs.map(s=>(
-          `<option value="${s}">${s} (${s})</option>`
-        )).join("");
+        sel.innerHTML =
+          `<option value="">— Elegí una expo —</option>` +
+          slugs.map(s=> `<option value="${s}">${s} (${s})</option>`).join("");
         if(cur && slugs.includes(cur)) sel.value = cur;
       }
     }
@@ -634,8 +647,7 @@
           <div class="imgCard">
             <div class="tag">Dibujo · ${slug}</div>
             <img src="${x.url}" alt="${file}" loading="lazy"
-              onerror="this.style.opacity='.3';"
-            />
+                 onerror="this.style.opacity='.35';" />
             <div class="meta">${file}</div>
           </div>
         `;
@@ -649,9 +661,14 @@
     $("btnLoadGallery").onclick = async ()=>{
       const slug = $("expoSelectGal").value;
       if(!slug) return toast("Elegí una expo.", true);
+
       try{
         const imgs = await listExpoImages(slug);
-        const bumped = imgs.map(x=>({ ...x, url: x.url + (x.url.includes("?") ? "&" : "?") + "v=" + Date.now() }));
+        // cache-bust por imagen (Safari no jode más)
+        const bumped = imgs.map(x=>{
+          const sep = x.url.includes("?") ? "&" : "?";
+          return { ...x, url: x.url + sep + "v=" + Date.now() };
+        });
         renderGallery(slug, bumped);
         toast("Galería cargada ✅");
       }catch(e){
@@ -665,8 +682,26 @@
       if(slug) setSelectedExpo(slug);
     }
 
+    /* ==========================================================
+      5) “botón presionado” real en iPhone (touch)
+    ========================================================== */
+    function addPressFX(el){
+      const on = ()=> el.classList.add("is-pressed");
+      const off = ()=> el.classList.remove("is-pressed");
+      el.addEventListener("touchstart", on, {passive:true});
+      el.addEventListener("touchend", off, {passive:true});
+      el.addEventListener("touchcancel", off, {passive:true});
+      el.addEventListener("mouseup", off);
+      el.addEventListener("mouseleave", off);
+    }
+    function initPressFX(){
+      document.querySelectorAll(".btn").forEach(addPressFX);
+    }
+
+    /* init */
     (async ()=>{
       try{
+        initPressFX();
         setStatus(false, "Conectando…", "Chequeando Storage");
         await refreshExpos();
         applyQueryExpo();
