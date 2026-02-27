@@ -22,305 +22,325 @@
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1000px 600px at 20% -10%, rgba(122,162,255,.22), transparent 60%),
-                  radial-gradient(1000px 600px at 90% 0%, rgba(68,208,123,.12), transparent 55%),
+      background: radial-gradient(1000px 600px at 20% -10%, rgba(122,162,255,.25), transparent 55%),
+                  radial-gradient(900px 600px at 90% 0%, rgba(68,208,123,.18), transparent 55%),
                   var(--bg);
       color:var(--text);
     }
-    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 72px}
-    .top{
+    .wrap{max-width:980px;margin:0 auto;padding:14px 12px 80px}
+    .hero{
       display:flex; gap:14px; align-items:center;
-      background: rgba(255,255,255,.04);
-      border:1px solid var(--stroke);
+      padding:14px; border:1px solid var(--stroke);
+      border-radius:24px; background:rgba(255,255,255,.04);
       box-shadow: var(--shadow);
-      border-radius: 26px;
-      padding:14px;
       backdrop-filter: blur(10px);
     }
     .logo{
-      width:72px;height:72px;border-radius:18px;
-      background: linear-gradient(145deg, rgba(122,162,255,.9), rgba(122,162,255,.15));
-      border:1px solid rgba(255,255,255,.15);
-      box-shadow: 0 12px 30px rgba(0,0,0,.35);
-      flex:0 0 auto;
-    }
-    h1{margin:0;font-size:38px;letter-spacing:.2px;line-height:1.0}
-    .sub{margin-top:6px;color:var(--muted);font-size:16px}
-    .statusPill{
-      margin-left:auto;
-      padding:12px 16px;
-      border-radius:999px;
+      width:54px;height:54px;border-radius:16px;
+      background: linear-gradient(135deg, rgba(122,162,255,.85), rgba(122,162,255,.25));
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.25);
-      display:flex; gap:10px; align-items:center;
-      min-width:220px; justify-content:center;
-      user-select:none;
     }
-    .dot{width:12px;height:12px;border-radius:999px;background:var(--bad);box-shadow:0 0 0 4px rgba(255,91,107,.15)}
-    .statusText{font-weight:800}
+    .hero h1{margin:0;font-size:22px;line-height:1.05}
+    .sub{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .pill{
+      margin-left:auto;
+      padding:10px 14px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      display:flex;align-items:center;gap:10px;
+      min-width:230px; justify-content:center;
+      text-align:center;
+    }
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--bad);box-shadow:0 0 0 4px rgba(255,91,107,.18)}
+    .pill.ok .dot{background:var(--good);box-shadow:0 0 0 4px rgba(68,208,123,.18)}
+    .pill strong{font-size:14px}
+    .pill span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
     .tabs{
       margin-top:14px;
       display:flex; gap:12px;
     }
-    .tab{
+    .tabBtn{
       flex:1;
-      display:flex; gap:10px; align-items:center; justify-content:center;
-      padding:16px 12px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.03);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      padding:14px 12px;
+      border-radius:20px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+      gap:10px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
       cursor:pointer;
       user-select:none;
-      font-size:22px;
-      font-weight:900;
     }
-    .tab:active{transform:var(--press)}
-    .tab.active{
-      outline: 2px solid rgba(122,162,255,.35);
-      background: rgba(122,162,255,.10);
+    .tabBtn:active{transform:var(--press)}
+    .tabBtn.active{
+      border-color: rgba(122,162,255,.45);
+      background: rgba(122,162,255,.12);
     }
-    .card{
+    .panel{
       margin-top:14px;
-      background: rgba(255,255,255,.04);
-      border:1px solid var(--stroke);
-      border-radius:26px;
       padding:16px;
+      border-radius:24px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.16);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-    .hint{color:var(--muted);line-height:1.35}
-    label{display:block;margin-top:14px;color:rgba(232,236,246,.78);font-weight:800}
+    .hint{color:var(--muted);line-height:1.35;margin:0 0 12px}
+    label{display:block;color:var(--muted);font-size:13px;margin:12px 0 8px}
     input, select{
       width:100%;
       padding:14px 14px;
       border-radius:16px;
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.28);
-      color:var(--text);
-      font-size:18px;
-      outline:none;
-    }
-    input::placeholder{color:rgba(232,236,246,.35)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:720px){.row{grid-template-columns:1fr}}
-    .btns{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
-    .btn{
-      padding:14px 16px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.16);
       background: rgba(255,255,255,.04);
-      color:var(--text);
-      font-weight:900;
+      color: var(--text);
+      outline:none;
+      font-size:16px;
+    }
+    input::placeholder{color: rgba(232,236,246,.35)}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row > *{flex:1;min-width:160px}
+    .btn{
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(122,162,255,.14);
+      color: var(--text);
+      font-weight:800;
       cursor:pointer;
       user-select:none;
-      font-size:18px;
+      text-align:center;
     }
-    .btn.primary{
-      background: rgba(122,162,255,.18);
-      border-color: rgba(122,162,255,.45);
-    }
+    .btn.secondary{background: rgba(255,255,255,.06)}
     .btn:active{transform:var(--press)}
-    .mini{
-      margin-top:12px;
-      display:flex;gap:12px;align-items:center;flex-wrap:wrap;
-      color:rgba(232,236,246,.70);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:14px;
-    }
-    .toast{
-      position:fixed;left:50%;bottom:16px;transform:translateX(-50%);
-      background: rgba(0,0,0,.72);
-      border:1px solid rgba(255,255,255,.12);
-      color:var(--text);
-      padding:12px 14px;border-radius:999px;
-      display:none; gap:10px; align-items:center;
-      max-width:min(92vw,720px);
-      box-shadow: 0 14px 40px rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-      z-index:9999;
-    }
-    .toast.show{display:flex}
-    .toast .x{color:var(--bad);font-weight:1000}
-    .grid{
+    .statBox{
       margin-top:14px;
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap:10px;
     }
-    @media (max-width:720px){.grid{grid-template-columns: repeat(2, 1fr)}}
-    .ph{
-      aspect-ratio: 1/1;
+    .stat{
+      padding:12px 14px;
+      border:1px solid var(--stroke);
       border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .stat b{color:var(--text)}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    @media (min-width: 860px){
+      .grid{grid-template-columns: repeat(4, 1fr)}
+    }
+    .card{
+      border-radius:18px;
+      border:1px solid var(--stroke);
       background: rgba(255,255,255,.03);
       overflow:hidden;
-      position:relative;
       cursor:pointer;
+      user-select:none;
+      position:relative;
     }
-    .ph img{width:100%;height:100%;object-fit:cover;display:block}
-    .ph .cap{
-      position:absolute;left:0;right:0;bottom:0;
-      padding:8px 10px;
-      background: linear-gradient(transparent, rgba(0,0,0,.72));
-      font-size:13px;color:rgba(255,255,255,.88);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    .thumb{
+      width:100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display:block;
+      background: rgba(0,0,0,.25);
     }
+    .cap{
+      padding:10px 12px;
+      color: var(--muted);
+      font-size:12px;
+      border-top:1px solid rgba(255,255,255,.08);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .footer{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      padding:10px 12px;
+      background: rgba(0,0,0,.42);
+      border-top:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(12px);
+      font-size:12px;
+      color: var(--muted);
+      display:flex; justify-content:space-between; gap:10px;
+    }
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:64px;
+      transform:translateX(-50%);
+      padding:12px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.65);
+      color: var(--text);
+      display:none;
+      align-items:center;
+      gap:10px;
+      max-width:min(92vw,560px);
+      box-shadow: var(--shadow);
+    }
+    .toast.show{display:flex}
+    .toast .x{
+      margin-left:auto;
+      opacity:.75;
+      font-weight:900;
+      cursor:pointer;
+      padding:0 6px;
+    }
+    /* Modal */
     .modal{
       position:fixed; inset:0;
       background: rgba(0,0,0,.72);
       display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:9998;
+      align-items:center; justify-content:center;
       padding:14px;
+      z-index:50;
     }
     .modal.show{display:flex}
     .modalBox{
-      width:min(980px, 96vw);
+      width:min(92vw, 920px);
       border-radius:22px;
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(15,17,21,.88);
-      box-shadow: var(--shadow);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(12px);
       overflow:hidden;
+      position:relative;
     }
     .modalTop{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.10);
-      color:rgba(232,236,246,.78);
-      font-weight:800;
+      position:absolute;
+      top:10px; left:10px;
+      padding:8px 10px;
+      border-radius:14px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-size:12px;
+      display:flex; gap:10px; align-items:center;
+      z-index:2;
     }
-    .modalTop .close{cursor:pointer;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03)}
-    .modalImg{width:100%;display:block;max-height:78vh;object-fit:contain;background:#0b0d10}
-    .footer{
-      position:fixed;left:0;right:0;bottom:0;
-      padding:10px 14px;
-      background: rgba(15,17,21,.72);
-      border-top:1px solid rgba(255,255,255,.10);
-      backdrop-filter: blur(10px);
-      display:flex;gap:14px;justify-content:space-between;align-items:center;
-      color:rgba(232,236,246,.75);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:14px;
-      z-index:9997;
+    .modalTop button{
+      border:0; background:transparent; color:var(--text);
+      font-weight:900; cursor:pointer;
+      padding:2px 6px; border-radius:10px;
     }
-    .muted{color:rgba(232,236,246,.55)}
+    .modalTop button:active{transform:var(--press)}
+    .modalImg{
+      width:100%;
+      height:auto;
+      display:block;
+      max-height: 84vh;
+      object-fit:contain;
+      background: rgba(0,0,0,.3);
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="logo"></div>
+    <div class="hero">
+      <div class="logo" aria-hidden="true"></div>
       <div>
         <h1>Martu-art</h1>
-        <div class="sub">Expos + Dibujos (GitHub Pages + Supabase)</div>
+        <div class="sub">Expos + Dibujos (GitHub Pages + Supabase Storage)</div>
       </div>
-      <div class="statusPill" id="pill" title="Si está verde, ok. Si está rojo, no cargó Supabase JS o no conecta.">
-        <div class="dot" id="dot"></div>
-        <div class="statusText" id="statusText">Conectando…</div>
-        <div class="muted" id="statusMini" style="font-weight:800"></div>
+      <div class="pill" id="pill">
+        <div class="dot"></div>
+        <div>
+          <strong id="statusTitle">Conectando…</strong>
+          <span id="statusMsg">probando Storage</span>
+        </div>
       </div>
     </div>
 
     <div class="tabs">
-      <div class="tab active" id="tabExpos">📁 Expos</div>
-      <div class="tab" id="tabUpload">⬆️ Subir dibujo</div>
-      <div class="tab" id="tabGallery">🖼️ Galería</div>
+      <div class="tabBtn active" id="tabExpos">📁 Expos</div>
+      <div class="tabBtn" id="tabUpload">⬆️ Subir dibujo</div>
+      <div class="tabBtn" id="tabGallery">🖼️ Galería</div>
     </div>
 
     <!-- EXPO -->
-    <div class="card" id="viewExpos">
-      <div class="hint">
-        Creá una expo (carpeta en el bucket). Después elegís la expo y compartís el link.<br/>
-        <span class="muted">Esto NO usa DB, solo Storage. Menos magia, más funciona.</span>
-      </div>
+    <div class="panel" id="panelExpos">
+      <p class="hint">
+        Esto usa <b>solo Storage</b> (sin DB y sin librerías externas). Menos magia, más funciona.
+      </p>
 
       <label>Nombre de la expo</label>
-      <input id="expoName" placeholder="Ej: Primavera 2026, Dinosaurios, etc." autocomplete="off"/>
+      <input id="expoName" placeholder="Ej: Primavera 2026, Dinosaurios, etc."/>
 
       <label>Slug (se autogenera)</label>
       <input id="expoSlug" placeholder="ej: primavera-2026" disabled/>
 
-      <div class="btns">
-        <button class="btn primary" id="btnCreateExpo">Crear expo</button>
-        <button class="btn" id="btnRefreshExpos">Actualizar lista</button>
+      <div class="row" style="margin-top:12px">
+        <div class="btn" id="btnCreateExpo">Crear expo</div>
+        <div class="btn secondary" id="btnRefresh">Actualizar lista</div>
       </div>
 
-      <label>Expo seleccionada</label>
+      <label style="margin-top:16px">Expo seleccionada</label>
       <select id="expoSelect">
         <option value="">— Elegí una expo —</option>
       </select>
 
       <label>Link de la expo (para compartir)</label>
       <input id="expoLink" placeholder="Se completa al elegir una expo" readonly/>
-
-      <div class="btns">
-        <button class="btn" id="btnCopyLink">Copiar link</button>
+      <div class="row" style="margin-top:10px">
+        <div class="btn secondary" id="btnCopyLink">Copiar link</div>
       </div>
 
-      <div class="mini">
-        <div><b id="countExpos">0</b> Expos creadas</div>
-        <div class="muted">·</div>
-        <div><b id="countFiles">0</b> Dibujos en esta expo</div>
+      <div class="statBox">
+        <div class="stat"><span>Expos creadas</span> <b id="countExpos">0</b></div>
+        <div class="stat"><span>Dibujos en esta expo</span> <b id="countFiles">0</b></div>
       </div>
     </div>
 
     <!-- UPLOAD -->
-    <div class="card" id="viewUpload" style="display:none">
-      <div class="hint">
-        Subí una foto (jpg/png). Se guarda en <b>drawings/&lt;expo_slug&gt;/</b> y aparece en la galería.
-      </div>
+    <div class="panel" id="panelUpload" style="display:none">
+      <p class="hint">Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda dentro de la expo seleccionada.</p>
 
-      <label>Expo (obligatoria)</label>
+      <label>Expo (obligatorio)</label>
       <select id="uploadExpoSelect">
         <option value="">— Elegí una expo —</option>
       </select>
 
       <label>Archivo (foto del dibujo)</label>
-      <input id="fileInput" type="file" accept="image/*"/>
+      <input id="fileInput" type="file" accept="image/*" />
 
       <label>Título (opcional)</label>
-      <input id="titleInput" placeholder="Ej: Gatito, Arcoiris, etc." autocomplete="off"/>
+      <input id="titleInput" placeholder="Ej: Gatito, Arcoiris, etc."/>
 
-      <div class="btns">
-        <button class="btn primary" id="btnUpload">Subir</button>
-        <button class="btn" id="btnGoGallery">Ver galería</button>
-      </div>
-
-      <div class="mini">
-        <div><b>Modo:</b> Público (sin login)</div>
-        <div class="muted">·</div>
-        <div><b>bucket:</b> <span id="bucketName"></span></div>
+      <div class="row" style="margin-top:12px">
+        <div class="btn" id="btnUpload">Subir</div>
+        <div class="btn secondary" id="btnGoGallery">Ver galería</div>
       </div>
     </div>
 
     <!-- GALLERY -->
-    <div class="card" id="viewGallery" style="display:none">
-      <div class="hint">
-        Elegí expo y te muestro las fotos guardadas en Storage.
-      </div>
+    <div class="panel" id="panelGallery" style="display:none">
+      <p class="hint">Elegí una expo y mirá los dibujos. Tocá una imagen para agrandar.</p>
 
       <label>Expo</label>
       <select id="galleryExpoSelect">
         <option value="">— Elegí una expo —</option>
       </select>
 
-      <div class="btns">
-        <button class="btn primary" id="btnLoadGallery">Cargar galería</button>
+      <div class="row" style="margin-top:12px">
+        <div class="btn secondary" id="btnLoadGallery">Cargar galería</div>
       </div>
 
+      <div style="height:12px"></div>
       <div class="grid" id="grid"></div>
-      <div class="muted" id="emptyMsg" style="margin-top:12px;display:none">No hay dibujos todavía en esta expo.</div>
-    </div>
-  </div>
-
-  <div class="modal" id="modal">
-    <div class="modalBox">
-      <div class="modalTop">
-        <div id="modalTitle">Vista</div>
-        <div class="close" id="modalClose">Cerrar</div>
-      </div>
-      <img id="modalImg" class="modalImg" alt="imagen"/>
     </div>
   </div>
 
@@ -331,264 +351,313 @@
 
   <div class="toast" id="toast">
     <div id="toastMsg">—</div>
-    <div class="x" id="toastX">✖</div>
+    <div class="x" id="toastX">×</div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modalBox">
+      <div class="modalTop">
+        <div>Tocá para agrandar</div>
+        <button id="modalClose">Cerrar</button>
+      </div>
+      <img id="modalImg" class="modalImg" alt="Imagen"/>
+    </div>
   </div>
 
   <script>
-    // ======================
+    // ===========================
     // 1) CONFIG (TOCÁ SOLO ESTO)
-    // ======================
-    const SUPABASE_URL = "https://vfvbssenzfbrnk.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+    // ===========================
+    const SUPABASE_URL = "https://vfvbssenzfbrnkyddyo.supabase.co"; // si tu Project ID es otro, cambialo acá
+    const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
     const BUCKET = "drawings";
-    // ======================
+    const EXPO_INDEX_PATH = "_expos.json"; // archivo índice en el root del bucket
 
-    // ======================
-    // 2) UI helpers
-    // ======================
+    // ===========================
+    // 2) Helpers
+    // ===========================
     const $ = (id)=>document.getElementById(id);
 
-    const toast = (msg, bad=false) => {
+    const toast = (msg, bad=false)=>{
       $("toastMsg").textContent = msg;
       $("toastMsg").style.color = bad ? "var(--bad)" : "var(--text)";
       $("toast").classList.add("show");
       clearTimeout(window.__toastT);
-      window.__toastT = setTimeout(()=> $("toast").classList.remove("show"), 2600);
+      window.__toastT = setTimeout(()=>$("toast").classList.remove("show"), 2600);
     };
-    $("toastX").onclick = ()=> $("toast").classList.remove("show");
+    $("toastX").onclick = ()=>$("toast").classList.remove("show");
 
-    const setStatus = (ok, text, mini="") => {
-      $("dot").style.background = ok ? "var(--good)" : "var(--bad)";
-      $("dot").style.boxShadow = ok ? "0 0 0 4px rgba(68,208,123,.15)" : "0 0 0 4px rgba(255,91,107,.15)";
-      $("statusText").textContent = text;
-      $("statusMini").textContent = mini;
+    const setStatus = (ok, title, msg)=>{
+      const pill = $("pill");
+      pill.classList.toggle("ok", !!ok);
+      $("statusTitle").textContent = title;
+      $("statusMsg").textContent = msg || "";
       $("footState").textContent = ok ? "ok" : "error";
       $("footBucket").textContent = BUCKET;
-      $("bucketName").textContent = BUCKET;
     };
 
-    const slugify = (s) => (s||"")
-      .toString()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "")
-      .slice(0, 60);
-
-    const safeFileName = (name) => (name||"image.jpg")
-      .toString()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-zA-Z0-9._-]+/g, "_")
-      .slice(-120);
-
-    const showView = (which) => {
-      $("viewExpos").style.display = which==="expos" ? "" : "none";
-      $("viewUpload").style.display = which==="upload" ? "" : "none";
-      $("viewGallery").style.display = which==="gallery" ? "" : "none";
-      $("tabExpos").classList.toggle("active", which==="expos");
-      $("tabUpload").classList.toggle("active", which==="upload");
-      $("tabGallery").classList.toggle("active", which==="gallery");
+    const slugify = (s)=>{
+      return (s||"")
+        .toString()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+        .trim().toLowerCase()
+        .replace(/[^a-z0-9]+/g,"-")
+        .replace(/(^-|-$)/g,"");
     };
 
-    $("tabExpos").onclick = ()=> showView("expos");
-    $("tabUpload").onclick = ()=> showView("upload");
-    $("tabGallery").onclick = ()=> showView("gallery");
+    const headersAuth = ()=>{
+      return {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      };
+    };
 
-    // modal
-    const modalOpen = (url, title="") => {
-      $("modalTitle").textContent = title || "Vista";
-      $("modalImg").src = url;
+    const storageObjectURL = (path)=>{
+      // Public URL (sirve si el bucket es PUBLIC). Si no es public, igual sube pero no se ve.
+      return `${SUPABASE_URL}/storage/v1/object/public/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
+    };
+
+    async function storageList(prefix){
+      // POST /storage/v1/object/list/{bucket}
+      const url = `${SUPABASE_URL}/storage/v1/object/list/${encodeURIComponent(BUCKET)}`;
+      const res = await fetch(url, {
+        method:"POST",
+        headers: {
+          ...headersAuth(),
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+          prefix: prefix || "",
+          limit: 1000,
+          offset: 0,
+          sortBy: { column: "name", order: "asc" }
+        })
+      });
+      if(!res.ok){
+        const t = await res.text().catch(()=> "");
+        throw new Error(`LIST ${res.status}: ${t || res.statusText}`);
+      }
+      return res.json();
+    }
+
+    async function storageUpload(path, fileOrBlob, contentType){
+      const url = `${SUPABASE_URL}/storage/v1/object/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
+      const res = await fetch(url, {
+        method:"POST",
+        headers: {
+          ...headersAuth(),
+          "Content-Type": contentType || "application/octet-stream",
+          "x-upsert": "true"
+        },
+        body: fileOrBlob
+      });
+      if(!res.ok){
+        const t = await res.text().catch(()=> "");
+        throw new Error(`UPLOAD ${res.status}: ${t || res.statusText}`);
+      }
+      return res.json();
+    }
+
+    async function storageDownload(path){
+      const url = `${SUPABASE_URL}/storage/v1/object/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
+      const res = await fetch(url, { headers: headersAuth() });
+      if(res.status === 404) return null;
+      if(!res.ok){
+        const t = await res.text().catch(()=> "");
+        throw new Error(`GET ${res.status}: ${t || res.statusText}`);
+      }
+      return res.json();
+    }
+
+    async function storagePutJSON(path, obj){
+      const blob = new Blob([JSON.stringify(obj, null, 2)], {type:"application/json"});
+      const url = `${SUPABASE_URL}/storage/v1/object/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
+      const res = await fetch(url, {
+        method:"PUT",
+        headers: {
+          ...headersAuth(),
+          "Content-Type":"application/json",
+          "x-upsert":"true"
+        },
+        body: blob
+      });
+      if(!res.ok){
+        const t = await res.text().catch(()=> "");
+        throw new Error(`PUT ${res.status}: ${t || res.statusText}`);
+      }
+      return res.json();
+    }
+
+    function pageLinkForExpo(slug){
+      const u = new URL(location.href);
+      u.searchParams.set("expo", slug);
+      return u.toString();
+    }
+
+    // ===========================
+    // 3) Expo Index (_expos.json)
+    // ===========================
+    async function readExpoIndex(){
+      try{
+        const json = await storageDownload(EXPO_INDEX_PATH);
+        if(!json) return [];
+        if(Array.isArray(json)) return json;
+        if(Array.isArray(json.expos)) return json.expos;
+        return [];
+      }catch(e){
+        // si no hay permiso o no existe, devolvemos vacío
+        return [];
+      }
+    }
+
+    async function writeExpoIndex(expos){
+      await storagePutJSON(EXPO_INDEX_PATH, { expos });
+    }
+
+    // ===========================
+    // 4) UI: Tabs
+    // ===========================
+    const showTab = (name)=>{
+      const tabs = [
+        ["Expos","panelExpos","tabExpos"],
+        ["Upload","panelUpload","tabUpload"],
+        ["Gallery","panelGallery","tabGallery"],
+      ];
+      tabs.forEach(([n,p,t])=>{
+        $(p).style.display = (n===name) ? "" : "none";
+        $(t).classList.toggle("active", n===name);
+      });
+    };
+
+    $("tabExpos").onclick = ()=>showTab("Expos");
+    $("tabUpload").onclick = ()=>showTab("Upload");
+    $("tabGallery").onclick = ()=>showTab("Gallery");
+    $("btnGoGallery").onclick = ()=>{
+      showTab("Gallery");
+      if($("galleryExpoSelect").value) loadGallery();
+    };
+
+    // Modal
+    const openModal = (src)=>{
+      $("modalImg").src = src;
       $("modal").classList.add("show");
     };
-    const modalClose = ()=> $("modal").classList.remove("show");
-    $("modalClose").onclick = modalClose;
-    $("modal").onclick = (e)=> { if(e.target.id==="modal") modalClose(); };
+    const closeModal = ()=> $("modal").classList.remove("show");
+    $("modal").onclick = (e)=>{ if(e.target.id==="modal") closeModal(); };
+    $("modalClose").onclick = closeModal;
 
-    // ======================
-    // 3) Load Supabase JS (CDN fallback)
-    // ======================
-    const loadScript = (src) => new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      s.src = src;
-      s.async = true;
-      s.onload = ()=> resolve(src);
-      s.onerror = ()=> reject(new Error("No cargó: " + src));
-      document.head.appendChild(s);
-    });
-
-    async function loadSupabaseUMD(){
-      // Si el Wi-Fi bloquea un CDN, probamos otro. Si bloquea todos -> error.
-      const sources = [
-        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js",
-        "https://unpkg.com/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"
-      ];
-      let lastErr = null;
-      for(const src of sources){
-        try { await loadScript(src); return src; }
-        catch(e){ lastErr = e; }
-      }
-      throw lastErr || new Error("No cargó Supabase JS");
-    }
-
-    // ======================
-    // 4) App logic (Storage-only)
-    // ======================
-    let supa = null;
-
-    async function testConnection(){
-      // Probar algo simple: listar prefijo vacío
-      const { data, error } = await supa.storage.from(BUCKET).list("", { limit: 1 });
-      if(error) throw error;
-      return data || [];
-    }
-
-    async function listExpos(){
-      // Expos = “carpetas” (prefixes) bajo drawings/
-      const { data, error } = await supa.storage.from(BUCKET).list("", { limit: 1000, offset: 0, sortBy: { column: "name", order: "asc" } });
-      if(error) throw error;
-
-      // “Carpetas” se representan como objetos con name tipo "expoSlug"
-      // En storage no hay folders reales; nosotros las creamos con un .keep.
-      // Así que expo existe si hay algo con prefijo "<slug>/".
-      // Para simplificar: mostramos cualquier “directorio” detectado por archivos.
-      const prefixes = new Set();
-      for(const obj of (data||[])){
-        // si hay archivos sueltos en raíz, ignoramos
-        // en realidad list("") devuelve solo objetos de raíz; no nos sirve para prefijos.
-        // Entonces mantenemos un índice en localStorage.
-      }
-
-      const saved = JSON.parse(localStorage.getItem("martu_expos") || "[]");
-      return Array.isArray(saved) ? saved : [];
-    }
-
-    function saveExpoLocal(expo){
-      const saved = JSON.parse(localStorage.getItem("martu_expos") || "[]");
-      const map = new Map((Array.isArray(saved)?saved:[]).map(x => [x.slug, x]));
-      map.set(expo.slug, expo);
-      const arr = Array.from(map.values()).sort((a,b)=> (a.title||"").localeCompare(b.title||""));
-      localStorage.setItem("martu_expos", JSON.stringify(arr));
-      return arr;
-    }
-
-    async function refreshExpoSelects(){
-      const expos = await listExpos();
+    // ===========================
+    // 5) Expos / Selects
+    // ===========================
+    function fillSelects(expos){
       const opts = ['<option value="">— Elegí una expo —</option>']
-        .concat(expos.map(e => `<option value="${e.slug}">${escapeHtml(e.title)} (${escapeHtml(e.slug)})</option>`))
+        .concat(expos.map(x=>`<option value="${x.slug}">${x.name} (${x.slug})</option>`))
         .join("");
 
       $("expoSelect").innerHTML = opts;
       $("uploadExpoSelect").innerHTML = opts;
       $("galleryExpoSelect").innerHTML = opts;
 
-      $("countExpos").textContent = expos.length.toString();
-      return expos;
+      $("countExpos").textContent = String(expos.length);
     }
 
-    function escapeHtml(s){
-      return (s||"").toString()
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
+    async function refreshExpos(){
+      const expos = await readExpoIndex();
+      fillSelects(expos);
 
-    async function ensureExpoFolder(slug){
-      // Crear expo = subir un archivo “.keep” dentro del prefijo
-      const path = `${slug}/.keep`;
-      const blob = new Blob(["ok"], { type: "text/plain" });
-      const { error } = await supa.storage.from(BUCKET).upload(path, blob, { upsert: true, contentType: "text/plain" });
-      if(error) throw error;
-    }
-
-    function expoShareLink(slug){
-      const base = location.origin + location.pathname; // github pages index.html
-      const url = new URL(base, location.href);
-      url.searchParams.set("expo", slug);
-      return url.toString();
-    }
-
-    async function countFilesInExpo(slug){
-      const { data, error } = await supa.storage.from(BUCKET).list(slug, { limit: 1000, offset: 0, sortBy: { column: "name", order: "desc" } });
-      if(error) throw error;
-      const files = (data||[]).filter(x => x.name && x.name !== ".keep");
-      return files.length;
-    }
-
-    async function uploadDrawing(slug, file, title=""){
-      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-      const ts = new Date().toISOString().replaceAll(":","").replaceAll("-","").replace(".","");
-      const baseName = safeFileName(file.name);
-      const finalName = `${ts}_${baseName}`;
-      const path = `${slug}/${finalName}`;
-
-      const { error } = await supa.storage.from(BUCKET).upload(path, file, { upsert: false, contentType: file.type || "image/jpeg" });
-      if(error) throw error;
-
-      // Si querés “títulos”, los guardamos en localStorage (sin DB).
-      if(title){
-        const key = `martu_titles_${slug}`;
-        const map = JSON.parse(localStorage.getItem(key) || "{}");
-        map[finalName] = title;
-        localStorage.setItem(key, JSON.stringify(map));
-      }
-
-      return { path, name: finalName };
-    }
-
-    function getPublicUrl(path){
-      // bucket es público
-      const { data } = supa.storage.from(BUCKET).getPublicUrl(path);
-      return data?.publicUrl || "";
-    }
-
-    async function loadGallery(slug){
-      const { data, error } = await supa.storage.from(BUCKET).list(slug, { limit: 1000, offset: 0, sortBy: { column: "name", order: "desc" } });
-      if(error) throw error;
-
-      const files = (data||[]).filter(x => x.name && x.name !== ".keep");
-      $("grid").innerHTML = "";
-      $("emptyMsg").style.display = files.length ? "none" : "";
-      const titleMap = JSON.parse(localStorage.getItem(`martu_titles_${slug}`) || "{}");
-
-      for(const f of files){
-        const path = `${slug}/${f.name}`;
-        const url = getPublicUrl(path);
-        const cap = titleMap[f.name] || f.name;
-
-        const div = document.createElement("div");
-        div.className = "ph";
-        div.innerHTML = `<img loading="lazy" alt="img" src="${url}"><div class="cap">${escapeHtml(cap)}</div>`;
-        div.onclick = ()=> modalOpen(url, cap);
-        $("grid").appendChild(div);
+      // si viene ?expo=... lo seleccionamos
+      const u = new URL(location.href);
+      const qExpo = u.searchParams.get("expo") || "";
+      if(qExpo){
+        $("expoSelect").value = qExpo;
+        $("uploadExpoSelect").value = qExpo;
+        $("galleryExpoSelect").value = qExpo;
+        $("expoLink").value = pageLinkForExpo(qExpo);
+        await updateCountsForExpo(qExpo);
+      }else{
+        $("expoLink").value = "";
+        $("countFiles").textContent = "0";
       }
     }
 
-    // ======================
-    // 5) Wire UI
-    // ======================
+    async function updateCountsForExpo(slug){
+      if(!slug){ $("countFiles").textContent="0"; return; }
+      try{
+        const list = await storageList(slug + "/");
+        const files = (list||[]).filter(x=>x.name && !x.name.endsWith("/.keep") && x.name !== ".keep" && !x.name.endsWith(".keep"));
+        $("countFiles").textContent = String(files.length);
+      }catch(e){
+        $("countFiles").textContent = "—";
+      }
+    }
+
     $("expoName").addEventListener("input", ()=>{
       $("expoSlug").value = slugify($("expoName").value);
     });
 
-    $("btnCreateExpo").onclick = async ()=>{
+    $("btnRefresh").onclick = async ()=>{
       try{
-        if(!supa) return toast("Todavía no conectó.", true);
-        const title = $("expoName").value.trim();
-        const slug = slugify(title);
-        if(!title) return toast("Poné un nombre.", true);
-        if(!slug) return toast("Ese nombre no sirve para slug.", true);
+        await refreshExpos();
+        toast("Lista actualizada ✅");
+      }catch(e){
+        console.error(e);
+        toast("No pude actualizar ❌", true);
+      }
+    };
 
-        await ensureExpoFolder(slug);
-        const expos = saveExpoLocal({ title, slug, createdAt: Date.now() });
-        await refreshExpoSelects();
+    $("expoSelect").onchange = async ()=>{
+      const slug = $("expoSelect").value || "";
+      $("uploadExpoSelect").value = slug;
+      $("galleryExpoSelect").value = slug;
+      $("expoLink").value = slug ? pageLinkForExpo(slug) : "";
+      await updateCountsForExpo(slug);
+    };
+
+    $("btnCopyLink").onclick = async ()=>{
+      const v = $("expoLink").value.trim();
+      if(!v){ toast("Elegí una expo primero", true); return; }
+      try{
+        await navigator.clipboard.writeText(v);
+        toast("Link copiado ✅");
+      }catch{
+        toast("No pude copiar (iPhone a veces se hace el difícil) ❌", true);
+      }
+    };
+
+    // Crear expo = agrega en _expos.json + crea placeholder .keep
+    $("btnCreateExpo").onclick = async ()=>{
+      const name = $("expoName").value.trim();
+      const slug = slugify(name);
+
+      if(!name){ toast("Poné un nombre de expo", true); return; }
+      if(!slug){ toast("Nombre inválido", true); return; }
+
+      try{
+        const expos = await readExpoIndex();
+        if(expos.some(x=>x.slug === slug)){
+          toast("Esa expo ya existe", true);
+          $("expoSelect").value = slug;
+          $("uploadExpoSelect").value = slug;
+          $("galleryExpoSelect").value = slug;
+          $("expoLink").value = pageLinkForExpo(slug);
+          await updateCountsForExpo(slug);
+          return;
+        }
+
+        expos.push({ name, slug, created_at: new Date().toISOString() });
+        await writeExpoIndex(expos);
+
+        // placeholder para “crear carpeta”
+        const empty = new Blob([""], {type:"text/plain"});
+        await storageUpload(`${slug}/.keep`, empty, "text/plain");
+
+        await refreshExpos();
         $("expoSelect").value = slug;
         $("uploadExpoSelect").value = slug;
         $("galleryExpoSelect").value = slug;
+        $("expoLink").value = pageLinkForExpo(slug);
+        await updateCountsForExpo(slug);
 
-        $("expoLink").value = expoShareLink(slug);
-        $("countFiles").textContent = (await countFilesInExpo(slug)).toString();
         toast("Expo creada ✅");
       }catch(e){
         console.error(e);
@@ -596,121 +665,107 @@ const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
       }
     };
 
-    $("btnRefreshExpos").onclick = async ()=>{
-      try{
-        await refreshExpoSelects();
-        toast("Lista actualizada ✅");
-      }catch(e){
-        console.error(e);
-        toast("Error cargando expos ❌", true);
-      }
-    };
-
-    $("expoSelect").onchange = async ()=>{
-      const slug = $("expoSelect").value;
-      if(!slug){
-        $("expoLink").value = "";
-        $("countFiles").textContent = "0";
-        return;
-      }
-      $("expoLink").value = expoShareLink(slug);
-      try{
-        $("countFiles").textContent = (await countFilesInExpo(slug)).toString();
-      }catch(e){
-        console.error(e);
-        $("countFiles").textContent = "0";
-      }
-    };
-
-    $("btnCopyLink").onclick = async ()=>{
-      const v = $("expoLink").value.trim();
-      if(!v) return toast("Elegí una expo.", true);
-      try{
-        await navigator.clipboard.writeText(v);
-        toast("Link copiado ✅");
-      }catch{
-        toast("No se pudo copiar (iPhone a veces jode).", true);
-      }
-    };
-
+    // ===========================
+    // 6) Upload
+    // ===========================
     $("btnUpload").onclick = async ()=>{
-      try{
-        const slug = $("uploadExpoSelect").value;
-        if(!slug) return toast("Elegí una expo.", true);
-        const file = $("fileInput").files?.[0];
-        if(!file) return toast("Elegí una foto.", true);
+      const slug = $("uploadExpoSelect").value || "";
+      const file = $("fileInput").files && $("fileInput").files[0];
+      const title = $("titleInput").value.trim();
 
-        await ensureExpoFolder(slug); // por si no existía
-        const title = $("titleInput").value.trim();
-        await uploadDrawing(slug, file, title);
+      if(!slug){ toast("Elegí una expo", true); return; }
+      if(!file){ toast("Elegí una foto", true); return; }
+
+      try{
+        const safeTitle = slugify(title).slice(0, 40);
+        const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+        const ts = new Date().toISOString().replace(/[:.]/g,"-");
+        const rnd = Math.random().toString(16).slice(2,8);
+        const filename = `${ts}_${rnd}${safeTitle ? "_" + safeTitle : ""}.${ext}`;
+        const path = `${slug}/${filename}`;
+
+        await storageUpload(path, file, file.type || "application/octet-stream");
+
         toast("Subió ✅");
+        $("fileInput").value = "";
+        $("titleInput").value = "";
+        await updateCountsForExpo(slug);
       }catch(e){
         console.error(e);
         toast("No subió ❌", true);
       }
     };
 
-    $("btnGoGallery").onclick = ()=>{
-      showView("gallery");
-      const slug = $("uploadExpoSelect").value;
-      if(slug) $("galleryExpoSelect").value = slug;
-    };
+    // ===========================
+    // 7) Gallery
+    // ===========================
+    async function loadGallery(){
+      const slug = $("galleryExpoSelect").value || "";
+      if(!slug){ toast("Elegí una expo", true); return; }
 
-    $("btnLoadGallery").onclick = async ()=>{
-      const slug = $("galleryExpoSelect").value;
-      if(!slug) return toast("Elegí una expo.", true);
       try{
-        await loadGallery(slug);
-        toast("Galería lista ✅");
+        const list = await storageList(slug + "/");
+        const items = (list||[])
+          .map(x=>x.name)
+          .filter(name => name && name !== ".keep" && !name.endsWith("/.keep") && !name.endsWith(".keep"))
+          .map(name => ({
+            path: `${slug}/${name}`.replace(/\/+/g,"/"),
+            name
+          }));
+
+        $("grid").innerHTML = "";
+
+        if(items.length === 0){
+          $("grid").innerHTML = `<div style="color:var(--muted);padding:10px 2px">No hay dibujos todavía.</div>`;
+          return;
+        }
+
+        items.forEach(it=>{
+          const src = storageObjectURL(it.path);
+          const el = document.createElement("div");
+          el.className = "card";
+          el.innerHTML = `
+            <img class="thumb" loading="lazy" src="${src}" alt="dibujo"/>
+            <div class="cap">${it.name}</div>
+          `;
+          el.onclick = ()=>openModal(src);
+          $("grid").appendChild(el);
+        });
+
+        toast("Galería cargada ✅");
       }catch(e){
         console.error(e);
         toast("Error cargando galería ❌", true);
       }
-    };
+    }
 
-    // ======================
-    // 6) Boot
-    // ======================
-    (async function boot(){
-      setStatus(false, "Conectando…", "probando Supabase");
+    $("btnLoadGallery").onclick = loadGallery;
+
+    // ===========================
+    // 8) Boot
+    // ===========================
+    async function boot(){
       $("footBucket").textContent = BUCKET;
 
       if(!SUPABASE_URL.includes("supabase.co")){
-        setStatus(false, "Error", "Pegá tu SUPABASE_URL arriba");
-        toast("Falta SUPABASE_URL (tu proyecto).", true);
+        setStatus(false, "Error", "Falta SUPABASE_URL");
+        toast("Falta SUPABASE_URL", true);
         return;
       }
 
       try{
-        const src = await loadSupabaseUMD();
-        if(!window.supabase){
-          setStatus(false, "JS no cargó", "supabase no existe");
-          return;
-        }
-        supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
-        });
-
-        await testConnection();
+        // prueba rápida de auth/list
+        await storageList("");
         setStatus(true, "Conectado ✅", "");
-        await refreshExpoSelects();
-
-        // Si viene ?expo=algo, lo preseleccionamos
-        const url = new URL(location.href);
-        const expo = (url.searchParams.get("expo")||"").trim();
-        if(expo){
-          $("expoSelect").value = expo;
-          $("uploadExpoSelect").value = expo;
-          $("galleryExpoSelect").value = expo;
-          $("expoLink").value = expoShareLink(expo);
-          try{ $("countFiles").textContent = (await countFilesInExpo(expo)).toString(); }catch{}
-        }
+        await refreshExpos();
       }catch(e){
         console.error(e);
-        setStatus(false, "JS no cargó ❌", "CDN bloqueado o sin internet");
-        toast("JS no cargó (CDN bloqueado).", true);
+        setStatus(false, "Error", "No pude hablar con Storage");
+        toast("Error (permisos o bucket no público)", true);
       }
-    })();
+    }
+
+    boot();
   </script>
 </body>
 </html>
