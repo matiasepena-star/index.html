@@ -433,7 +433,9 @@ function expoShareLink(slug){
 }
 
 function publicUrl(path){
-  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${encodeURI(path)}`;
+  // encodea cada tramo y deja las "/" (evita que Safari rompa el URL)
+  const safe = String(path).split("/").map(encodeURIComponent).join("/");
+  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${safe}`;
 }
 
 /* ============================================================
