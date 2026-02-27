@@ -558,7 +558,7 @@ async function listExpoImages(slug){
     const name = o?.name || "";
     if(!name || name.endsWith("/.keep")) continue;
     if(!/\.(png|jpg|jpeg|webp|gif)$/i.test(name)) continue;
-    imgs.push({ path:name, url: publicUrl(name) });
+    imgs.push({ path:name, url: publicUrl(slug + "/" + name.split("/").pop()) });
   }
   // más nuevo primero (si el nombre tiene timestamp ISO, sirve)
   imgs.sort((a,b)=>b.path.localeCompare(a.path));
