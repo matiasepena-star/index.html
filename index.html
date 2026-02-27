@@ -14,7 +14,7 @@
       --good:#44d07b;
       --bad:#ff5b6b;
       --shadow: 0 14px 40px rgba(0,0,0,.55);
-      --r:18px;
+      --r:22px;
       --press: translateY(1px) scale(.99);
     }
     *{box-sizing:border-box}
@@ -22,260 +22,270 @@
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1000px 600px at 20% -10%, rgba(122,162,255,.25), transparent 55%),
-                  radial-gradient(900px 600px at 90% 0%, rgba(68,208,123,.18), transparent 55%),
+      background: radial-gradient(1000px 600px at 20% -10%, rgba(122,162,255,.25), transparent 60%),
+                  radial-gradient(900px 600px at 100% 0%, rgba(68,208,123,.10), transparent 60%),
                   var(--bg);
       color:var(--text);
     }
-    .wrap{max-width:980px;margin:0 auto;padding:14px 12px 80px}
-    .hero{
-      display:flex; gap:14px; align-items:center;
-      padding:14px; border:1px solid var(--stroke);
-      border-radius:24px; background:rgba(255,255,255,.04);
+    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 90px}
+    .card{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      border-radius: var(--r);
       box-shadow: var(--shadow);
+      overflow:hidden;
       backdrop-filter: blur(10px);
+    }
+    .top{
+      display:flex; gap:14px; align-items:center;
+      padding:14px;
     }
     .logo{
-      width:54px;height:54px;border-radius:16px;
-      background: linear-gradient(135deg, rgba(122,162,255,.85), rgba(122,162,255,.25));
-      border:1px solid rgba(255,255,255,.14);
+      width:70px;height:70px;border-radius:18px;
+      background: linear-gradient(135deg, rgba(122,162,255,.95), rgba(122,162,255,.20));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 12px 26px rgba(0,0,0,.35);
     }
-    .hero h1{margin:0;font-size:22px;line-height:1.05}
-    .sub{margin:4px 0 0;color:var(--muted);font-size:13px}
-    .pill{
+    .title{font-size:34px; font-weight:900; letter-spacing:.2px; line-height:1.05}
+    .subtitle{margin-top:6px; color:var(--muted); font-weight:650}
+    .status{
       margin-left:auto;
-      padding:10px 14px;border-radius:999px;
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      min-width: 260px;
+      justify-content:flex-start;
+    }
+    .dot{width:10px;height:10px;border-radius:50%}
+    .status b{font-size:18px}
+    .status small{display:block;color:var(--muted); margin-top:2px}
+    .dot.good{background:var(--good); box-shadow: 0 0 0 6px rgba(68,208,123,.12)}
+    .dot.bad{background:var(--bad); box-shadow: 0 0 0 6px rgba(255,91,107,.12)}
+    .tabs{
+      display:flex; gap:12px; padding:0 14px 14px;
+    }
+    .tab{
+      flex:1;
+      display:flex; gap:10px; align-items:center; justify-content:center;
+      padding:14px 12px;
+      border-radius:18px;
       border:1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
-      display:flex;align-items:center;gap:10px;
-      min-width:230px; justify-content:center;
-      text-align:center;
-    }
-    .dot{width:10px;height:10px;border-radius:999px;background:var(--bad);box-shadow:0 0 0 4px rgba(255,91,107,.18)}
-    .pill.ok .dot{background:var(--good);box-shadow:0 0 0 4px rgba(68,208,123,.18)}
-    .pill strong{font-size:14px}
-    .pill span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
-    .tabs{
-      margin-top:14px;
-      display:flex; gap:12px;
-    }
-    .tabBtn{
-      flex:1;
-      padding:14px 12px;
-      border-radius:20px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      font-weight:700;
-      display:flex; align-items:center; justify-content:center;
-      gap:10px;
-      box-shadow: 0 10px 28px rgba(0,0,0,.35);
-      cursor:pointer;
+      font-weight:900;
       user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
-    .tabBtn:active{transform:var(--press)}
-    .tabBtn.active{
-      border-color: rgba(122,162,255,.45);
-      background: rgba(122,162,255,.12);
+    .tab:active{transform: var(--press)}
+    .tab.active{
+      background: rgba(122,162,255,.18);
+      border-color: rgba(122,162,255,.35);
     }
-    .panel{
-      margin-top:14px;
-      padding:16px;
-      border-radius:24px;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.16);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .hint{color:var(--muted);line-height:1.35;margin:0 0 12px}
-    label{display:block;color:var(--muted);font-size:13px;margin:12px 0 8px}
+
+    .panel{display:none; padding:14px}
+    .panel.active{display:block}
+
+    .muted{color:var(--muted)}
+    .grid2{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    @media(max-width:760px){ .grid2{grid-template-columns:1fr} .status{min-width: 0} }
+    label{display:block; margin:12px 0 8px; font-weight:900}
     input, select{
       width:100%;
-      padding:14px 14px;
       border-radius:16px;
+      padding:14px 14px;
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
       outline:none;
       font-size:16px;
     }
-    input::placeholder{color: rgba(232,236,246,.35)}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row > *{flex:1;min-width:160px}
+    input::placeholder{color:rgba(232,236,246,.40)}
+    .btnRow{display:flex; gap:12px; margin-top:12px; flex-wrap:wrap}
     .btn{
-      padding:14px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(122,162,255,.14);
-      color: var(--text);
-      font-weight:800;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
+      font-weight:900;
       cursor:pointer;
       user-select:none;
-      text-align:center;
+      -webkit-tap-highlight-color: transparent;
     }
-    .btn.secondary{background: rgba(255,255,255,.06)}
-    .btn:active{transform:var(--press)}
-    .statBox{
-      margin-top:14px;
+    .btn:active{transform: var(--press)}
+    .btn.primary{
+      background: rgba(122,162,255,.22);
+      border-color: rgba(122,162,255,.35);
+    }
+    .kpi{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .stat{
-      padding:12px 14px;
-      border:1px solid var(--stroke);
-      border-radius:18px;
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
       gap:12px;
+      margin-top:14px;
     }
-    .stat b{color:var(--text)}
-    .grid{
+    .kpi .box{
+      background: rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:12px 12px;
+    }
+    .kpi .n{font-size:28px; font-weight:1000}
+    .kpi .t{color:var(--muted); font-weight:800}
+
+    .galleryGrid{
       display:grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap:10px;
     }
-    @media (min-width: 860px){
-      .grid{grid-template-columns: repeat(4, 1fr)}
-    }
-    .card{
-      border-radius:18px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
+    @media(max-width:900px){ .galleryGrid{grid-template-columns: repeat(3, 1fr);} }
+    @media(max-width:650px){ .galleryGrid{grid-template-columns: repeat(2, 1fr);} }
+    .thumb{
+      border-radius:16px;
       overflow:hidden;
-      cursor:pointer;
-      user-select:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      aspect-ratio: 1 / 1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       position:relative;
     }
-    .thumb{
-      width:100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
+    .thumb img{
+      width:100%; height:100%;
+      object-fit:cover;
       display:block;
-      background: rgba(0,0,0,.25);
     }
-    .cap{
-      padding:10px 12px;
-      color: var(--muted);
+    .thumb:active{transform: var(--press)}
+    .pill{
+      position:absolute;
+      left:10px; top:10px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.18);
+      color: rgba(232,236,246,.85);
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
       font-size:12px;
-      border-top:1px solid rgba(255,255,255,.08);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      backdrop-filter: blur(8px);
     }
+
     .footer{
       position:fixed;
       left:0; right:0; bottom:0;
-      padding:10px 12px;
-      background: rgba(0,0,0,.42);
-      border-top:1px solid rgba(255,255,255,.10);
-      backdrop-filter: blur(12px);
-      font-size:12px;
-      color: var(--muted);
-      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, rgba(15,17,21,.92), rgba(15,17,21,.65), transparent);
+      color: rgba(232,236,246,.85);
+      font-weight:800;
+      display:flex; justify-content:space-between; gap:12px;
+      font-size:14px;
     }
     .toast{
-      position:fixed;
-      left:50%;
-      bottom:64px;
-      transform:translateX(-50%);
-      padding:12px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
+      position:fixed; left:50%; transform:translateX(-50%);
+      bottom:72px;
       background: rgba(0,0,0,.65);
-      color: var(--text);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      padding:12px 14px;
       display:none;
       align-items:center;
       gap:10px;
-      max-width:min(92vw,560px);
-      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      max-width:min(520px, calc(100% - 24px));
+      z-index:20;
     }
     .toast.show{display:flex}
     .toast .x{
       margin-left:auto;
       opacity:.75;
-      font-weight:900;
       cursor:pointer;
-      padding:0 6px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
     }
-    /* Modal */
+    .toast .x:active{transform: var(--press)}
+
     .modal{
       position:fixed; inset:0;
-      background: rgba(0,0,0,.72);
+      background: rgba(0,0,0,.78);
       display:none;
-      align-items:center; justify-content:center;
+      z-index:30;
       padding:14px;
-      z-index:50;
     }
     .modal.show{display:flex}
-    .modalBox{
-      width:min(92vw, 920px);
+    .modalInner{
+      margin:auto;
+      width:min(980px, 100%);
+      height:min(90vh, 900px);
       border-radius:22px;
-      border:1px solid rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.16);
       background: rgba(0,0,0,.35);
-      backdrop-filter: blur(12px);
       overflow:hidden;
       position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      backdrop-filter: blur(10px);
     }
-    .modalTop{
-      position:absolute;
-      top:10px; left:10px;
-      padding:8px 10px;
-      border-radius:14px;
-      background: rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.12);
-      color: var(--muted);
-      font-size:12px;
-      display:flex; gap:10px; align-items:center;
-      z-index:2;
-    }
-    .modalTop button{
-      border:0; background:transparent; color:var(--text);
-      font-weight:900; cursor:pointer;
-      padding:2px 6px; border-radius:10px;
-    }
-    .modalTop button:active{transform:var(--press)}
     .modalImg{
-      width:100%;
-      height:auto;
-      display:block;
-      max-height: 84vh;
+      width:100%; height:100%;
       object-fit:contain;
-      background: rgba(0,0,0,.3);
+      background: rgba(0,0,0,.25);
     }
+    .modalHint{
+      position:absolute; left:12px; top:12px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.18);
+      color: rgba(232,236,246,.85);
+      padding:8px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+    }
+    .modalClose{
+      position:absolute; right:12px; top:12px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.18);
+      color: rgba(232,236,246,.9);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+    .modalClose:active{transform: var(--press)}
+    .sep{height:1px;background:rgba(255,255,255,.10); margin:12px 0}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
+<div class="wrap">
+  <div class="card">
+    <div class="top">
       <div class="logo" aria-hidden="true"></div>
       <div>
-        <h1>Martu-art</h1>
-        <div class="sub">Expos + Dibujos (GitHub Pages + Supabase Storage)</div>
+        <div class="title">Martu-art</div>
+        <div class="subtitle">Expos + Dibujos (GitHub Pages + Supabase Storage)</div>
       </div>
-      <div class="pill" id="pill">
-        <div class="dot"></div>
+
+      <div class="status" id="statusPill">
+        <span class="dot bad" id="dot"></span>
         <div>
-          <strong id="statusTitle">Conectando…</strong>
-          <span id="statusMsg">probando Storage</span>
+          <b id="stTitle">Conectando…</b>
+          <small id="stSub" class="muted">probando Storage</small>
         </div>
       </div>
     </div>
 
     <div class="tabs">
-      <div class="tabBtn active" id="tabExpos">📁 Expos</div>
-      <div class="tabBtn" id="tabUpload">⬆️ Subir dibujo</div>
-      <div class="tabBtn" id="tabGallery">🖼️ Galería</div>
+      <div class="tab active" id="tabExpos">📁 Expos</div>
+      <div class="tab" id="tabUpload">⬆️ Subir dibujo</div>
+      <div class="tab" id="tabGallery">🖼️ Galería</div>
     </div>
 
-    <!-- EXPO -->
-    <div class="panel" id="panelExpos">
-      <p class="hint">
+    <div class="panel active" id="panelExpos">
+      <div class="muted">
         Esto usa <b>solo Storage</b> (sin DB y sin librerías externas). Menos magia, más funciona.
-      </p>
+      </div>
 
       <label>Nombre de la expo</label>
       <input id="expoName" placeholder="Ej: Primavera 2026, Dinosaurios, etc."/>
@@ -283,489 +293,474 @@
       <label>Slug (se autogenera)</label>
       <input id="expoSlug" placeholder="ej: primavera-2026" disabled/>
 
-      <div class="row" style="margin-top:12px">
-        <div class="btn" id="btnCreateExpo">Crear expo</div>
-        <div class="btn secondary" id="btnRefresh">Actualizar lista</div>
+      <div class="btnRow">
+        <button class="btn primary" id="btnCreateExpo">Crear expo</button>
+        <button class="btn" id="btnRefresh">Actualizar lista</button>
       </div>
 
-      <label style="margin-top:16px">Expo seleccionada</label>
+      <div class="sep"></div>
+
+      <label>Expo seleccionada</label>
       <select id="expoSelect">
         <option value="">— Elegí una expo —</option>
       </select>
 
       <label>Link de la expo (para compartir)</label>
       <input id="expoLink" placeholder="Se completa al elegir una expo" readonly/>
-      <div class="row" style="margin-top:10px">
-        <div class="btn secondary" id="btnCopyLink">Copiar link</div>
+      <div class="btnRow">
+        <button class="btn" id="btnCopyLink">Copiar link</button>
       </div>
 
-      <div class="statBox">
-        <div class="stat"><span>Expos creadas</span> <b id="countExpos">0</b></div>
-        <div class="stat"><span>Dibujos en esta expo</span> <b id="countFiles">0</b></div>
+      <div class="kpi">
+        <div class="box">
+          <div class="n" id="kpiExpos">0</div>
+          <div class="t">Expos creadas</div>
+        </div>
+        <div class="box">
+          <div class="n" id="kpiFiles">0</div>
+          <div class="t">Dibujos en esta expo</div>
+        </div>
       </div>
     </div>
 
-    <!-- UPLOAD -->
-    <div class="panel" id="panelUpload" style="display:none">
-      <p class="hint">Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda dentro de la expo seleccionada.</p>
+    <div class="panel" id="panelUpload">
+      <div class="muted">
+        Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda en la expo seleccionada.
+      </div>
 
-      <label>Expo (obligatorio)</label>
+      <label>Expo</label>
       <select id="uploadExpoSelect">
         <option value="">— Elegí una expo —</option>
       </select>
 
       <label>Archivo (foto del dibujo)</label>
-      <input id="fileInput" type="file" accept="image/*" />
+      <input type="file" id="fileInput" accept="image/*"/>
 
       <label>Título (opcional)</label>
       <input id="titleInput" placeholder="Ej: Gatito, Arcoiris, etc."/>
 
-      <div class="row" style="margin-top:12px">
-        <div class="btn" id="btnUpload">Subir</div>
-        <div class="btn secondary" id="btnGoGallery">Ver galería</div>
+      <div class="btnRow">
+        <button class="btn primary" id="btnUpload">Subir</button>
+        <button class="btn" id="btnGoGallery">Ver galería</button>
       </div>
     </div>
 
-    <!-- GALLERY -->
-    <div class="panel" id="panelGallery" style="display:none">
-      <p class="hint">Elegí una expo y mirá los dibujos. Tocá una imagen para agrandar.</p>
+    <div class="panel" id="panelGallery">
+      <div class="muted">
+        Elegí una expo y te muestro los dibujos subidos.
+      </div>
 
       <label>Expo</label>
       <select id="galleryExpoSelect">
         <option value="">— Elegí una expo —</option>
       </select>
 
-      <div class="row" style="margin-top:12px">
-        <div class="btn secondary" id="btnLoadGallery">Cargar galería</div>
+      <div class="btnRow">
+        <button class="btn" id="btnLoadGallery">Cargar galería</button>
       </div>
 
-      <div style="height:12px"></div>
-      <div class="grid" id="grid"></div>
+      <div class="sep"></div>
+      <div class="galleryGrid" id="galleryGrid"></div>
     </div>
   </div>
+</div>
 
-  <div class="footer">
-    <div>Estado: <b id="footState">—</b></div>
-    <div>bucket: <b id="footBucket">—</b></div>
+<div class="toast" id="toast">
+  <div id="toastMsg">—</div>
+  <div class="x" id="toastX">×</div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modalInner">
+    <div class="modalHint">Tocá para agrandar</div>
+    <button class="modalClose" id="modalClose">Cerrar</button>
+    <img id="modalImg" class="modalImg" alt="Dibujo"/>
   </div>
+</div>
 
-  <div class="toast" id="toast">
-    <div id="toastMsg">—</div>
-    <div class="x" id="toastX">×</div>
-  </div>
+<div class="footer">
+  <div>Estado: <b id="footState">—</b></div>
+  <div>bucket: <b id="footBucket">—</b></div>
+</div>
 
-  <div class="modal" id="modal">
-    <div class="modalBox">
-      <div class="modalTop">
-        <div>Tocá para agrandar</div>
-        <button id="modalClose">Cerrar</button>
-      </div>
-      <img id="modalImg" class="modalImg" alt="Imagen"/>
-    </div>
-  </div>
+<script>
+/* ============================================================
+   1) CONFIG (TOCÁ SOLO ESTO)
+   ============================================================ */
+// 👇 Pegá acá tu Project URL (Settings → API → Project URL)
+const SUPABASE_URL = "https://vfvbsenzfbrnkyddyo.supabase.co";
+// 👇 Tu publishable key (la que empieza con sb_publishable__)
+const SUPABASE_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+const BUCKET = "drawings";
 
-  <script>
-    // ===========================
-    // 1) CONFIG (TOCÁ SOLO ESTO)
-    // ===========================
-    const SUPABASE_URL = "https://vfvbssenzfbrnkyddyo.supabase.co"; // si tu Project ID es otro, cambialo acá
-    const SUPABASE_ANON_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
-    const BUCKET = "drawings";
-    const EXPO_INDEX_PATH = "_expos.json"; // archivo índice en el root del bucket
+/* ============================================================
+   2) UI helpers
+   ============================================================ */
+const $ = (id)=>document.getElementById(id);
 
-    // ===========================
-    // 2) Helpers
-    // ===========================
-    const $ = (id)=>document.getElementById(id);
+const toast = (msg, bad=false)=>{
+  $("toastMsg").textContent = msg;
+  $("toastMsg").style.color = bad ? "var(--bad)" : "rgba(232,236,246,.92)";
+  $("toast").classList.add("show");
+  clearTimeout(window.__toastT);
+  window.__toastT = setTimeout(()=> $("toast").classList.remove("show"), 2600);
+};
+$("toastX").onclick = ()=> $("toast").classList.remove("show");
 
-    const toast = (msg, bad=false)=>{
-      $("toastMsg").textContent = msg;
-      $("toastMsg").style.color = bad ? "var(--bad)" : "var(--text)";
-      $("toast").classList.add("show");
-      clearTimeout(window.__toastT);
-      window.__toastT = setTimeout(()=>$("toast").classList.remove("show"), 2600);
-    };
-    $("toastX").onclick = ()=>$("toast").classList.remove("show");
+const setStatus = (ok, title, sub="")=>{
+  $("dot").className = "dot " + (ok ? "good" : "bad");
+  $("stTitle").textContent = title;
+  $("stSub").textContent = sub;
+  $("footState").textContent = ok ? "ok" : "error";
+  $("footBucket").textContent = BUCKET;
+};
 
-    const setStatus = (ok, title, msg)=>{
-      const pill = $("pill");
-      pill.classList.toggle("ok", !!ok);
-      $("statusTitle").textContent = title;
-      $("statusMsg").textContent = msg || "";
-      $("footState").textContent = ok ? "ok" : "error";
-      $("footBucket").textContent = BUCKET;
-    };
+function slugify(s){
+  return (s||"")
+    .trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"")
+    .slice(0,60);
+}
 
-    const slugify = (s)=>{
-      return (s||"")
-        .toString()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-        .trim().toLowerCase()
-        .replace(/[^a-z0-9]+/g,"-")
-        .replace(/(^-|-$)/g,"");
-    };
+function expoShareLink(slug){
+  const u = new URL(location.href);
+  u.searchParams.set("expo", slug);
+  return u.toString();
+}
 
-    const headersAuth = ()=>{
-      return {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": "Bearer " + SUPABASE_ANON_KEY
-      };
-    };
+function publicUrl(path){
+  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${encodeURI(path)}`;
+}
 
-    const storageObjectURL = (path)=>{
-      // Public URL (sirve si el bucket es PUBLIC). Si no es public, igual sube pero no se ve.
-      return `${SUPABASE_URL}/storage/v1/object/public/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
-    };
+/* ============================================================
+   3) Supabase Storage REST (sin librerías externas)
+   ============================================================ */
+const API = `${SUPABASE_URL}/storage/v1`;
 
-    async function storageList(prefix){
-      // POST /storage/v1/object/list/{bucket}
-      const url = `${SUPABASE_URL}/storage/v1/object/list/${encodeURIComponent(BUCKET)}`;
-      const res = await fetch(url, {
-        method:"POST",
-        headers: {
-          ...headersAuth(),
-          "Content-Type":"application/json"
-        },
-        body: JSON.stringify({
-          prefix: prefix || "",
-          limit: 1000,
-          offset: 0,
-          sortBy: { column: "name", order: "asc" }
-        })
-      });
-      if(!res.ok){
-        const t = await res.text().catch(()=> "");
-        throw new Error(`LIST ${res.status}: ${t || res.statusText}`);
-      }
-      return res.json();
+async function sbFetch(path, opts={}){
+  const headers = new Headers(opts.headers || {});
+  headers.set("apikey", SUPABASE_KEY);
+  headers.set("Authorization", `Bearer ${SUPABASE_KEY}`);
+  // algunos endpoints andan mejor con este
+  headers.set("x-client-info", "martu-art-storage-only");
+  if(opts.json){
+    headers.set("Content-Type","application/json");
+    opts.body = JSON.stringify(opts.json);
+    delete opts.json;
+  }
+  const res = await fetch(`${API}${path}`, { ...opts, headers });
+  return res;
+}
+
+async function testStorage(){
+  // endpoint liviano: lista 1 objeto (si hay permisos, responde 200/400 pero con JSON)
+  const res = await sbFetch(`/object/list/${BUCKET}`, { method:"POST", json:{ prefix:"", limit:1, offset:0 } });
+  const txt = await res.text();
+  // 200 o 400 con JSON válido: Storage responde; 0/failed: no llegó
+  if(!res.ok){
+    // Si contesta JSON con error de policy, también está “vivo” (pero faltan permisos)
+    try{ JSON.parse(txt); }catch(e){ throw new Error("No responde Storage (red/CORS/DNS)"); }
+    // Si hay error de permisos, lo detectamos para decirlo claro
+    if(txt.includes("new row violates row-level security") || txt.includes("row level security") || txt.includes("permission")){
+      throw new Error("RLS: faltan policies en Storage");
     }
-
-    async function storageUpload(path, fileOrBlob, contentType){
-      const url = `${SUPABASE_URL}/storage/v1/object/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
-      const res = await fetch(url, {
-        method:"POST",
-        headers: {
-          ...headersAuth(),
-          "Content-Type": contentType || "application/octet-stream",
-          "x-upsert": "true"
-        },
-        body: fileOrBlob
-      });
-      if(!res.ok){
-        const t = await res.text().catch(()=> "");
-        throw new Error(`UPLOAD ${res.status}: ${t || res.statusText}`);
-      }
-      return res.json();
+    // bucket inexistente
+    if(txt.toLowerCase().includes("bucket") && txt.toLowerCase().includes("not found")){
+      throw new Error("Bucket drawings no existe");
     }
+    // otro error
+    throw new Error("Storage respondió con error");
+  }
+  return true;
+}
 
-    async function storageDownload(path){
-      const url = `${SUPABASE_URL}/storage/v1/object/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
-      const res = await fetch(url, { headers: headersAuth() });
-      if(res.status === 404) return null;
-      if(!res.ok){
-        const t = await res.text().catch(()=> "");
-        throw new Error(`GET ${res.status}: ${t || res.statusText}`);
-      }
-      return res.json();
-    }
-
-    async function storagePutJSON(path, obj){
-      const blob = new Blob([JSON.stringify(obj, null, 2)], {type:"application/json"});
-      const url = `${SUPABASE_URL}/storage/v1/object/${encodeURIComponent(BUCKET)}/${path.split("/").map(encodeURIComponent).join("/")}`;
-      const res = await fetch(url, {
-        method:"PUT",
-        headers: {
-          ...headersAuth(),
-          "Content-Type":"application/json",
-          "x-upsert":"true"
-        },
-        body: blob
-      });
-      if(!res.ok){
-        const t = await res.text().catch(()=> "");
-        throw new Error(`PUT ${res.status}: ${t || res.statusText}`);
-      }
-      return res.json();
-    }
-
-    function pageLinkForExpo(slug){
-      const u = new URL(location.href);
-      u.searchParams.set("expo", slug);
-      return u.toString();
-    }
-
-    // ===========================
-    // 3) Expo Index (_expos.json)
-    // ===========================
-    async function readExpoIndex(){
-      try{
-        const json = await storageDownload(EXPO_INDEX_PATH);
-        if(!json) return [];
-        if(Array.isArray(json)) return json;
-        if(Array.isArray(json.expos)) return json.expos;
-        return [];
-      }catch(e){
-        // si no hay permiso o no existe, devolvemos vacío
-        return [];
-      }
-    }
-
-    async function writeExpoIndex(expos){
-      await storagePutJSON(EXPO_INDEX_PATH, { expos });
-    }
-
-    // ===========================
-    // 4) UI: Tabs
-    // ===========================
-    const showTab = (name)=>{
-      const tabs = [
-        ["Expos","panelExpos","tabExpos"],
-        ["Upload","panelUpload","tabUpload"],
-        ["Gallery","panelGallery","tabGallery"],
-      ];
-      tabs.forEach(([n,p,t])=>{
-        $(p).style.display = (n===name) ? "" : "none";
-        $(t).classList.toggle("active", n===name);
-      });
-    };
-
-    $("tabExpos").onclick = ()=>showTab("Expos");
-    $("tabUpload").onclick = ()=>showTab("Upload");
-    $("tabGallery").onclick = ()=>showTab("Gallery");
-    $("btnGoGallery").onclick = ()=>{
-      showTab("Gallery");
-      if($("galleryExpoSelect").value) loadGallery();
-    };
-
-    // Modal
-    const openModal = (src)=>{
-      $("modalImg").src = src;
-      $("modal").classList.add("show");
-    };
-    const closeModal = ()=> $("modal").classList.remove("show");
-    $("modal").onclick = (e)=>{ if(e.target.id==="modal") closeModal(); };
-    $("modalClose").onclick = closeModal;
-
-    // ===========================
-    // 5) Expos / Selects
-    // ===========================
-    function fillSelects(expos){
-      const opts = ['<option value="">— Elegí una expo —</option>']
-        .concat(expos.map(x=>`<option value="${x.slug}">${x.name} (${x.slug})</option>`))
-        .join("");
-
-      $("expoSelect").innerHTML = opts;
-      $("uploadExpoSelect").innerHTML = opts;
-      $("galleryExpoSelect").innerHTML = opts;
-
-      $("countExpos").textContent = String(expos.length);
-    }
-
-    async function refreshExpos(){
-      const expos = await readExpoIndex();
-      fillSelects(expos);
-
-      // si viene ?expo=... lo seleccionamos
-      const u = new URL(location.href);
-      const qExpo = u.searchParams.get("expo") || "";
-      if(qExpo){
-        $("expoSelect").value = qExpo;
-        $("uploadExpoSelect").value = qExpo;
-        $("galleryExpoSelect").value = qExpo;
-        $("expoLink").value = pageLinkForExpo(qExpo);
-        await updateCountsForExpo(qExpo);
-      }else{
-        $("expoLink").value = "";
-        $("countFiles").textContent = "0";
-      }
-    }
-
-    async function updateCountsForExpo(slug){
-      if(!slug){ $("countFiles").textContent="0"; return; }
-      try{
-        const list = await storageList(slug + "/");
-        const files = (list||[]).filter(x=>x.name && !x.name.endsWith("/.keep") && x.name !== ".keep" && !x.name.endsWith(".keep"));
-        $("countFiles").textContent = String(files.length);
-      }catch(e){
-        $("countFiles").textContent = "—";
-      }
-    }
-
-    $("expoName").addEventListener("input", ()=>{
-      $("expoSlug").value = slugify($("expoName").value);
+async function listAllObjects(prefix=""){
+  const out = [];
+  let offset = 0;
+  const limit = 1000;
+  while(true){
+    const res = await sbFetch(`/object/list/${BUCKET}`, {
+      method:"POST",
+      json:{ prefix, limit, offset, sortBy:{ column:"name", order:"asc" } }
     });
+    const data = await res.json().catch(()=>null);
+    if(!res.ok) throw new Error(data?.message || "No pude listar Storage");
+    if(!Array.isArray(data)) break;
+    out.push(...data);
+    if(data.length < limit) break;
+    offset += limit;
+  }
+  return out;
+}
 
-    $("btnRefresh").onclick = async ()=>{
-      try{
-        await refreshExpos();
-        toast("Lista actualizada ✅");
-      }catch(e){
-        console.error(e);
-        toast("No pude actualizar ❌", true);
-      }
-    };
+async function listExpos(){
+  const objs = await listAllObjects("");
+  const set = new Set();
+  for(const o of objs){
+    const name = o?.name || "";
+    const p = name.split("/")[0];
+    if(p) set.add(p);
+  }
+  return Array.from(set).sort((a,b)=>a.localeCompare(b));
+}
 
-    $("expoSelect").onchange = async ()=>{
-      const slug = $("expoSelect").value || "";
-      $("uploadExpoSelect").value = slug;
-      $("galleryExpoSelect").value = slug;
-      $("expoLink").value = slug ? pageLinkForExpo(slug) : "";
-      await updateCountsForExpo(slug);
-    };
+async function ensureExpoFolder(slug){
+  // “Carpeta” en Storage = subir un archivo marcador
+  const path = `${slug}/.keep`;
+  const body = new Blob([`keep:${Date.now()}`], {type:"text/plain"});
+  const res = await sbFetch(`/object/${BUCKET}/${path}`, {
+    method:"POST",
+    headers: { "x-upsert":"true", "Content-Type":"text/plain" },
+    body
+  });
+  const txt = await res.text();
+  if(!res.ok){
+    if(txt.includes("row-level security") || txt.includes("RLS") || txt.includes("violates")){
+      throw new Error("RLS: no tenés permiso para crear expo (policy insert)");
+    }
+    throw new Error("No pude crear expo");
+  }
+  return true;
+}
 
-    $("btnCopyLink").onclick = async ()=>{
-      const v = $("expoLink").value.trim();
-      if(!v){ toast("Elegí una expo primero", true); return; }
-      try{
-        await navigator.clipboard.writeText(v);
-        toast("Link copiado ✅");
-      }catch{
-        toast("No pude copiar (iPhone a veces se hace el difícil) ❌", true);
-      }
-    };
+async function uploadImage(slug, file, title=""){
+  const safeName = (file.name || `foto-${Date.now()}.jpg`).replace(/[^\w.\-]+/g,"_");
+  const stamp = new Date().toISOString().replace(/[:.]/g,"-");
+  const base = title ? slugify(title).slice(0,30) : "dibujo";
+  const filename = `${base}-${stamp}-${safeName}`;
+  const path = `${slug}/${filename}`;
 
-    // Crear expo = agrega en _expos.json + crea placeholder .keep
-    $("btnCreateExpo").onclick = async ()=>{
-      const name = $("expoName").value.trim();
-      const slug = slugify(name);
+  const res = await sbFetch(`/object/${BUCKET}/${path}`, {
+    method:"POST",
+    headers: { "x-upsert":"true", "Content-Type": file.type || "application/octet-stream" },
+    body: file
+  });
+  const txt = await res.text();
+  if(!res.ok){
+    if(txt.includes("row-level security") || txt.includes("RLS") || txt.includes("violates")){
+      throw new Error("RLS: no tenés permiso para subir (policy insert)");
+    }
+    throw new Error("No subió");
+  }
+  return { path, url: publicUrl(path) };
+}
 
-      if(!name){ toast("Poné un nombre de expo", true); return; }
-      if(!slug){ toast("Nombre inválido", true); return; }
+async function listExpoImages(slug){
+  const objs = await listAllObjects(`${slug}/`);
+  const imgs = [];
+  for(const o of objs){
+    const name = o?.name || "";
+    if(!name || name.endsWith("/.keep")) continue;
+    if(!/\.(png|jpg|jpeg|webp|gif)$/i.test(name)) continue;
+    imgs.push({ path:name, url: publicUrl(name) });
+  }
+  // más nuevo primero (si el nombre tiene timestamp ISO, sirve)
+  imgs.sort((a,b)=>b.path.localeCompare(a.path));
+  return imgs;
+}
 
-      try{
-        const expos = await readExpoIndex();
-        if(expos.some(x=>x.slug === slug)){
-          toast("Esa expo ya existe", true);
-          $("expoSelect").value = slug;
-          $("uploadExpoSelect").value = slug;
-          $("galleryExpoSelect").value = slug;
-          $("expoLink").value = pageLinkForExpo(slug);
-          await updateCountsForExpo(slug);
-          return;
-        }
+/* ============================================================
+   4) UI logic
+   ============================================================ */
+function showPanel(which){
+  $("tabExpos").classList.toggle("active", which==="expos");
+  $("tabUpload").classList.toggle("active", which==="upload");
+  $("tabGallery").classList.toggle("active", which==="gallery");
+  $("panelExpos").classList.toggle("active", which==="expos");
+  $("panelUpload").classList.toggle("active", which==="upload");
+  $("panelGallery").classList.toggle("active", which==="gallery");
+}
 
-        expos.push({ name, slug, created_at: new Date().toISOString() });
-        await writeExpoIndex(expos);
+$("tabExpos").onclick = ()=>showPanel("expos");
+$("tabUpload").onclick = ()=>showPanel("upload");
+$("tabGallery").onclick = ()=>showPanel("gallery");
 
-        // placeholder para “crear carpeta”
-        const empty = new Blob([""], {type:"text/plain"});
-        await storageUpload(`${slug}/.keep`, empty, "text/plain");
+$("expoName").addEventListener("input", ()=>{
+  $("expoSlug").value = slugify($("expoName").value);
+});
 
-        await refreshExpos();
-        $("expoSelect").value = slug;
-        $("uploadExpoSelect").value = slug;
-        $("galleryExpoSelect").value = slug;
-        $("expoLink").value = pageLinkForExpo(slug);
-        await updateCountsForExpo(slug);
+$("btnCopyLink").onclick = async ()=>{
+  const v = $("expoLink").value.trim();
+  if(!v) return toast("Elegí una expo primero", true);
+  try{
+    await navigator.clipboard.writeText(v);
+    toast("Link copiado ✅");
+  }catch{
+    toast("No pude copiar (iPhone a veces se pone exquisito). Mantené apretado y copiá.", true);
+  }
+};
 
-        toast("Expo creada ✅");
-      }catch(e){
-        console.error(e);
-        toast("No pudo crear expo ❌", true);
-      }
-    };
+$("btnGoGallery").onclick = ()=>{
+  showPanel("gallery");
+  const v = $("uploadExpoSelect").value;
+  if(v) $("galleryExpoSelect").value = v;
+};
 
-    // ===========================
-    // 6) Upload
-    // ===========================
-    $("btnUpload").onclick = async ()=>{
-      const slug = $("uploadExpoSelect").value || "";
-      const file = $("fileInput").files && $("fileInput").files[0];
-      const title = $("titleInput").value.trim();
+function fillSelect(sel, expos){
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">— Elegí una expo —</option>` +
+    expos.map(e=>`<option value="${e}">${e} (${e})</option>`).join("");
+  if(expos.includes(cur)) sel.value = cur;
+}
 
-      if(!slug){ toast("Elegí una expo", true); return; }
-      if(!file){ toast("Elegí una foto", true); return; }
+async function refreshAll(){
+  const expos = await listExpos();
+  $("kpiExpos").textContent = String(expos.length);
+  fillSelect($("expoSelect"), expos);
+  fillSelect($("uploadExpoSelect"), expos);
+  fillSelect($("galleryExpoSelect"), expos);
+  return expos;
+}
 
-      try{
-        const safeTitle = slugify(title).slice(0, 40);
-        const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-        const ts = new Date().toISOString().replace(/[:.]/g,"-");
-        const rnd = Math.random().toString(16).slice(2,8);
-        const filename = `${ts}_${rnd}${safeTitle ? "_" + safeTitle : ""}.${ext}`;
-        const path = `${slug}/${filename}`;
+$("btnRefresh").onclick = async ()=>{
+  try{
+    await refreshAll();
+    toast("Lista actualizada ✅");
+  }catch(e){
+    console.error(e);
+    toast(String(e.message||e), true);
+  }
+};
 
-        await storageUpload(path, file, file.type || "application/octet-stream");
+$("expoSelect").addEventListener("change", async ()=>{
+  const slug = $("expoSelect").value;
+  if(!slug){
+    $("expoLink").value = "";
+    $("kpiFiles").textContent = "0";
+    return;
+  }
+  $("expoLink").value = expoShareLink(slug);
+  try{
+    const imgs = await listExpoImages(slug);
+    $("kpiFiles").textContent = String(imgs.length);
+  }catch{
+    $("kpiFiles").textContent = "—";
+  }
+});
 
-        toast("Subió ✅");
-        $("fileInput").value = "";
-        $("titleInput").value = "";
-        await updateCountsForExpo(slug);
-      }catch(e){
-        console.error(e);
-        toast("No subió ❌", true);
-      }
-    };
+$("btnCreateExpo").onclick = async ()=>{
+  const name = $("expoName").value.trim();
+  const slug = slugify(name);
+  if(!name || !slug) return toast("Poné un nombre de expo", true);
 
-    // ===========================
-    // 7) Gallery
-    // ===========================
-    async function loadGallery(){
-      const slug = $("galleryExpoSelect").value || "";
-      if(!slug){ toast("Elegí una expo", true); return; }
+  try{
+    await ensureExpoFolder(slug);
+    toast("Expo creada ✅");
+    $("expoName").value = "";
+    $("expoSlug").value = "";
+    await refreshAll();
+    $("expoSelect").value = slug;
+    $("expoSelect").dispatchEvent(new Event("change"));
+  }catch(e){
+    console.error(e);
+    toast(String(e.message||e), true);
+  }
+};
 
-      try{
-        const list = await storageList(slug + "/");
-        const items = (list||[])
-          .map(x=>x.name)
-          .filter(name => name && name !== ".keep" && !name.endsWith("/.keep") && !name.endsWith(".keep"))
-          .map(name => ({
-            path: `${slug}/${name}`.replace(/\/+/g,"/"),
-            name
-          }));
+$("btnUpload").onclick = async ()=>{
+  const slug = $("uploadExpoSelect").value;
+  if(!slug) return toast("Elegí una expo", true);
 
-        $("grid").innerHTML = "";
+  const f = $("fileInput").files?.[0];
+  if(!f) return toast("Elegí una foto", true);
 
-        if(items.length === 0){
-          $("grid").innerHTML = `<div style="color:var(--muted);padding:10px 2px">No hay dibujos todavía.</div>`;
-          return;
-        }
+  try{
+    await uploadImage(slug, f, $("titleInput").value.trim());
+    toast("Subió ✅");
+    $("fileInput").value = "";
+    $("titleInput").value = "";
+  }catch(e){
+    console.error(e);
+    toast(String(e.message||e), true);
+  }
+};
 
-        items.forEach(it=>{
-          const src = storageObjectURL(it.path);
-          const el = document.createElement("div");
-          el.className = "card";
-          el.innerHTML = `
-            <img class="thumb" loading="lazy" src="${src}" alt="dibujo"/>
-            <div class="cap">${it.name}</div>
-          `;
-          el.onclick = ()=>openModal(src);
-          $("grid").appendChild(el);
-        });
+$("btnLoadGallery").onclick = async ()=>{
+  const slug = $("galleryExpoSelect").value;
+  if(!slug) return toast("Elegí una expo", true);
 
-        toast("Galería cargada ✅");
-      }catch(e){
-        console.error(e);
-        toast("Error cargando galería ❌", true);
-      }
+  try{
+    const imgs = await listExpoImages(slug);
+    const grid = $("galleryGrid");
+    grid.innerHTML = "";
+    if(!imgs.length){
+      grid.innerHTML = `<div class="muted">No hay dibujos en esta expo todavía.</div>`;
+      return;
+    }
+    for(const it of imgs){
+      const d = document.createElement("div");
+      d.className = "thumb";
+      d.innerHTML = `<span class="pill">${slug}</span><img loading="lazy" src="${it.url}" alt="Dibujo"/>`;
+      d.onclick = ()=> openModal(it.url);
+      grid.appendChild(d);
+    }
+    toast("Galería cargada ✅");
+  }catch(e){
+    console.error(e);
+    toast(String(e.message||e), true);
+  }
+};
+
+/* Modal */
+function openModal(url){
+  $("modalImg").src = url;
+  $("modal").classList.add("show");
+}
+function closeModal(){
+  $("modal").classList.remove("show");
+  $("modalImg").src = "";
+}
+$("modalClose").onclick = closeModal;
+$("modal").onclick = (e)=>{ if(e.target === $("modal")) closeModal(); };
+
+/* ============================================================
+   5) Boot
+   ============================================================ */
+(async function boot(){
+  // Validación básica de config
+  if(!SUPABASE_URL.includes("supabase.co") || !SUPABASE_KEY.startsWith("sb_")){
+    setStatus(false, "Error", "Pegá tu SUPABASE_URL y SUPABASE_KEY arriba");
+    toast("Config incompleta", true);
+    return;
+  }
+
+  try{
+    await testStorage();
+    setStatus(true, "Conectado ✅", "");
+    await refreshAll();
+
+    // Si viene ?expo=algo, preseleccionar
+    const url = new URL(location.href);
+    const expo = (url.searchParams.get("expo") || "").trim();
+    if(expo){
+      $("expoSelect").value = expo;
+      $("uploadExpoSelect").value = expo;
+      $("galleryExpoSelect").value = expo;
+      $("expoSelect").dispatchEvent(new Event("change"));
+      showPanel("gallery");
+      $("btnLoadGallery").click();
+    }
+  }catch(e){
+    console.error(e);
+    const msg = String(e.message||e);
+
+    if(msg.includes("RLS")){
+      setStatus(false, "Error", "Faltan permisos (RLS) en Storage");
+      toast("Faltan policies en Storage (SQL). Hacé el paso A y listo.", true);
+      return;
+    }
+    if(msg.includes("Bucket")){
+      setStatus(false, "Error", "No existe el bucket drawings");
+      toast("Creá el bucket drawings en Storage", true);
+      return;
     }
 
-    $("btnLoadGallery").onclick = loadGallery;
-
-    // ===========================
-    // 8) Boot
-    // ===========================
-    async function boot(){
-      $("footBucket").textContent = BUCKET;
-
-      if(!SUPABASE_URL.includes("supabase.co")){
-        setStatus(false, "Error", "Falta SUPABASE_URL");
-        toast("Falta SUPABASE_URL", true);
-        return;
-      }
-
-      try{
-        // prueba rápida de auth/list
-        await storageList("");
-        setStatus(true, "Conectado ✅", "");
-        await refreshExpos();
-      }catch(e){
-        console.error(e);
-        setStatus(false, "Error", "No pude hablar con Storage");
-        toast("Error (permisos o bucket no público)", true);
-      }
-    }
-
-    boot();
-  </script>
+    setStatus(false, "Error", "No pude hablar con Storage");
+    toast("No pude hablar con Storage. Puede ser Wi-Fi/DNS/CORS. Probá con 4G para confirmar.", true);
+  }
+})();
+</script>
 </body>
 </html>
