@@ -8,7 +8,6 @@
   <style>
     :root{
       --bg:#0f1115;
-      --card:#141822;
       --stroke:rgba(255,255,255,.10);
       --text:#e8ecf6;
       --muted:rgba(232,236,246,.62);
@@ -16,7 +15,7 @@
       --good:#44d07b;
       --bad:#ff5b6b;
       --shadow: 0 18px 50px rgba(0,0,0,.55);
-      --r:18px;
+
       --press: translateY(1.5px) scale(.985);
       --pressShadow: 0 10px 24px rgba(0,0,0,.55);
       --btnShadow: 0 14px 34px rgba(0,0,0,.45);
@@ -58,6 +57,22 @@
     }
     h1{font-size:40px;line-height:1;margin:0}
     .sub{color:var(--muted);margin-top:4px}
+    .status{
+      margin-left:auto;
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--stroke);
+      border-radius: 999px;
+      background: rgba(255,255,255,.03);
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--bad);
+      box-shadow: 0 0 0 6px rgba(255,91,107,.14);
+    }
+    .dot.good{background:var(--good); box-shadow:0 0 0 6px rgba(68,208,123,.14)}
+    .stTitle{font-weight:700}
+    .stSub{color:var(--muted);font-size:12px;margin-top:2px}
 
     .tabs{
       display:grid;
@@ -67,32 +82,64 @@
     }
 
     .btn{
-      appearance:none; border:1px solid var(--stroke);
+      appearance:none;
+      border:1px solid var(--stroke);
       background: rgba(255,255,255,.04);
       color: var(--text);
       border-radius: 20px;
       padding: 14px 14px;
       font-weight: 800;
+      letter-spacing: .2px;
       cursor:pointer;
+      user-select:none;
+      -webkit-user-select:none;
+      touch-action: manipulation;
       box-shadow: var(--btnShadow);
-      transition: transform .06s ease, box-shadow .12s ease;
-      display:flex;align-items:center;justify-content:center;
+      transition: transform .06s ease, filter .12s ease, box-shadow .12s ease, background .12s ease;
+      display:flex;align-items:center;justify-content:center;gap:10px;
     }
     .btn.primary{
       background: rgba(122,162,255,.14);
       border-color: rgba(122,162,255,.35);
     }
-    .btn:active{
+    /* iOS: a veces :active es tímido, por eso también usamos .is-pressed vía JS */
+    .btn:active,
+    .btn.is-pressed{
       transform: var(--press);
       box-shadow: var(--pressShadow);
+      filter: brightness(1.10);
     }
+    .btn:focus{outline:none}
+    .btn.small{padding:12px 14px;border-radius:16px;font-weight:800}
+    .btn.ghost{background: rgba(255,255,255,.02)}
+    .btnRow{display:flex;gap:12px;flex-wrap:wrap}
 
     .content{padding:12px 16px 16px}
+    .muted{color:var(--muted)}
+    .hr{height:1px;background:var(--stroke);margin:14px 0}
+
+    label{display:block;font-weight:800;margin:12px 0 8px}
+    input, select{
+      width:100%;
+      padding:14px 14px;
+      background: rgba(0,0,0,.22);
+      border:1px solid var(--stroke);
+      color: var(--text);
+      border-radius: 18px;
+      font-size: 16px;
+      outline:none;
+    }
+    input::placeholder{color:rgba(232,236,246,.38)}
+    select{appearance:none}
+
     .gridGallery{
       display:grid;
       grid-template-columns: repeat(2, minmax(0,1fr));
       gap:14px;
       margin-top:14px;
+    }
+    @media (min-width:720px){
+      .gridGallery{grid-template-columns: repeat(3, minmax(0,1fr));}
     }
 
     .imgCard{
@@ -100,12 +147,25 @@
       border-radius: 22px;
       background: rgba(0,0,0,.22);
       overflow:hidden;
+      position:relative;
+      min-height: 170px;
+    }
+    .imgCard .tag{
+      position:absolute; top:10px; left:10px;
+      padding:8px 10px;
+      border-radius: 999px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.38);
+      font-weight:900;
+      font-size:12px;
+      z-index:2;
     }
     .imgCard img{
       width:100%;
       height: 220px;
       object-fit: cover;
       display:block;
+      background: rgba(255,255,255,.02);
     }
     .imgCard .meta{
       padding:10px 12px 12px;
@@ -113,135 +173,544 @@
       font-size: 12px;
       word-break: break-word;
     }
+
+    .footer{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 16px;
+      border-top:1px solid var(--stroke);
+      color: var(--muted);
+      font-weight:700;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.72);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 16px;
+      box-shadow: 0 16px 44px rgba(0,0,0,.55);
+      max-width:min(520px, calc(100vw - 24px));
+      display:none;
+      z-index:9999;
+    }
+    .toast.show{display:flex;align-items:center;gap:12px}
+    .toast .x{
+      margin-left:auto;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 12px;
+      padding:6px 10px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 14px;
+      z-index: 9998;
+    }
+    .modal.show{display:flex}
+    .modalBox{
+      width:min(980px, 100%);
+      background: rgba(20,24,34,.84);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 26px;
+      overflow:hidden;
+      box-shadow: 0 22px 70px rgba(0,0,0,.65);
+      position:relative;
+    }
+    .modalHint{
+      position:absolute; top:10px; left:10px;
+      padding:8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.12);
+      font-weight: 900;
+      font-size: 12px;
+      z-index:2;
+    }
+    .modalClose{
+      position:absolute; top:10px; right:10px;
+      z-index:2;
+    }
+    .modalImg{
+      width:100%;
+      height: min(75vh, 700px);
+      object-fit: contain;
+      background: rgba(0,0,0,.30);
+      display:block;
+    }
   </style>
 </head>
 
 <body>
-<div class="wrap">
-<div class="card">
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div class="pill"></div>
+        <div>
+          <h1>Martu-art</h1>
+          <div class="sub">Expos + Dibujos (GitHub Pages + Supabase Storage)</div>
+        </div>
 
-<div class="tabs">
-<button class="btn primary" id="tabUpload">Subir</button>
-<button class="btn" id="tabGallery">Galería</button>
-</div>
-
-<div class="content">
-
-<section id="panelUpload">
-<input id="expoSelectUp" placeholder="Slug expo"/>
-<input id="fileInput" type="file" accept="image/*"/>
-<input id="titleInput" placeholder="Nombre del dibujo"/>
-<button class="btn primary" id="btnUpload">Subir</button>
-</section>
-
-<section id="panelGallery" style="display:none">
-<input id="expoSelectGal" placeholder="Slug expo"/>
-<button class="btn primary" id="btnLoadGallery">Cargar</button>
-<div id="galleryGrid" class="gridGallery"></div>
-</section>
-
-</div>
-</div>
-</div>
-
-<script>
-const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
-const SUPABASE_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
-const BUCKET = "drawings";
-
-const $ = id => document.getElementById(id);
-const API = `${SUPABASE_URL}/storage/v1`;
-
-function slugify(s){
-  return (s||"")
-    .trim().toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9]+/g,"-")
-    .replace(/^-+|-+$/g,"");
-}
-
-function publicUrl(path){
-  const safe = String(path).split("/").map(encodeURIComponent).join("/");
-  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${safe}`;
-}
-
-async function sbFetch(path, opts={}){
-  const headers = new Headers(opts.headers || {});
-  headers.set("apikey", SUPABASE_KEY);
-  headers.set("authorization", `Bearer ${SUPABASE_KEY}`);
-  return fetch(`${API}${path}`, { ...opts, headers });
-}
-
-/* 🔥 CAMBIO ACÁ: nombre exacto */
-async function uploadImage(slug, file, title=""){
-  const ext = (file.name || "image").split(".").pop() || "jpg";
-  const base = title ? slugify(title) : "dibujo";
-  const filename = `${base}.${ext}`;
-  const path = `${slug}/${filename}`;
-
-  const res = await sbFetch(`/object/${BUCKET}/${path}`, {
-    method: "POST",
-    headers: { "x-upsert":"true", "Content-Type": file.type },
-    body: file
-  });
-
-  if(!res.ok){
-    const txt = await res.text();
-    throw new Error(txt);
-  }
-
-  return { path, url: publicUrl(path) };
-}
-
-async function listExpoImages(slug){
-  const res = await sbFetch(`/object/list/${BUCKET}`, {
-    method:"POST",
-    headers: { "Content-Type":"application/json" },
-    body: JSON.stringify({ prefix:`${slug}/` })
-  });
-
-  const objs = await res.json();
-  return objs
-    .filter(o => /\.(png|jpg|jpeg|webp|gif)$/i.test(o.name))
-    .map(o => ({ path:o.name, url: publicUrl(o.name) }));
-}
-
-$("btnUpload").onclick = async ()=>{
-  const slug = $("expoSelectUp").value;
-  const file = $("fileInput").files?.[0];
-  const title = $("titleInput").value;
-
-  if(!slug || !file) return;
-
-  await uploadImage(slug, file, title);
-  alert("Subido");
-};
-
-$("btnLoadGallery").onclick = async ()=>{
-  const slug = $("expoSelectGal").value;
-  const imgs = await listExpoImages(slug);
-
-  $("galleryGrid").innerHTML = imgs.map(x=>{
-    const file = x.path.split("/").pop();
-    return `
-      <div class="imgCard">
-        <img src="${x.url}"/>
-        <div class="meta">${file}</div>
+        <div class="status">
+          <div id="dot" class="dot"></div>
+          <div>
+            <div class="stTitle" id="stTitle">Conectando…</div>
+            <div class="stSub" id="stSub">Chequeando Storage</div>
+          </div>
+        </div>
       </div>
-    `;
-  }).join("");
-};
 
-$("tabUpload").onclick = ()=>{
-  $("panelUpload").style.display="";
-  $("panelGallery").style.display="none";
-};
+      <div class="tabs">
+        <button class="btn primary" id="tabExpos">📁 Expos</button>
+        <button class="btn" id="tabUpload">⬆️ Subir dibujo</button>
+        <button class="btn" id="tabGallery">🖼️ Galería</button>
+      </div>
 
-$("tabGallery").onclick = ()=>{
-  $("panelUpload").style.display="none";
-  $("panelGallery").style.display="";
-};
-</script>
+      <div class="content">
+        <div class="muted" style="margin:2px 0 12px">
+          Esto usa solo <b>Storage</b> (sin DB y sin librerías externas). Menos magia, más funciona.
+        </div>
 
+        <!-- EXPO -->
+        <section id="panelExpos">
+          <label>Nombre de la expo</label>
+          <input id="expoName" placeholder="Ej: Primavera 2026, Dinosaurios, etc."/>
+
+          <label>Slug (se autogenera)</label>
+          <input id="expoSlug" placeholder="ej: primavera-2026" disabled/>
+
+          <div class="btnRow" style="margin-top:12px">
+            <button class="btn primary small" id="btnCreateExpo">Crear expo</button>
+            <button class="btn ghost small" id="btnRefreshExpos">Actualizar lista</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <label>Expo seleccionada</label>
+          <select id="expoSelect">
+            <option value="">— Elegí una expo —</option>
+          </select>
+
+          <label>Link de la expo (para compartir)</label>
+          <input id="shareLink" placeholder="Se completa al elegir una expo" readonly/>
+          <div class="btnRow" style="margin-top:10px">
+            <button class="btn small" id="btnCopyLink">Copiar link</button>
+          </div>
+        </section>
+
+        <!-- UPLOAD -->
+        <section id="panelUpload" style="display:none">
+          <div class="muted" style="margin-bottom:12px">
+            Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda en la expo seleccionada.
+          </div>
+
+          <label>Expo</label>
+          <select id="expoSelectUp">
+            <option value="">— Elegí una expo —</option>
+          </select>
+
+          <label>Archivo (foto del dibujo)</label>
+          <input id="fileInput" type="file" accept="image/*"/>
+
+          <label>Título (opcional)</label>
+          <input id="titleInput" placeholder="Ej: Gatito, Arcoiris, etc."/>
+
+          <div class="btnRow" style="margin-top:12px">
+            <button class="btn primary" id="btnUpload">Subir</button>
+            <button class="btn" id="btnToGallery">Ver galería</button>
+          </div>
+        </section>
+
+        <!-- GALLERY -->
+        <section id="panelGallery" style="display:none">
+          <div class="muted">Elegí una expo y te muestro los dibujos subidos.</div>
+
+          <label>Expo</label>
+          <select id="expoSelectGal">
+            <option value="">— Elegí una expo —</option>
+          </select>
+
+          <div class="btnRow" style="margin-top:12px">
+            <button class="btn primary" id="btnLoadGallery">Cargar galería</button>
+          </div>
+
+          <div id="galleryGrid" class="gridGallery"></div>
+        </section>
+      </div>
+
+      <div class="footer">
+        <div>Estado: <b id="footState">—</b></div>
+        <div>bucket: <b id="footBucket">—</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <div id="toastMsg">…</div>
+    <button class="x" id="toastX">×</button>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modalBox">
+      <div class="modalHint">Tocá para agrandar</div>
+      <button class="btn small modalClose" id="modalClose">Cerrar</button>
+      <img id="modalImg" class="modalImg" alt="preview"/>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================
+      1) CONFIG (TOCÁ SOLO ESTO)
+    ========================================================== */
+    const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+    const BUCKET = "drawings";
+
+    /* build id para cache-bust (GitHub Pages + Safari) */
+    const BUILD = Date.now();
+
+    /* ==========================================================
+      2) UI helpers
+    ========================================================== */
+    const $ = (id)=>document.getElementById(id);
+
+    const toast = (msg, bad=false)=>{
+      $("toastMsg").textContent = msg;
+      $("toastMsg").style.color = bad ? "var(--bad)" : "var(--text)";
+      $("toast").classList.add("show");
+      clearTimeout(window.__toastT);
+      window.__toastT = setTimeout(()=> $("toast").classList.remove("show"), 2200);
+    };
+    $("toastX").onclick = ()=> $("toast").classList.remove("show");
+
+    const setStatus = (ok, title, sub="")=>{
+      $("dot").className = "dot " + (ok ? "good" : "");
+      $("stTitle").textContent = title;
+      $("stSub").textContent = sub;
+      $("footState").textContent = ok ? "ok" : "error";
+      $("footBucket").textContent = BUCKET;
+    };
+
+    const showPanel = (which)=>{
+      const map = { expos:"panelExpos", upload:"panelUpload", gallery:"panelGallery" };
+      for(const k in map) $(map[k]).style.display = (k===which) ? "" : "none";
+      $("tabExpos").classList.toggle("primary", which==="expos");
+      $("tabUpload").classList.toggle("primary", which==="upload");
+      $("tabGallery").classList.toggle("primary", which==="gallery");
+    };
+    $("tabExpos").onclick = ()=> showPanel("expos");
+    $("tabUpload").onclick = ()=> showPanel("upload");
+    $("tabGallery").onclick = ()=> showPanel("gallery");
+
+    const slugify = (s)=>{
+      return (s||"")
+        .trim().toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+        .replace(/[^a-z0-9]+/g,"-")
+        .replace(/^-+|-+$/g,"")
+        .slice(0,60);
+    };
+
+    const expoShareLink = (slug)=>{
+      const u = new URL(location.href);
+      u.searchParams.set("expo", slug);
+      u.searchParams.set("v", BUILD); // fuerza refresh del link compartido
+      return u.toString();
+    };
+
+    /* URL pública EXACTA estilo "Get URL" */
+    function publicUrl(path){
+      const safe = String(path).split("/").map(encodeURIComponent).join("/");
+      return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${safe}`;
+    }
+
+    /* ==========================================================
+      3) Supabase Storage REST (sin librerías)
+    ========================================================== */
+    const API = `${SUPABASE_URL}/storage/v1`;
+
+    async function sbFetch(path, opts={}){
+      const headers = new Headers(opts.headers || {});
+      headers.set("apikey", SUPABASE_KEY);
+      headers.set("authorization", `Bearer ${SUPABASE_KEY}`);
+      return fetch(`${API}${path}`, { ...opts, headers });
+    }
+
+    async function ensureExpo(slug){
+      const keepPath = `${slug}/.keep`;
+      const res = await sbFetch(`/object/${BUCKET}/${keepPath}`, {
+        method: "POST",
+        headers: { "x-upsert":"true", "Content-Type":"text/plain" },
+        body: "ok"
+      });
+      if(!res.ok){
+        const txt = await res.text();
+        throw new Error("No pude crear expo: " + txt);
+      }
+      return true;
+    }
+
+    async function listAllObjects(prefix=""){
+      const res = await sbFetch(`/object/list/${BUCKET}`, {
+        method:"POST",
+        headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({
+          prefix,
+          limit: 1000,
+          offset: 0,
+          sortBy: { column: "name", order: "asc" }
+        })
+      });
+      if(!res.ok){
+        const txt = await res.text();
+        throw new Error("No pude listar: " + txt);
+      }
+      return res.json();
+    }
+
+    async function listExpos(){
+      const objs = await listAllObjects("");
+      const slugs = new Set();
+      for(const o of objs){
+        const name = o?.name || "";
+        const parts = name.split("/");
+        if(parts[0]) slugs.add(parts[0]);
+      }
+      return Array.from(slugs).sort();
+    }
+
+    async function uploadImage(slug, file, title=""){
+      const stamp = new Date().toISOString().replaceAll(":","-");
+      const base = title ? slugify(title).slice(0,30) : "dibujo";
+      const ext = (file.name || "image").split(".").pop() || "jpg";
+      const filename = `${base}-${stamp}-image.${ext}`;
+      const path = `${slug}/${filename}`;
+
+      const res = await sbFetch(`/object/${BUCKET}/${path}`, {
+        method: "POST",
+        headers: { "x-upsert":"true", "Content-Type": file.type || "application/octet-stream" },
+        body: file
+      });
+
+      const txt = await res.text();
+      if(!res.ok){
+        if(txt.includes("row-level security")) {
+          throw new Error("RLS: no tenés permiso (revisar policies del bucket).");
+        }
+        throw new Error("No subió: " + txt);
+      }
+      return { path, url: publicUrl(path) };
+    }
+
+    async function listExpoImages(slug){
+      const objs = await listAllObjects(`${slug}/`);
+      const imgs = [];
+      for(const o of objs){
+        const name = o?.name || "";
+        if(!name || name.endsWith("/.keep")) continue;
+        if(!(/\.(png|jpg|jpeg|webp|gif)$/i).test(name)) continue;
+        imgs.push({ path:name, url: publicUrl(name) });
+      }
+      imgs.sort((a,b)=> b.path.localeCompare(a.path));
+      return imgs;
+    }
+
+    /* ==========================================================
+      4) App logic
+    ========================================================== */
+    function syncExpoSelects(slugs){
+      const sels = [$("expoSelect"), $("expoSelectUp"), $("expoSelectGal")];
+      for(const sel of sels){
+        const cur = sel.value;
+        sel.innerHTML =
+          `<option value="">— Elegí una expo —</option>` +
+          slugs.map(s=> `<option value="${s}">${s} (${s})</option>`).join("");
+        if(cur && slugs.includes(cur)) sel.value = cur;
+      }
+    }
+
+    async function refreshExpos(){
+      const slugs = await listExpos();
+      syncExpoSelects(slugs);
+      return slugs;
+    }
+
+    function setSelectedExpo(slug){
+      $("expoSelect").value = slug || "";
+      $("expoSelectUp").value = slug || "";
+      $("expoSelectGal").value = slug || "";
+      $("shareLink").value = slug ? expoShareLink(slug) : "";
+    }
+
+    $("expoName").addEventListener("input", ()=>{
+      $("expoSlug").value = slugify($("expoName").value);
+    });
+
+    $("expoSelect").addEventListener("change", ()=>{
+      const slug = $("expoSelect").value;
+      $("shareLink").value = slug ? expoShareLink(slug) : "";
+      $("expoSelectUp").value = slug;
+      $("expoSelectGal").value = slug;
+    });
+
+    $("btnCopyLink").onclick = async ()=>{
+      const v = $("shareLink").value.trim();
+      if(!v) return toast("Elegí una expo primero.", true);
+      try{
+        await navigator.clipboard.writeText(v);
+        toast("Link copiado ✅");
+      }catch{
+        $("shareLink").select();
+        toast("Copialo manual (iOS) 📋");
+      }
+    };
+
+    $("btnCreateExpo").onclick = async ()=>{
+      const name = $("expoName").value.trim();
+      const slug = slugify(name);
+      if(!name || !slug) return toast("Poné un nombre de expo.", true);
+      try{
+        await ensureExpo(slug);
+        await refreshExpos();
+        setSelectedExpo(slug);
+        toast("Expo creada ✅");
+      }catch(e){
+        toast(String(e.message || e), true);
+      }
+    };
+
+    $("btnRefreshExpos").onclick = async ()=>{
+      try{
+        await refreshExpos();
+        toast("Lista actualizada ✅");
+      }catch(e){
+        toast(String(e.message || e), true);
+      }
+    };
+
+    $("btnUpload").onclick = async ()=>{
+      const slug = $("expoSelectUp").value;
+      const file = $("fileInput").files?.[0];
+      const title = $("titleInput").value.trim();
+      if(!slug) return toast("Elegí una expo.", true);
+      if(!file) return toast("Elegí una foto (jpg/png).", true);
+
+      try{
+        await uploadImage(slug, file, title);
+        toast("Subió ✅");
+        $("fileInput").value = "";
+        $("titleInput").value = "";
+      }catch(e){
+        toast(String(e.message || e), true);
+      }
+    };
+
+    $("btnToGallery").onclick = ()=>{
+      const slug = $("expoSelectUp").value;
+      showPanel("gallery");
+      if(slug) $("expoSelectGal").value = slug;
+    };
+
+    function openModal(url){
+      $("modalImg").src = url;
+      $("modal").classList.add("show");
+    }
+    $("modal").addEventListener("click", (e)=>{
+      if(e.target.id==="modal") $("modal").classList.remove("show");
+    });
+    $("modalClose").onclick = ()=> $("modal").classList.remove("show");
+
+    function renderGallery(slug, imgs){
+      const grid = $("galleryGrid");
+      if(!slug){ grid.innerHTML = ""; return; }
+      if(!imgs.length){
+        grid.innerHTML = `<div class="muted" style="grid-column:1/-1;padding:10px 2px">No hay imágenes en esta expo todavía.</div>`;
+        return;
+      }
+
+      grid.innerHTML = imgs.map(x=>{
+        const file = x.path.split("/").pop();
+        return `
+          <div class="imgCard">
+            <div class="tag">Dibujo · ${slug}</div>
+            <img src="${x.url}" alt="${file}" loading="lazy"
+                 onerror="this.style.opacity='.35';" />
+            <div class="meta">${file}</div>
+          </div>
+        `;
+      }).join("");
+
+      grid.querySelectorAll(".imgCard img").forEach(img=>{
+        img.addEventListener("click", ()=> openModal(img.src));
+      });
+    }
+
+    $("btnLoadGallery").onclick = async ()=>{
+      const slug = $("expoSelectGal").value;
+      if(!slug) return toast("Elegí una expo.", true);
+
+      try{
+        const imgs = await listExpoImages(slug);
+        // cache-bust por imagen (Safari no jode más)
+        const bumped = imgs.map(x=>{
+          const sep = x.url.includes("?") ? "&" : "?";
+          return { ...x, url: x.url + sep + "v=" + Date.now() };
+        });
+        renderGallery(slug, bumped);
+        toast("Galería cargada ✅");
+      }catch(e){
+        toast(String(e.message || e), true);
+      }
+    };
+
+    function applyQueryExpo(){
+      const u = new URL(location.href);
+      const slug = (u.searchParams.get("expo") || "").trim();
+      if(slug) setSelectedExpo(slug);
+    }
+
+    /* ==========================================================
+      5) “botón presionado” real en iPhone (touch)
+    ========================================================== */
+    function addPressFX(el){
+      const on = ()=> el.classList.add("is-pressed");
+      const off = ()=> el.classList.remove("is-pressed");
+      el.addEventListener("touchstart", on, {passive:true});
+      el.addEventListener("touchend", off, {passive:true});
+      el.addEventListener("touchcancel", off, {passive:true});
+      el.addEventListener("mouseup", off);
+      el.addEventListener("mouseleave", off);
+    }
+    function initPressFX(){
+      document.querySelectorAll(".btn").forEach(addPressFX);
+    }
+
+    /* init */
+    (async ()=>{
+      try{
+        initPressFX();
+        setStatus(false, "Conectando…", "Chequeando Storage");
+        await refreshExpos();
+        applyQueryExpo();
+        setStatus(true, "Conectado ✅", "");
+      }catch(e){
+        setStatus(false, "Error", "No pude hablar con Storage");
+        toast(String(e.message || e), true);
+      }
+    })();
+  </script>
 </body>
 </html>
