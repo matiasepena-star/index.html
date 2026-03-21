@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
@@ -135,7 +135,6 @@
     font-weight:900;
     letter-spacing:.08em;
     position:relative;
-    cursor:pointer;
   }
   .imgBox img{
     width:100%;
@@ -175,7 +174,6 @@
     border-radius:999px;
     font-weight:1000;
     letter-spacing:.3px;
-    z-index: 10;
   }
 
   .body{ padding: 12px 14px 14px; }
@@ -744,9 +742,15 @@
     { id:"cheese_langost", tab:"rolls", name:"Cheese langostino", pieces:5, price:9500, desc:"Langostino + queso crema.", img:"cheese-langostino.PNG" },
     { id:"salmon_crispy", tab:"rolls", name:"Salmón crispy", pieces:5, price:10000, desc:"Salmón + queso + cebolla crispy.", img:"salmon-crispy.PNG" },
     { id:"tamago", tab:"rolls", name:"Tamago", pieces:5, price:8500, desc:"Huevo + queso + palta.", img:"tamago.PNG" },
-    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Vegetales de estación.", img:"vegetariano.PNG" },
+    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso crema.", img:"vegetariano.PNG" },
 
     // ===== Especiales (x5) =====
+    { id:"rocoto", tab:"especiales", name:"Rocoto", pieces:5, price:11000, desc:"Salmón + queso crema, levemente picante.", img:"rocoto.PNG" },
+    { id:"tamago_especial", tab:"especiales", name:"Tamago", pieces:5, price:11500, desc:"Huevo dulce japonés con salmón y queso crema.", img:"tamago.PNG" },
+    { id:"salmon_crispy_especial", tab:"especiales", name:"Salmón crispy", pieces:5, price:12000, desc:"Salmón + palta, con topping de batata.", img:"salmon-crispy.PNG" },
+    { id:"ebi_langostino_especial", tab:"especiales", name:"Ebi langostino", pieces:5, price:12500, desc:"Langostino rebozado cubierto con salsa Buenos Aires.", img:"ebi-langostino.PNG" },
+    { id:"paradise", tab:"especiales", name:"Paradise", pieces:5, price:12000, desc:"Queso crema cubierto con salmón y topping de batata.", img:"paradise.PNG" },
+    { id:"guacamole_roll", tab:"especiales", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso crema con topping de guacamole.", img:"guacamole.PNG" },
     { id:"japan_flowers", tab:"especiales", name:"Japan flowers", pieces:5, price:12000, desc:"Queso y palta cubierto con salmón.", img:"japan-flowers.PNG" },
     { id:"crazy", tab:"especiales", name:"Crazy", pieces:5, price:12000, desc:"Palta y queso envuelto en salmón.", img:"crazy.PNG" },
 
@@ -1171,7 +1175,7 @@
     for (const [id, qty] of Object.entries(sauceChoices)){
       const it = MENU.find(x=>x.id===id);
       const nm = it ? it.name : (SAUCE_CHOICES.find(x=>x.id===id)?.name || id);
-      sauceChoiceLines.push(`${qty}x ${nm} (sin cargo)`);
+      choiceLines.push(`${qty}x ${nm} (sin cargo)`);
     }
 
     const { totalMoney, totalPieces } = totals();
