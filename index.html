@@ -1,722 +1,1314 @@
-<!doctype html>
+!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Martu-art · Expos + Dibujos</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sushi Stella Maris</title>
 
-  <style>
-    :root{
-      --bg:#0f1115;
-      --card:#141822;
-      --stroke:rgba(255,255,255,.10);
-      --text:#e8ecf6;
-      --muted:rgba(232,236,246,.62);
-      --brand:#7aa2ff;
-      --good:#44d07b;
-      --bad:#ff5b6b;
-      --shadow: 0 18px 50px rgba(0,0,0,.55);
-      --r:18px;
+<style>
+  :root{
+    --bg:#0b0b0c;
+    --panel:#101114;
+    --card:#15161a;
+    --line:#262830;
+    --text:#f3f3f3;
+    --muted:#b7b7b7;
+    --gold:#caa76a;
+    --gold2:#8f6f3f;
+    --shadow: 0 18px 55px rgba(0,0,0,.55);
+    --radius:18px;
+  }
 
-      /* sensación de botón presionado */
-      --press: translateY(1.5px) scale(.985);
-      --pressShadow: 0 10px 24px rgba(0,0,0,.55);
-      --btnShadow: 0 14px 34px rgba(0,0,0,.45);
-    }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 700px at 50% -10%, rgba(202,167,106,.18), transparent 55%),
+      radial-gradient(900px 550px at 20% 20%, rgba(255,255,255,.06), transparent 52%),
+      var(--bg);
+    color:var(--text);
+  }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(900px 520px at 20% -10%, rgba(122,162,255,.18), transparent 60%),
-                  radial-gradient(900px 520px at 80% 110%, rgba(68,208,123,.10), transparent 60%),
-                  var(--bg);
-      color:var(--text);
-      -webkit-font-smoothing: antialiased;
-      -webkit-tap-highlight-color: transparent;
-    }
+  header{
+    position:fixed; top:0; left:0; right:0;
+    z-index:1000;
+    background: rgba(15,16,18,.92);
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    padding:14px 14px 12px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  .brandRow{display:flex; align-items:center; gap:12px;}
+  .logo{
+    width:40px; height:40px; border-radius:14px;
+    display:grid; place-items:center;
+    color:var(--gold);
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.14), transparent 40%),
+      linear-gradient(135deg, rgba(202,167,106,.28), rgba(202,167,106,.08));
+    border:1px solid rgba(202,167,106,.25);
+    user-select:none;
+  }
+  h1{margin:0; font-size:18px; letter-spacing:.2px; font-weight:950;}
 
-    .wrap{max-width:980px;margin:0 auto;padding:14px 12px 84px}
-    .card{
-      background: rgba(20,24,34,.72);
-      border:1px solid var(--stroke);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
-    }
+  /* Tabs: scroll horizontal */
+  .tabs{
+    margin-top:12px;
+    display:flex;
+    gap:10px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;
+    min-width:122px;
+    text-align:center;
+    padding:11px 10px;
+    border-radius:14px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:900;
+    color: rgba(255,255,255,.90);
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.10);
+    user-select:none;
+    transition: transform .08s ease, background .15s ease, border-color .15s ease, filter .15s ease;
+    -webkit-tap-highlight-color: transparent;
 
-    .header{
-      display:flex; align-items:center; gap:12px;
-      padding:16px 16px 10px;
-    }
-    .pill{
-      width:36px;height:60px;border-radius:18px;
-      background: linear-gradient(180deg, rgba(122,162,255,.95), rgba(122,162,255,.25));
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow: 0 10px 26px rgba(0,0,0,.35);
-      flex:0 0 auto;
-    }
-    h1{font-size:40px;line-height:1;margin:0}
-    .sub{color:var(--muted);margin-top:4px}
-    .status{
-      margin-left:auto;
-      display:flex; align-items:center; gap:10px;
-      padding:10px 12px;
-      border:1px solid var(--stroke);
-      border-radius: 999px;
-      background: rgba(255,255,255,.03);
-    }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: var(--bad);
-      box-shadow: 0 0 0 6px rgba(255,91,107,.14);
-    }
-    .dot.good{background:var(--good); box-shadow:0 0 0 6px rgba(68,208,123,.14)}
-    .stTitle{font-weight:700}
-    .stSub{color:var(--muted);font-size:12px;margin-top:2px}
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.22),
+      inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .tab.is-pressed,
+  .tab:active{transform: translateY(3px) scale(.965); filter:brightness(.90);}
+  .tab.active{
+    background: rgba(202,167,106,.16);
+    border-color: rgba(202,167,106,.40);
+    color:#fff;
+  }
 
-    .tabs{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:12px;
-      padding:12px 16px 8px;
-    }
+  .content{
+    max-width:720px;
+    margin:0 auto;
+    padding: 120px 14px 170px;
+  }
 
-    /* botones con feedback */
-    .btn{
-      appearance:none; border:1px solid var(--stroke);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      border-radius: 20px;
-      padding: 14px 14px;
-      font-weight: 800;
-      letter-spacing: .2px;
-      cursor:pointer;
-      user-select:none;
-      box-shadow: var(--btnShadow);
-      transition: transform .06s ease, filter .12s ease, box-shadow .12s ease, background .12s ease;
-      display:flex;align-items:center;justify-content:center;gap:10px;
-    }
-    .btn.primary{
-      background: rgba(122,162,255,.14);
-      border-color: rgba(122,162,255,.35);
-    }
-    .btn:active{
-      transform: var(--press);
-      box-shadow: var(--pressShadow);
-      filter: brightness(1.08);
-    }
-    .btn:focus{outline:none}
-    .btn.small{padding:12px 14px;border-radius:16px;font-weight:800}
-    .btn.ghost{background: rgba(255,255,255,.02)}
-    .btnRow{display:flex;gap:12px;flex-wrap:wrap}
+  .sectionTitle{
+    margin: 10px 2px 10px;
+    color: var(--gold);
+    letter-spacing:.35em;
+    font-weight:950;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
 
-    .content{padding:12px 16px 16px}
-    .muted{color:var(--muted)}
-    .hr{height:1px;background:var(--stroke);margin:14px 0}
+  .grid{
+    display:grid;
+    gap:14px;
+    grid-template-columns: 1fr;
+  }
 
-    label{display:block;font-weight:800;margin:12px 0 8px}
-    input, select{
-      width:100%;
-      padding:14px 14px;
-      background: rgba(0,0,0,.22);
-      border:1px solid var(--stroke);
-      color: var(--text);
-      border-radius: 18px;
-      font-size: 16px;
-      outline:none;
-    }
-    input::placeholder{color:rgba(232,236,246,.38)}
-    select{appearance:none}
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    position:relative;
+  }
 
-    .gridGallery{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:14px;
-      margin-top:14px;
-    }
-    @media (min-width:720px){
-      .gridGallery{grid-template-columns: repeat(3, minmax(0,1fr));}
-    }
+  .imgBox{
+    height: 250px;
+    background:
+      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.14), transparent 60%),
+      radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
+      rgba(0,0,0,.30);
+    border-bottom:1px solid rgba(255,255,255,.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: rgba(255,255,255,.35);
+    font-weight:900;
+    letter-spacing:.08em;
+    position:relative;
+    cursor:pointer;
+  }
+  .imgBox img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    background: rgba(0,0,0,.55);
+  }
 
-    .imgCard{
-      border:1px solid var(--stroke);
-      border-radius: 22px;
-      background: rgba(0,0,0,.22);
-      overflow:hidden;
-      position:relative;
-      min-height: 170px;
-    }
-    .imgCard .tag{
-      position:absolute; top:10px; left:10px;
-      padding:8px 10px;
-      border-radius: 999px;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.38);
-      font-weight:900;
-      font-size:12px;
-    }
-    .imgCard img{
-      width:100%;
-      height: 220px;
-      object-fit: cover;
-      display:block;
-      background: rgba(255,255,255,.02);
-    }
-    .imgCard .meta{
-      padding:10px 12px 12px;
-      color: var(--muted);
-      font-size: 12px;
-      word-break: break-word;
-    }
+  .tapHint{
+    position:absolute;
+    top:10px; left:10px;
+    font-size:12px;
+    font-weight:950;
+    letter-spacing:.2px;
+    padding:7px 10px;
+    border-radius:999px;
+    color:#fff;
+    background: rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.12);
+    user-select:none;
+    pointer-events:none;
+  }
 
-    .footer{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      padding:12px 16px;
-      border-top:1px solid var(--stroke);
-      color: var(--muted);
-      font-weight:700;
-    }
+  /* Combos y Salsas: imagen más baja */
+  .card[data-tab="combos"] .imgBox,
+  .card[data-tab="extras"] .imgBox{
+    height: 200px;
+  }
 
-    /* toast */
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:18px;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,.72);
-      border:1px solid rgba(255,255,255,.14);
-      color: var(--text);
-      padding: 12px 14px;
-      border-radius: 16px;
-      box-shadow: 0 16px 44px rgba(0,0,0,.55);
-      max-width:min(520px, calc(100vw - 24px));
-      display:none;
-      z-index:9999;
-    }
-    .toast.show{display:flex;align-items:center;gap:12px}
-    .toast .x{
-      margin-left:auto;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius: 12px;
-      padding:6px 10px;
-      font-weight:900;
-      cursor:pointer;
-    }
+  .priceTag{
+    position:absolute;
+    top:12px; right:12px;
+    background: rgba(0,0,0,.60);
+    border:1px solid rgba(255,255,255,.12);
+    padding:7px 12px;
+    border-radius:999px;
+    font-weight:1000;
+    letter-spacing:.3px;
+    z-index: 10;
+  }
 
-    /* modal */
-    .modal{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.72);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 14px;
-      z-index: 9998;
-    }
-    .modal.show{display:flex}
-    .modalBox{
-      width:min(980px, 100%);
-      background: rgba(20,24,34,.84);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius: 26px;
-      overflow:hidden;
-      box-shadow: 0 22px 70px rgba(0,0,0,.65);
-      position:relative;
-    }
-    .modalHint{
-      position:absolute; top:10px; left:10px;
-      padding:8px 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.12);
-      font-weight: 900;
-      font-size: 12px;
-      z-index:2;
-    }
-    .modalClose{
-      position:absolute; top:10px; right:10px;
-      z-index:2;
-    }
-    .modalImg{
-      width:100%;
-      height: min(75vh, 700px);
-      object-fit: contain;
-      background: rgba(0,0,0,.30);
-      display:block;
-    }
-  </style>
+  .body{ padding: 12px 14px 14px; }
+  .name{margin:0; font-size:18px; font-weight:1000; line-height:1.15;}
+  .meta{margin-top:6px; font-size:13px; color:var(--muted); line-height:1.25;}
+  .meta b{color: rgba(255,255,255,.92); font-weight:950;}
+  .list{
+    margin:10px 0 0;
+    padding-left: 18px;
+    color: rgba(255,255,255,.78);
+    font-size: 13px;
+    line-height:1.35;
+  }
+
+  .bottomRow{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+
+  .qty{
+    display:flex; align-items:center; gap:10px;
+    font-size:13px;
+    color: var(--muted);
+    font-weight:900;
+  }
+  .qtyPill{
+    padding:7px 11px;
+    border-radius:999px;
+    border:1px solid rgba(202,167,106,.28);
+    background: rgba(202,167,106,.10);
+    color:#fff;
+    min-width:52px;
+    text-align:center;
+    font-weight:1000;
+  }
+
+  .btns{display:flex; gap:10px;}
+  .btn{
+    border:none;
+    cursor:pointer;
+    user-select:none;
+    font-weight:1000;
+    padding:12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff;
+    transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
+    -webkit-tap-highlight-color: transparent;
+
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .btn.is-pressed,
+  .btn:active{
+    transform: translateY(3px) scale(.965);
+    filter: brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+
+  .btn.add{
+    background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
+    border:1px solid rgba(202,167,106,.55);
+    color:#1a140b;
+    box-shadow:
+      0 12px 26px rgba(202,167,106,.18),
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.20);
+  }
+  .btn.minus{ background: rgba(255,255,255,.04); }
+
+  /* Footer fijo */
+  .footer{
+    position:fixed; left:0; right:0; bottom:0;
+    z-index:1000;
+    background: rgba(10,10,12,.88);
+    backdrop-filter: blur(12px);
+    border-top:1px solid rgba(255,255,255,.10);
+    padding:10px 12px;
+  }
+  .footerInner{
+    max-width:720px;
+    margin:0 auto;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+
+  .totals{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:10px 12px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.10);
+    width: 100%;
+  }
+  .totals .big{font-weight:1000; font-size:16px;}
+  .totals .small{color:var(--muted); font-weight:900; font-size:13px;}
+  .totals .extrasLine{
+    margin-top:2px;
+    font-size:13px;
+    font-weight:900;
+    color: rgba(255,255,255,.80);
+  }
+  .totals .extrasLine b{ color: var(--gold); }
+
+  .footerBtns{
+    width:100%;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+
+  .btnGhost{
+    flex:0 0 auto;
+    padding:12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.10);
+    color:#fff;
+    font-weight:1000;
+    cursor:pointer;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .btnGhost.is-pressed,
+  .btnGhost:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+
+  .btnPreview{
+    flex:1;
+    padding:12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff;
+    font-weight:1100;
+    cursor:pointer;
+    text-align:center;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .btnPreview.is-pressed,
+  .btnPreview:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.45),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+
+  .btnWA{
+    flex:1.25;
+    padding:12px 16px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
+    border:1px solid rgba(202,167,106,.55);
+    color:#1a140b;
+    font-weight:1100;
+    cursor:pointer;
+    text-align:center;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 12px 26px rgba(202,167,106,.18),
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.20);
+  }
+  .btnWA.is-pressed,
+  .btnWA:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.45),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+
+  /* ===== Modales ===== */
+  .modal{
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background: rgba(0,0,0,.72);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 16px;
+  }
+  .modal.show{display:flex;}
+  .modalCard{
+    width:100%;
+    max-width:720px;
+    background: rgba(15,16,18,.96);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius: 18px;
+    box-shadow: 0 28px 90px rgba(0,0,0,.65);
+    overflow:hidden;
+  }
+  .modalTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px;
+    border-bottom:1px solid rgba(255,255,255,.10);
+  }
+  .modalTop .ttl{
+    font-weight:950;
+    letter-spacing:.2px;
+    font-size:14px;
+    color:#fff;
+  }
+  .closeBtn{
+    width:40px; height:40px;
+    border-radius: 12px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:950;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .closeBtn:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+
+  /* modal imagen */
+  .modalBodyImg{
+    padding: 0;
+    background: rgba(0,0,0,.55);
+  }
+  .modalBodyImg img{
+    width:100%;
+    max-height: 78vh;
+    object-fit: contain;
+    display:block;
+    background: rgba(0,0,0,.55);
+  }
+
+  /* modal salsas */
+  .modalBody{
+    padding: 14px 14px 12px;
+  }
+  .helper{
+    color: rgba(255,255,255,.78);
+    font-size:13px;
+    font-weight:850;
+    margin: 0 0 10px;
+  }
+  .chips{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .chip{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px;
+    border-radius: 16px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    cursor:pointer;
+    user-select:none;
+  }
+  .chip.is-pressed,
+  .chip:active{
+    transform: translateY(3px) scale(.985);
+    filter:brightness(.93);
+  }
+  .chip .left{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .chip .nm{
+    font-weight:950;
+    font-size:14px;
+  }
+  .chip .pr{
+    font-size:12.5px;
+    color: rgba(255,255,255,.70);
+    font-weight:850;
+  }
+  .chip input{
+    width:20px; height:20px;
+    accent-color: var(--gold);
+  }
+  .modalBottom{
+    padding: 12px 14px 14px;
+    border-top:1px solid rgba(255,255,255,.10);
+    display:flex;
+    gap:10px;
+  }
+  .btnModal{
+    flex:1;
+    padding:12px 14px;
+    border-radius: 14px;
+    font-weight:1100;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color:#fff;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .btnModal:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+  .btnModal.primary{
+    background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
+    border:1px solid rgba(202,167,106,.55);
+    color:#1a140b;
+    box-shadow:
+      0 12px 26px rgba(202,167,106,.18),
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.20);
+  }
+
+  /* ===== Modal pedido (preview) ===== */
+  .orderBody{
+    padding: 14px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    max-height: 70vh;
+    overflow:auto;
+  }
+  .box{
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    border-radius: 18px;
+    padding:14px;
+  }
+  .box h3{
+    margin:0 0 10px;
+    font-size:18px;
+    font-weight:1000;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .box ul{
+    margin:0;
+    padding-left: 18px;
+    color: rgba(255,255,255,.82);
+    line-height:1.35;
+  }
+  .box li{margin:6px 0;}
+  .bigLine{
+    font-size:20px;
+    font-weight:1100;
+    margin-top:6px;
+  }
+  .mutedLine{
+    color: var(--muted);
+    font-weight:900;
+    margin-top:6px;
+  }
+  .orderBtns{
+    display:flex;
+    gap:10px;
+    padding: 12px 14px 14px;
+    border-top:1px solid rgba(255,255,255,.10);
+  }
+</style>
 </head>
 
 <body>
+<header>
   <div class="wrap">
-    <div class="card">
-      <div class="header">
-        <div class="pill"></div>
-        <div>
-          <h1>Martu-art</h1>
-          <div class="sub">Expos + Dibujos (GitHub Pages + Supabase Storage)</div>
-        </div>
+    <div class="brandRow">
+      <div class="logo">✦</div>
+      <div><h1>Sushi Stella Maris</h1></div>
+    </div>
 
-        <div class="status">
-          <div id="dot" class="dot"></div>
-          <div>
-            <div class="stTitle" id="stTitle">Conectando…</div>
-            <div class="stSub" id="stSub">Chequeando Storage</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tabs">
-        <button class="btn primary" id="tabExpos">📁 Expos</button>
-        <button class="btn" id="tabUpload">⬆️ Subir dibujo</button>
-        <button class="btn" id="tabGallery">🖼️ Galería</button>
-      </div>
-
-      <div class="content">
-        <div class="muted" style="margin:2px 0 12px">
-          Esto usa solo <b>Storage</b> (sin DB y sin librerías externas). Menos magia, más funciona.
-        </div>
-
-        <!-- EXPO -->
-        <section id="panelExpos">
-          <label>Nombre de la expo</label>
-          <input id="expoName" placeholder="Ej: Primavera 2026, Dinosaurios, etc."/>
-
-          <label>Slug (se autogenera)</label>
-          <input id="expoSlug" placeholder="ej: primavera-2026" disabled/>
-
-          <div class="btnRow" style="margin-top:12px">
-            <button class="btn primary small" id="btnCreateExpo">Crear expo</button>
-            <button class="btn ghost small" id="btnRefreshExpos">Actualizar lista</button>
-          </div>
-
-          <div class="hr"></div>
-
-          <label>Expo seleccionada</label>
-          <select id="expoSelect">
-            <option value="">— Elegí una expo —</option>
-          </select>
-
-          <label>Link de la expo (para compartir)</label>
-          <input id="shareLink" placeholder="Se completa al elegir una expo" readonly/>
-          <div class="btnRow" style="margin-top:10px">
-            <button class="btn small" id="btnCopyLink">Copiar link</button>
-          </div>
-        </section>
-
-        <!-- UPLOAD -->
-        <section id="panelUpload" style="display:none">
-          <div class="muted" style="margin-bottom:12px">
-            Subí una foto del dibujo (jpg/png). Se guarda en el bucket y queda en la expo seleccionada.
-          </div>
-
-          <label>Expo</label>
-          <select id="expoSelectUp">
-            <option value="">— Elegí una expo —</option>
-          </select>
-
-          <label>Archivo (foto del dibujo)</label>
-          <input id="fileInput" type="file" accept="image/*"/>
-
-          <label>Título (opcional)</label>
-          <input id="titleInput" placeholder="Ej: Gatito, Arcoiris, etc."/>
-
-          <div class="btnRow" style="margin-top:12px">
-            <button class="btn primary" id="btnUpload">Subir</button>
-            <button class="btn" id="btnToGallery">Ver galería</button>
-          </div>
-        </section>
-
-        <!-- GALLERY -->
-        <section id="panelGallery" style="display:none">
-          <div class="muted">Elegí una expo y te muestro los dibujos subidos.</div>
-
-          <label>Expo</label>
-          <select id="expoSelectGal">
-            <option value="">— Elegí una expo —</option>
-          </select>
-
-          <div class="btnRow" style="margin-top:12px">
-            <button class="btn primary" id="btnLoadGallery">Cargar galería</button>
-          </div>
-
-          <div id="galleryGrid" class="gridGallery"></div>
-        </section>
-      </div>
-
-      <div class="footer">
-        <div>Estado: <b id="footState">—</b></div>
-        <div>bucket: <b id="footBucket">—</b></div>
-      </div>
+    <div class="tabs" id="tabs">
+      <div class="tab active" onclick="setTab('combos', this)">Combos</div>
+      <div class="tab" onclick="setTab('rolls', this)">Rolls</div>
+      <div class="tab" onclick="setTab('especiales', this)">Especiales</div>
+      <div class="tab" onclick="setTab('makis', this)">Makis</div>
+      <div class="tab" onclick="setTab('nigiris', this)">Nigiris</div>
+      <div class="tab" onclick="setTab('sashimis', this)">Sashimis</div>
+      <div class="tab" onclick="setTab('extras', this)">Salsas y adicionales</div>
     </div>
   </div>
+</header>
 
-  <div class="toast" id="toast">
-    <div id="toastMsg">…</div>
-    <button class="x" id="toastX">×</button>
-  </div>
+<div class="content" id="content"></div>
 
-  <div class="modal" id="modal">
-    <div class="modalBox">
-      <div class="modalHint">Tocá para agrandar</div>
-      <button class="btn small modalClose" id="modalClose">Cerrar</button>
-      <img id="modalImg" class="modalImg" alt="preview"/>
+<div class="footer">
+  <div class="footerInner">
+    <div class="totals">
+      <div class="big" id="totalMoney">Total: $0</div>
+      <div class="small" id="totalPieces">Total de piezas: 0</div>
+      <div class="extrasLine" id="extrasLine"><b>Salsas y adicionales:</b> 0</div>
+    </div>
+    <div class="footerBtns">
+      <button class="btnGhost" id="btnClear">Vaciar</button>
+      <button class="btnPreview" id="btnPreview">Ver pedido</button>
+      <button class="btnWA" id="btnWA">Confirmar por WhatsApp</button>
     </div>
   </div>
+</div>
 
-  <script>
-    /* ==========================================================
-      1) CONFIG (TOCÁ SOLO ESTO)
-    ========================================================== */
+<!-- Modal Imagen -->
+<div class="modal" id="imgModal">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="ttl" id="imgModalTitle">Imagen</div>
+      <button class="closeBtn" onclick="closeImgModal()">×</button>
+    </div>
+    <div class="modalBodyImg">
+      <img id="imgModalEl" src="" alt="Imagen" />
+    </div>
+  </div>
+</div>
 
-    // ✅ Tu Project URL
-    const SUPABASE_URL = "https://vfvbssenzfbrnkydddxo.supabase.co";
+<!-- Modal Elección de Salsas para combos -->
+<div class="modal" id="sauceModal">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="ttl" id="sauceModalTitle">Elegí tus salsas</div>
+      <button class="closeBtn" onclick="closeSauceModal()">×</button>
+    </div>
+    <div class="modalBody">
+      <p class="helper" id="sauceHelper">Elegí 1 salsa (sin cargo).</p>
+      <div class="chips" id="sauceList"></div>
+    </div>
+    <div class="modalBottom">
+      <button class="btnModal" onclick="closeSauceModal()">Cancelar</button>
+      <button class="btnModal primary" onclick="confirmSauces()">Confirmar</button>
+    </div>
+  </div>
+</div>
 
-    // ✅ Tu publishable key
-    const SUPABASE_KEY = "sb_publishable__3wLx8HB6dbL49gWL9Eyfw_kJPFh6kS";
+<!-- Modal Pedido (preview) -->
+<div class="modal" id="orderModal">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="ttl">Tu pedido</div>
+      <button class="closeBtn" onclick="closeOrderModal()">×</button>
+    </div>
 
-    // ✅ Bucket
-    const BUCKET = "drawings";
+    <div class="orderBody">
+      <div class="box">
+        <h3>🍣 Sushi</h3>
+        <ul id="orderSushiList"><li>—</li></ul>
+      </div>
 
-    /* ==========================================================
-      2) UI helpers
-    ========================================================== */
-    const $ = (id)=>document.getElementById(id);
+      <div class="box">
+        <h3>🥣 Salsas y adicionales</h3>
+        <div class="mutedLine" id="orderIncludedLine">Salsa incluida (sin cargo): —</div>
+        <ul id="orderSauceList"><li>—</li></ul>
+      </div>
 
-    const toast = (msg, bad=false)=>{
-      $("toastMsg").textContent = msg;
-      $("toastMsg").style.color = bad ? "var(--bad)" : "var(--text)";
-      $("toast").classList.add("show");
-      clearTimeout(window.__toastT);
-      window.__toastT = setTimeout(()=> $("toast").classList.remove("show"), 2200);
-    };
-    $("toastX").onclick = ()=> $("toast").classList.remove("show");
+      <div class="box">
+        <h3>Totales</h3>
+        <div class="bigLine" id="orderTotalMoney">Total: $0</div>
+        <div class="mutedLine" id="orderTotalPieces">Total piezas: 0</div>
+        <div class="mutedLine" id="orderTotalSauces">Total salsas: 0</div>
+      </div>
+    </div>
 
-    const setStatus = (ok, title, sub="")=>{
-      $("dot").className = "dot " + (ok ? "good" : "");
-      $("stTitle").textContent = title;
-      $("stSub").textContent = sub;
-      $("footState").textContent = ok ? "ok" : "error";
-      $("footBucket").textContent = BUCKET;
-    };
+    <div class="orderBtns">
+      <button class="btnModal" onclick="closeOrderModal()">Cerrar</button>
+      <button class="btnModal primary" onclick="sendWA()">Confirmar por WhatsApp</button>
+    </div>
+  </div>
+</div>
 
-    const showPanel = (which)=>{
-      const map = { expos:"panelExpos", upload:"panelUpload", gallery:"panelGallery" };
-      for(const k in map) $(map[k]).style.display = (k===which) ? "" : "none";
-      $("tabExpos").classList.toggle("primary", which==="expos");
-      $("tabUpload").classList.toggle("primary", which==="upload");
-      $("tabGallery").classList.toggle("primary", which==="gallery");
-    };
-    $("tabExpos").onclick = ()=> showPanel("expos");
-    $("tabUpload").onclick = ()=> showPanel("upload");
-    $("tabGallery").onclick = ()=> showPanel("gallery");
+<script>
+  const WA = "5491164194866";
 
-    const slugify = (s)=>{
-      return (s||"")
-        .trim().toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-        .replace(/[^a-z0-9]+/g,"-")
-        .replace(/^-+|-+$/g,"")
-        .slice(0,60);
-    };
+  const fmtMoney = (n) => {
+    const x = Math.round(Number(n)||0);
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
 
-    const expoShareLink = (slug)=>{
-      const u = new URL(location.href);
-      u.searchParams.set("expo", slug);
-      return u.toString();
-    };
+  let activeTab = "combos";
 
-    // ✅ FIX: arma URL pública sin romper "/" (iOS friendly)
-    function publicUrl(path){
-      const safe = String(path)
-        .split("/")
-        .map(encodeURIComponent)
-        .join("/");
-      return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${safe}`;
-    }
+  // Carrito SOLO para items con precio (combos, piezas, extras pagas)
+  const cart = {}; // id -> qty
 
-    /* ==========================================================
-      3) Supabase Storage REST (sin librerías)
-    ========================================================== */
-    const API = `${SUPABASE_URL}/storage/v1`;
+  // Salsas a elección (sin cargo) elegidas en modal
+  const sauceChoices = {}; // id -> qty (sin cargo)
 
-    async function sbFetch(path, opts={}){
-      const headers = new Headers(opts.headers || {});
-      headers.set("apikey", SUPABASE_KEY);
-      // publishable key también va como bearer (para list/upload cuando hay policies)
-      headers.set("authorization", `Bearer ${SUPABASE_KEY}`);
-      return fetch(`${API}${path}`, { ...opts, headers });
-    }
+  // ===== Menú =====
+  const MENU = [
+    // ===== Combos (NOMBRES + FOTOS) =====
+    { id:"combo10", tab:"combos", name:"Osaka", pieces:10, price:16000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"osaka.PNG",
+      chooseSauces:0, fixedSoja:1
+    },
+    { id:"combo15", tab:"combos", name:"Sapporo", pieces:15, price:22000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"sapporo.PNG",
+      chooseSauces:0, fixedSoja:1
+    },
+    { id:"combo20", tab:"combos", name:"Tokio", pieces:20, price:30000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese langostino"], img:"tokio.PNG",
+      chooseSauces:0, fixedSoja:1
+    },
+    { id:"combo30", tab:"combos", name:"Hiroshima", pieces:30, price:45000,
+      includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
+      composition:["5 Avocado","5 Maki de atún","5 California","5 Vegetariano","5 Buenos Aires","5 New York"], img:"hiroshima.PNG",
+      chooseSauces:1, fixedSoja:1
+    },
+    { id:"combo40", tab:"combos", name:"Yokohama", pieces:40, price:55000,
+      includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
+      composition:["10 Philadelphia","10 Maki de salmón","10 Nigiris de salmón","10 New York"], img:"yokohama.PNG",
+      chooseSauces:1, fixedSoja:2
+    },
+    { id:"combo50", tab:"combos", name:"Imperial", pieces:50, price:70000,
+      includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
+      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"imperial.PNG",
+      chooseSauces:2, fixedSoja:2
+    },
 
-    // crea una "carpeta" (sube .keep) para que exista el slug
-    async function ensureExpo(slug){
-      const keepPath = `${slug}/.keep`;
-      const res = await sbFetch(`/object/${BUCKET}/${keepPath}`, {
-        method: "POST",
-        headers: { "x-upsert":"true", "Content-Type":"text/plain" },
-        body: "ok"
-      });
-      if(!res.ok){
-        const txt = await res.text();
-        throw new Error("No pude crear expo: " + txt);
-      }
-      return true;
-    }
+    // ===== Rolls (x5) =====
+    { id:"avocado", tab:"rolls", name:"Avocado", pieces:5, price:9000, desc:"Salmón y queso envuelto en palta.", img:"avocado.PNG" },
+    { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
+    { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"Salmón + palta.", img:"new-york.PNG" },
+    { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"Kani kama + palta.", img:"california.PNG" },
+    { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:10000, desc:"Salmón + palta + queso crema.", img:"alaska.PNG" },
+    { id:"alaska_ahumado", tab:"rolls", name:"Alaska ahumado", pieces:5, price:10500, desc:"Salmón ahumado + palta + queso crema.", img:"alaska-ahumado.PNG" },
+    { id:"buenosaires", tab:"rolls", name:"Buenos Aires", pieces:5, price:9000, desc:"Salmón + queso + sésamo.", img:"buenos-aires.PNG" },
+    { id:"ebi_langost", tab:"rolls", name:"Ebi langostino", pieces:5, price:9500, desc:"Langostino + queso + palta.", img:"ebi-langostino.PNG" },
+    { id:"cheese_langost", tab:"rolls", name:"Cheese langostino", pieces:5, price:9500, desc:"Langostino + queso crema.", img:"cheese-langostino.PNG" },
+    { id:"salmon_crispy", tab:"rolls", name:"Salmón crispy", pieces:5, price:10000, desc:"Salmón + queso + cebolla crispy.", img:"salmon-crispy.PNG" },
+    { id:"tamago", tab:"rolls", name:"Tamago", pieces:5, price:8500, desc:"Huevo + queso + palta.", img:"tamago.PNG" },
+    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Vegetales de estación.", img:"vegetariano.PNG" },
 
-    async function listAllObjects(prefix=""){
-      // endpoint: /object/list/{bucket}
-      const res = await sbFetch(`/object/list/${BUCKET}`, {
-        method:"POST",
-        headers: { "Content-Type":"application/json" },
-        body: JSON.stringify({
-          prefix,
-          limit: 1000,
-          offset: 0,
-          sortBy: { column: "name", order: "asc" }
-        })
-      });
-      if(!res.ok){
-        const txt = await res.text();
-        throw new Error("No pude listar: " + txt);
-      }
-      return res.json();
-    }
+    // ===== Especiales (x5) =====
+    { id:"japan_flowers", tab:"especiales", name:"Japan flowers", pieces:5, price:12000, desc:"Queso y palta cubierto con salmón.", img:"japan-flowers.PNG" },
+    { id:"crazy", tab:"especiales", name:"Crazy", pieces:5, price:12000, desc:"Palta y queso envuelto en salmón.", img:"crazy.PNG" },
 
-    async function listExpos(){
-      const objs = await listAllObjects("");
-      const slugs = new Set();
-      for(const o of objs){
-        const name = o?.name || "";
-        const parts = name.split("/");
-        if(parts[0]) slugs.add(parts[0]);
-      }
-      return Array.from(slugs).sort();
-    }
+    // ===== Makis (x5) =====
+    { id:"maki_salmon", tab:"makis", name:"Maki de salmón", pieces:5, price:8500, desc:"Salmón envuelto en arroz y alga.", img:"maki-de-salmon.PNG" },
+    { id:"maki_atun", tab:"makis", name:"Maki de atún", pieces:5, price:8500, desc:"Atún envuelto en arroz y alga.", img:"maki-de-atun.PNG" },
+    { id:"maki_salmon_ahum", tab:"makis", name:"Maki de salmón ahumado", pieces:5, price:9000, desc:"Salmón ahumado envuelto en arroz y alga.", img:"maki-de-salmon-ahumado.PNG" },
+    { id:"maki_veggie", tab:"makis", name:"Maki veggie", pieces:5, price:7500, desc:"Vegetales envueltos en arroz y alga.", img:"maki-veggie.PNG" },
 
-    async function uploadImage(slug, file, title=""){
-      const stamp = new Date().toISOString().replaceAll(":","-");
-      const base = title ? slugify(title).slice(0,30) : "dibujo";
-      const safeName = (file.name || "image").split(".").pop() || "jpg";
-      const filename = `${base}-${stamp}-image.${safeName}`;
-      const path = `${slug}/${filename}`;
+    // ===== Nigiris (x5) =====
+    { id:"nigiri_salmon", tab:"nigiris", name:"Nigiri de salmón", pieces:5, price:9500, desc:"Salmón sobre arroz de sushi.", img:"nigiri-de-salmon.PNG" },
+    { id:"nigiri_salmon_ahum", tab:"nigiris", name:"Nigiri de salmón ahumado", pieces:5, price:9800, desc:"Salmón ahumado sobre arroz de sushi.", img:"nigiri-de-salmon-ahumado.PNG" },
+    { id:"keki", tab:"nigiris", name:"Keki", pieces:5, price:11000, desc:"Salmón sobre arroz de sushi, decorado con palta y mango.", img:"keki.PNG" },
 
-      const res = await sbFetch(`/object/${BUCKET}/${path}`, {
-        method: "POST",
-        headers: { "x-upsert":"true", "Content-Type": file.type || "application/octet-stream" },
-        body: file
-      });
+    // ===== Sashimis (x5) =====
+    { id:"sashimi_salmon", tab:"sashimis", name:"Sashimi de salmón", pieces:5, price:12000, desc:"Cortes de salmón fresco.", img:"sashimi-de-salmon.PNG" },
+    { id:"sashimi_salmon_flam", tab:"sashimis", name:"Sashimi de salmón flameado", pieces:5, price:13000, desc:"Cortes de salmón con toque flameado.", img:"sashimi-de-salmon-flameado.PNG" },
 
-      const txt = await res.text();
-      if(!res.ok){
-        if(txt.includes("row-level security")) {
-          throw new Error("RLS: no tenés permiso (revisar policies del bucket).");
+    // ===== Salsas y adicionales (x1) =====
+    { id:"soja", tab:"extras", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"salsa-de-soja.PNG" },
+    { id:"salsa_ba", tab:"extras", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"salsa-buenos-aires.PNG" },
+    { id:"mostaza_miel", tab:"extras", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"salsa-de-mostaza-y-miel.PNG" },
+    { id:"maracuya", tab:"extras", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"salsa-de-maracuya.PNG" },
+    { id:"guacamole_extra", tab:"extras", name:"Guacamole (adicional)", pieces:0, price:850, desc:"Unidad.", img:"salsa-guacamole.PNG" },
+    { id:"criolla", tab:"extras", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"criolla.PNG" },
+    { id:"jengibre", tab:"extras", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"jengibre.PNG" },
+    { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"pepino.PNG" }
+  ];
+
+  // ===== Salsas a elección (SOLO estas 4) =====
+  const SAUCE_CHOICES = [
+    { id:"salsa_ba", name:"Salsa Buenos Aires" },
+    { id:"maracuya", name:"Salsa maracuyá" },
+    { id:"mostaza_miel", name:"Salsa mostaza y miel" },
+    { id:"soja", name:"Salsa de soja" }
+  ];
+
+  const getQty = (id) => cart[id] || 0;
+
+  function haptic() {
+    try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
+  }
+
+  function bindPressFeedback(){
+    const pressables = document.querySelectorAll("button, .tab, .chip");
+    pressables.forEach(el=>{
+      el.addEventListener("pointerdown", ()=> el.classList.add("is-pressed"));
+      const off = ()=> el.classList.remove("is-pressed");
+      el.addEventListener("pointerup", off);
+      el.addEventListener("pointercancel", off);
+      el.addEventListener("pointerleave", off);
+    });
+  }
+
+  function setTab(tab, el){
+    activeTab = tab;
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
+    render();
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  // ===== Modal imagen =====
+  function openImgModal(name, src){
+    if (!src) return;
+    document.getElementById("imgModalTitle").textContent = name || "Imagen";
+    document.getElementById("imgModalEl").src = src;
+    document.getElementById("imgModal").classList.add("show");
+  }
+  function closeImgModal(){
+    document.getElementById("imgModal").classList.remove("show");
+    document.getElementById("imgModalEl").src = "";
+  }
+  document.getElementById("imgModal").addEventListener("click", (e)=>{
+    if (e.target.id === "imgModal") closeImgModal();
+  });
+
+  // ===== Modal elección salsas =====
+  let pendingSaucePick = null; // {comboId, count}
+
+  function openSauceModal(comboItem){
+    const count = Number(comboItem.chooseSauces||0);
+    if (!count) return;
+
+    pendingSaucePick = { comboId: comboItem.id, count };
+
+    document.getElementById("sauceModalTitle").textContent =
+      count === 1 ? "Elegí 1 salsa" : `Elegí ${count} salsas`;
+
+    document.getElementById("sauceHelper").textContent =
+      count === 1 ? "Elegí 1 salsa (sin cargo)." : `Elegí ${count} salsas (sin cargo).`;
+
+    const list = document.getElementById("sauceList");
+    list.innerHTML = SAUCE_CHOICES.map(s=>{
+      return `
+        <label class="chip">
+          <div class="left">
+            <div class="nm">${s.name}</div>
+            <div class="pr">Sin cargo</div>
+          </div>
+          <input type="checkbox" value="${s.id}" />
+        </label>
+      `;
+    }).join("");
+
+    list.querySelectorAll("input").forEach(inp=>{
+      inp.addEventListener("change", ()=>{
+        const checked = [...list.querySelectorAll("input:checked")];
+        if (checked.length > pendingSaucePick.count){
+          inp.checked = false;
         }
-        throw new Error("No subió: " + txt);
-      }
-      return { path, url: publicUrl(path) };
-    }
-
-    async function listExpoImages(slug){
-      const objs = await listAllObjects(`${slug}/`);
-      const imgs = [];
-      for(const o of objs){
-        const name = o?.name || "";
-        if(!name || name.endsWith("/.keep")) continue;
-        if(!(/\.(png|jpg|jpeg|webp|gif)$/i).test(name)) continue;
-        imgs.push({ path:name, url: publicUrl(name) });
-      }
-      // más nuevo primero (timestamp en nombre)
-      imgs.sort((a,b)=> b.path.localeCompare(a.path));
-      return imgs;
-    }
-
-    /* ==========================================================
-      4) App logic
-    ========================================================== */
-    function syncExpoSelects(slugs){
-      const sels = [$("expoSelect"), $("expoSelectUp"), $("expoSelectGal")];
-      for(const sel of sels){
-        const cur = sel.value;
-        sel.innerHTML = `<option value="">— Elegí una expo —</option>` + slugs.map(s=>(
-          `<option value="${s}">${s} (${s})</option>`
-        )).join("");
-        // intenta mantener selección
-        if(cur && slugs.includes(cur)) sel.value = cur;
-      }
-    }
-
-    async function refreshExpos(){
-      const slugs = await listExpos();
-      syncExpoSelects(slugs);
-      return slugs;
-    }
-
-    function setSelectedExpo(slug){
-      $("expoSelect").value = slug || "";
-      $("expoSelectUp").value = slug || "";
-      $("expoSelectGal").value = slug || "";
-      $("shareLink").value = slug ? expoShareLink(slug) : "";
-    }
-
-    // autocompleta slug
-    $("expoName").addEventListener("input", ()=>{
-      $("expoSlug").value = slugify($("expoName").value);
-    });
-
-    // elegir expo en panel expos
-    $("expoSelect").addEventListener("change", ()=>{
-      const slug = $("expoSelect").value;
-      $("shareLink").value = slug ? expoShareLink(slug) : "";
-      // sincroniza los otros selects
-      $("expoSelectUp").value = slug;
-      $("expoSelectGal").value = slug;
-    });
-
-    // copiar link
-    $("btnCopyLink").onclick = async ()=>{
-      const v = $("shareLink").value.trim();
-      if(!v) return toast("Elegí una expo primero.", true);
-      try{
-        await navigator.clipboard.writeText(v);
-        toast("Link copiado ✅");
-      }catch{
-        $("shareLink").select();
-        toast("Copialo manual (iOS) 📋");
-      }
-    };
-
-    // crear expo
-    $("btnCreateExpo").onclick = async ()=>{
-      const name = $("expoName").value.trim();
-      const slug = slugify(name);
-      if(!name || !slug) return toast("Poné un nombre de expo.", true);
-      try{
-        await ensureExpo(slug);
-        await refreshExpos();
-        setSelectedExpo(slug);
-        toast("Expo creada ✅");
-      }catch(e){
-        toast(String(e.message || e), true);
-      }
-    };
-
-    $("btnRefreshExpos").onclick = async ()=>{
-      try{
-        await refreshExpos();
-        toast("Lista actualizada ✅");
-      }catch(e){
-        toast(String(e.message || e), true);
-      }
-    };
-
-    // subir
-    $("btnUpload").onclick = async ()=>{
-      const slug = $("expoSelectUp").value;
-      const file = $("fileInput").files?.[0];
-      const title = $("titleInput").value.trim();
-      if(!slug) return toast("Elegí una expo.", true);
-      if(!file) return toast("Elegí una foto (jpg/png).", true);
-
-      try{
-        await uploadImage(slug, file, title);
-        toast("Subió ✅");
-        $("fileInput").value = "";
-        $("titleInput").value = "";
-      }catch(e){
-        toast(String(e.message || e), true);
-      }
-    };
-
-    $("btnToGallery").onclick = ()=>{
-      const slug = $("expoSelectUp").value;
-      showPanel("gallery");
-      if(slug) $("expoSelectGal").value = slug;
-    };
-
-    // galería
-    function openModal(url){
-      $("modalImg").src = url;
-      $("modal").classList.add("show");
-    }
-    $("modal").addEventListener("click", (e)=>{
-      if(e.target.id==="modal") $("modal").classList.remove("show");
-    });
-    $("modalClose").onclick = ()=> $("modal").classList.remove("show");
-
-    function renderGallery(slug, imgs){
-      const grid = $("galleryGrid");
-      if(!slug){ grid.innerHTML = ""; return; }
-      if(!imgs.length){
-        grid.innerHTML = `<div class="muted" style="grid-column:1/-1;padding:10px 2px">No hay imágenes en esta expo todavía.</div>`;
-        return;
-      }
-
-      grid.innerHTML = imgs.map(x=>{
-        const file = x.path.split("/").pop();
-        return `
-          <div class="imgCard">
-            <div class="tag">Dibujo · ${slug}</div>
-            <img src="${x.url}" alt="${file}"
-              loading="lazy"
-              onerror="this.dataset.err='1'; this.style.opacity='.3';"
-            />
-            <div class="meta">${file}</div>
-          </div>
-        `;
-      }).join("");
-
-      // click para agrandar
-      grid.querySelectorAll(".imgCard img").forEach(img=>{
-        img.addEventListener("click", ()=>{
-          openModal(img.src);
-        });
       });
+    });
+
+    document.getElementById("sauceModal").classList.add("show");
+    bindPressFeedback();
+  }
+
+  function closeSauceModal(){
+    document.getElementById("sauceModal").classList.remove("show");
+    pendingSaucePick = null;
+  }
+
+  document.getElementById("sauceModal").addEventListener("click", (e)=>{
+    if (e.target.id === "sauceModal") closeSauceModal();
+  });
+
+  function confirmSauces(){
+    if (!pendingSaucePick) return;
+
+    const list = document.getElementById("sauceList");
+    const ids = [...list.querySelectorAll("input:checked")].map(x=>x.value);
+
+    if (ids.length !== pendingSaucePick.count){
+      alert(`Elegí ${pendingSaucePick.count} salsa${pendingSaucePick.count>1?'s':''}.`);
+      return;
     }
 
-    $("btnLoadGallery").onclick = async ()=>{
-      const slug = $("expoSelectGal").value;
-      if(!slug) return toast("Elegí una expo.", true);
-      try{
-        const imgs = await listExpoImages(slug);
+    // ✅ Estas salsas NO se cobran. Se guardan aparte del carrito.
+    ids.forEach(id=>{
+      sauceChoices[id] = (sauceChoices[id]||0) + 1;
+    });
 
-        // truquito: cache-bust para que iOS no te deje el cuadrito roto en memoria
-        const bumped = imgs.map(x=>({ ...x, url: x.url + (x.url.includes("?") ? "&" : "?") + "v=" + Date.now() }));
+    // ✅ si después cambian combos, se recorta solo (reconcile)
+    reconcileSauceChoices();
 
-        renderGallery(slug, bumped);
-        toast("Galería cargada ✅");
-      }catch(e){
-        toast(String(e.message || e), true);
+    haptic();
+    updateTotals();
+    closeSauceModal();
+  }
+
+  // ===== Reglas de salsas incluidas y reconcile (FIX) =====
+
+  function requiredChoiceSaucesFromCombos(){
+    let needed = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (it && it.tab==="combos"){
+        needed += (Number(it.chooseSauces||0) * qty);
       }
+    }
+    return needed;
+  }
+
+  // Recorta salsas elegidas si bajan combos (ej: 2 combos -> 1 combo)
+  function reconcileSauceChoices(){
+    const required = requiredChoiceSaucesFromCombos();
+    let current = countSauceChoices();
+    if (current <= required) return;
+
+    let toRemove = current - required;
+
+    // Sacamos de atrás hacia adelante según el orden del modal
+    for (let i = SAUCE_CHOICES.length - 1; i >= 0 && toRemove > 0; i--){
+      const id = SAUCE_CHOICES[i].id;
+      const q = sauceChoices[id] || 0;
+      if (!q) continue;
+      const dec = Math.min(q, toRemove);
+      const next = q - dec;
+      if (next <= 0) delete sauceChoices[id];
+      else sauceChoices[id] = next;
+      toRemove -= dec;
+    }
+
+    // Por si hubiera algún id fuera de lista (seguridad)
+    for (const id of Object.keys(sauceChoices)){
+      if (toRemove <= 0) break;
+      const q = sauceChoices[id] || 0;
+      const dec = Math.min(q, toRemove);
+      const next = q - dec;
+      if (next <= 0) delete sauceChoices[id];
+      else sauceChoices[id] = next;
+      toRemove -= dec;
+    }
+  }
+
+  // Salsa de soja incluida por rolls (NO combos): 1 cada 10 piezas entre todos
+  function sojaIncludedFromNonCombos(){
+    let nonComboPieces = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (!it) continue;
+      if (it.tab !== "combos" && (it.pieces||0) > 0){
+        nonComboPieces += (it.pieces||0) * qty;
+      }
+    }
+    return Math.floor(nonComboPieces / 10);
+  }
+
+  function fixedIncludedFromCombos(){
+    // solo salsa de soja fija según combo (sin cargo)
+    let fixedSoja = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (it && it.tab==="combos"){
+        fixedSoja += (Number(it.fixedSoja||0) * qty);
+      }
+    }
+    return { soja: fixedSoja };
+  }
+
+  function includedSojaTotal(){
+    const fixed = fixedIncludedFromCombos().soja || 0;
+    const rolls = sojaIncludedFromNonCombos();
+    return fixed + rolls;
+  }
+
+  // ===== Carrito =====
+  function add(id){
+    cart[id] = (cart[id]||0) + 1;
+    haptic();
+
+    // ✅ FIX: si se agregó/quitó combo, mantener salsas a elección alineadas
+    reconcileSauceChoices();
+
+    updateTotals();
+    updateQtyPills();
+
+    const item = MENU.find(x=>x.id===id);
+    if (item && item.tab==="combos" && Number(item.chooseSauces||0) > 0){
+      openSauceModal(item);
+    }
+  }
+
+  function sub(id){
+    if (!cart[id]) return;
+    cart[id] -= 1;
+    if (cart[id] <= 0) delete cart[id];
+    haptic();
+
+    // ✅ FIX: si bajan combos, recortar salsas elegidas excedentes
+    reconcileSauceChoices();
+
+    updateTotals();
+    updateQtyPills();
+  }
+
+  function clearCart(){
+    const hasAnything = Object.keys(cart).length>0 || Object.keys(sauceChoices).length>0;
+    if (!hasAnything) return;
+    if (!confirm("¿Vaciar el pedido?")) return;
+
+    for (const k of Object.keys(cart)) delete cart[k];
+    for (const k of Object.keys(sauceChoices)) delete sauceChoices[k];
+
+    updateTotals();
+    render();
+  }
+
+  function totals(){
+    let totalMoney = 0;
+    let totalPieces = 0;
+
+    for (const [id, qty] of Object.entries(cart)){
+      const item = MENU.find(x => x.id === id);
+      if (!item) continue;
+      totalMoney += (item.price||0) * qty;
+      totalPieces += (item.pieces||0) * qty;
+    }
+    return { totalMoney, totalPieces };
+  }
+
+  function countPaidExtras(){
+    // cuenta solo extras/adicionales pagas (items del carrito con pieces==0)
+    let c = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (it && it.pieces === 0) c += qty;
+    }
+    return c;
+  }
+
+  function countSauceChoices(){
+    let c = 0;
+    for (const qty of Object.values(sauceChoices)) c += qty;
+    return c;
+  }
+
+  function countSaucesTotal(){
+    // Total salsas = incluidas soja (combos + regla 10 piezas) + a elección sin cargo + adicionales pagas (extras)
+    return includedSojaTotal() + countSauceChoices() + countPaidExtras();
+  }
+
+  function updateTotals(){
+    const { totalMoney, totalPieces } = totals();
+    document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
+    document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
+    document.getElementById("extrasLine").innerHTML = `<b>Salsas y adicionales:</b> ${countSaucesTotal()}`;
+  }
+
+  function updateQtyPills(){
+    MENU.forEach(item => {
+      const pill = document.getElementById("qty-"+item.id);
+      if (!pill) return;
+      pill.textContent = (getQty(item.id)) + "x";
+    });
+  }
+
+  // ===== Preview Pedido =====
+  function openOrderModal(){
+    const hasAnything = Object.keys(cart).length>0 || Object.keys(sauceChoices).length>0;
+    if (!hasAnything){
+      alert("Agregá algo al pedido 🙂");
+      return;
+    }
+
+    const sushiList = document.getElementById("orderSushiList");
+    const sauceList = document.getElementById("orderSauceList");
+
+    const sushiLines = [];
+    const paidSaucesLines = [];
+
+    // Sushi + extras pagas
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (!it) continue;
+
+      if (it.pieces > 0){
+        const labelPieces = it.pieces === 5 ? "5 piezas" : `${it.pieces} piezas`;
+        const priceLine = `$${fmtMoney((it.price||0)*qty)}`;
+        sushiLines.push(`${qty}x ${it.name} – ${labelPieces} – ${priceLine}`);
+      } else {
+        // extras pagas
+        paidSaucesLines.push(`${qty}x ${it.name} – $${fmtMoney((it.price||0)*qty)}`);
+      }
+    }
+
+    // Salsa incluida (soja) por regla + combos
+    const sojaInc = includedSojaTotal();
+    const includedText = sojaInc > 0 ? `${sojaInc}x Salsa de soja (sin cargo)` : "—";
+    document.getElementById("orderIncludedLine").textContent = `Salsa incluida (sin cargo): ${includedText}`;
+
+    // Salsas a elección (sin cargo)
+    const choiceLines = [];
+    for (const [id, qty] of Object.entries(sauceChoices)){
+      const it = MENU.find(x=>x.id===id);
+      const nm = it ? it.name : (SAUCE_CHOICES.find(x=>x.id===id)?.name || id);
+      choiceLines.push(`${qty}x ${nm} (sin cargo)`);
+    }
+
+    // Render lists
+    sushiList.innerHTML = sushiLines.length ? sushiLines.map(x=>`<li>${escapeHTML(x)}</li>`).join("") : "<li>—</li>";
+
+    const allSaucesLines = [];
+    if (choiceLines.length) allSaucesLines.push(...choiceLines);
+    if (paidSaucesLines.length) allSaucesLines.push(...paidSaucesLines);
+
+    sauceList.innerHTML = allSaucesLines.length ? allSaucesLines.map(x=>`<li>${escapeHTML(x)}</li>`).join("") : "<li>—</li>";
+
+    const { totalMoney, totalPieces } = totals();
+    document.getElementById("orderTotalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
+    document.getElementById("orderTotalPieces").textContent = `Total piezas: ${totalPieces}`;
+    document.getElementById("orderTotalSauces").textContent = `Total salsas: ${countSaucesTotal()}`;
+
+    document.getElementById("orderModal").classList.add("show");
+  }
+
+  function closeOrderModal(){
+    document.getElementById("orderModal").classList.remove("show");
+  }
+
+  document.getElementById("orderModal").addEventListener("click", (e)=>{
+    if (e.target.id === "orderModal") closeOrderModal();
+  });
+
+  function escapeHTML(str){
+    return String(str||"")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // ===== WhatsApp =====
+  function buildMessage(){
+    const sushiLines = [];
+    const sauceIncludedLines = [];
+    const sauceChoiceLines = [];
+    const saucePaidLines = [];
+
+    // Sushi + extras pagas
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (!it) continue;
+
+      if (it.pieces > 0){
+        const xBase = it.pieces === 5 ? " x5" : "";
+        sushiLines.push(`${qty}x ${it.name}${xBase} – ${(it.pieces||0)*qty} piezas – $${fmtMoney((it.price||0)*qty)}`);
+      } else {
+        saucePaidLines.push(`${qty}x ${it.name} – $${fmtMoney((it.price||0)*qty)}`);
+      }
+    }
+
+    // Salsa incluida (soja) por regla + combos
+    const sojaInc = includedSojaTotal();
+    if (sojaInc > 0){
+      sauceIncludedLines.push(`${sojaInc}x Salsa de soja (sin cargo)`);
+    }
+
+    // A elección (sin cargo)
+    for (const [id, qty] of Object.entries(sauceChoices)){
+      const it = MENU.find(x=>x.id===id);
+      const nm = it ? it.name : (SAUCE_CHOICES.find(x=>x.id===id)?.name || id);
+      sauceChoiceLines.push(`${qty}x ${nm} (sin cargo)`);
+    }
+
+    const { totalMoney, totalPieces } = totals();
+    const totalSauces = countSaucesTotal();
+
+    let msg = "";
+    msg += "Pedido Sushi Stella Maris 🍣\n\n";
+
+    msg += (sushiLines.length ? sushiLines.join("\n") : "—") + "\n\n";
+
+    msg += "Salsa incluida (sin cargo):\n";
+    msg += (sauceIncludedLines.length ? ("- " + sauceIncludedLines.join("\n- ")) : "- —") + "\n\n";
+
+    msg += "Salsa a elección (sin cargo):\n";
+    msg += (sauceChoiceLines.length ? ("- " + sauceChoiceLines.join("\n- ")) : "- —") + "\n\n";
+
+    msg += "Salsa adicional:\n";
+    msg += (saucePaidLines.length ? ("- " + saucePaidLines.join("\n- ")) : "- —") + "\n\n";
+
+    msg += `Total piezas: ${totalPieces}\n`;
+    msg += `Total salsas: ${totalSauces}\n`;
+    msg += `Total: $${fmtMoney(totalMoney)}\n`;
+    return msg;
+  }
+
+  function sendWA(){
+    const hasAnything = Object.keys(cart).length>0 || Object.keys(sauceChoices).length>0;
+    if (!hasAnything){
+      alert("Agregá algo al pedido 🙂");
+      return;
+    }
+    const msg = buildMessage();
+    const url = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+    window.open(url, "_blank");
+  }
+
+  // ===== Fallback de imágenes =====
+  function attachImgFallback(imgEl){
+    imgEl.addEventListener("error", ()=>{
+      const original = imgEl.getAttribute("data-src") || imgEl.src;
+      const alts = [];
+
+      if (original.endsWith(".PNG")) alts.push(original.replace(".PNG",".png"));
+      if (original.endsWith(".png")) alts.push(original.replace(".png",".PNG"));
+
+      if (!original.startsWith("http") && !original.startsWith("./")) alts.push("./"+original);
+
+      const tried = JSON.parse(imgEl.getAttribute("data-tried") || "[]");
+      const next = alts.find(x=>x && !tried.includes(x));
+
+      if (next){
+        tried.push(next);
+        imgEl.setAttribute("data-tried", JSON.stringify(tried));
+        imgEl.src = next;
+      }
+    });
+  }
+
+  function escapeQuotes(s){
+    return String(s||"").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+  function cardHTML(item){
+    const price = item.price ? `$${fmtMoney(item.price)}` : "—";
+    const qty = getQty(item.id);
+
+    const hasImg = !!item.img;
+
+    const imgBlock = hasImg
+      ? `<div class="imgBox" onclick="openImgModal('${escapeQuotes(item.name)}','${escapeQuotes(item.img)}')">
+           <div class="tapHint">Tocá para agrandar</div>
+           <div class="priceTag">${price}</div>
+           <img data-src="${item.img}" src="${item.img}" alt="${escapeQuotes(item.name)}" class="menuImg">
+         </div>`
+      : `<div class="imgBox">
+           <div class="priceTag">${price}</div>
+           Foto (pendiente)
+         </div>`;
+
+    const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
+
+    const desc = item.tab === "combos"
+      ? `<div class="meta"><b>${base}</b> · ${item.includesRule || ""}</div>
+         ${(item.composition && item.composition.length) ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}`
+      : `<div class="meta"><b>${base}</b> · ${item.desc || ""}</div>`;
+
+    return `
+      <div class="card" data-tab="${item.tab}">
+        ${imgBlock}
+        <div class="body">
+          <p class="name">${item.name}</p>
+          ${desc}
+          <div class="bottomRow">
+            <div class="qty">En tu pedido: <span class="qtyPill" id="qty-${item.id}">${qty}x</span></div>
+            <div class="btns">
+              <button class="btn minus" onclick="sub('${item.id}')">–</button>
+              <button class="btn add" onclick="add('${item.id}')">Agregar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function render(){
+    const root = document.getElementById("content");
+    const items = MENU.filter(x => x.tab === activeTab);
+
+    const titleMap = {
+      combos: "COMBOS",
+      rolls: "ROLLS",
+      especiales: "ESPECIALES",
+      makis: "MAKIS",
+      nigiris: "NIGIRIS",
+      sashimis: "SASHIMIS",
+      extras: "SALSAS Y ADICIONALES"
     };
 
-    // si abrís con ?expo=slug, selecciona esa expo
-    function applyQueryExpo(){
-      const u = new URL(location.href);
-      const slug = (u.searchParams.get("expo") || "").trim();
-      if(slug){
-        setSelectedExpo(slug);
-      }
-    }
+    root.innerHTML = `
+      <div class="sectionTitle">${titleMap[activeTab] || ""}</div>
+      <div class="grid">
+        ${items.map(cardHTML).join("")}
+      </div>
+    `;
 
-    // init
-    (async ()=>{
-      try{
-        setStatus(false, "Conectando…", "Chequeando Storage");
-        await refreshExpos();
-        applyQueryExpo();
-        setStatus(true, "Conectado ✅", "");
-      }catch(e){
-        setStatus(false, "Error", "No pude hablar con Storage");
-        toast(String(e.message || e), true);
-      }
-    })();
-  </script>
+    document.querySelectorAll(".menuImg").forEach(img => attachImgFallback(img));
+
+    updateTotals();
+    updateQtyPills();
+    bindPressFeedback();
+  }
+
+  document.getElementById("btnClear").addEventListener("click", clearCart);
+  document.getElementById("btnWA").addEventListener("click", sendWA);
+  document.getElementById("btnPreview").addEventListener("click", openOrderModal);
+
+  render();
+</script>
 </body>
 </html>
